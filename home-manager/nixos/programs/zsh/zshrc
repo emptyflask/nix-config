@@ -1,0 +1,43 @@
+# setopt extendedglob
+unsetopt correct
+
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey '^[[H'  beginning-of-line                   # HOME
+bindkey '^[[F'  end-of-line                         # END
+bindkey '^?'    backward-delete-char                # BACKSPACE
+bindkey '^[[3~' delete-char                         # DELETE
+bindkey '^[[2~' overwrite-mode                      # INSERT
+bindkey '^[[5~' history-beginning-search-backward   # PAGE UP
+bindkey '^[[6~' history-beginning-search-forward    # PAGE DOWN
+# bindkey '^R'    history-incremental-search-backward # SEARCH HISTORY
+# bindkey '^R'    history-incremental-pattern-search-backward
+# bindkey '^F'    history-incremental-pattern-search-forward
+
+# Ensure that arrow keys work as they should
+# bindkey '\e[A' up-line-or-history
+# bindkey '\e[B' down-line-or-history
+
+rgrep() { grep -iR $1 *; }
+f() { find ./ | grep $1; }
+
+# Check if we can read given files and source those we can.
+function xsource () {
+  if (( ${#argv} < 1 )) ; then
+    printf 'usage: xsource FILE(s)...\n' >&2
+    return 1
+  fi
+
+  while (( ${#argv} > 0 )) ; do
+    [[ -r "$1" ]] && source "$1"
+    shift
+  done
+  return 0
+}
+
+function zrclocal () {
+  xsource "${HOME}/.zshrc.local"
+  return 0
+}
+
+zrclocal
