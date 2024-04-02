@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, rubyVersion ? pkgs.ruby, ... }:
 
 with pkgs;
 {
@@ -69,8 +69,8 @@ with pkgs;
     # programming - ruby
     bundix
     jekyll
-    ruby_3_2
-    rubyPackages_3_2.pry
+    rubyVersion
+    rubyVersion.gems.pry
 
     # programming - rust
     cargo

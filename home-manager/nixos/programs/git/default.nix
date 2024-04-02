@@ -128,6 +128,8 @@
         autoSetupRemote = true;
         default   = "upstream";
       };
+
+      rebase.updateRefs = true;
       rerere.enabled = true; # reuse recorded resolution
 
     };
