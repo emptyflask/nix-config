@@ -1,5 +1,7 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
+let rubyVersion = pkgs.ruby_3_3;
+in
 {
   nixpkgs = {
     # You can add overlays here
@@ -77,13 +79,16 @@
       ".psqlrc".source = ./nixos/home/psqlrc;
       ".railsrc".source = ./nixos/home/railsrc;
     };
+    sessionPath = [
+      "$HOME/.gem/ruby/${rubyVersion.version.libDir}/bin"
+    ];
   };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
   imports = [
-    ./common.nix
+    (import ./common.nix { inherit pkgs rubyVersion; })
     ./nixos/linux.nix
     ./nixos/environment.nix
     ./nixos/accounts
