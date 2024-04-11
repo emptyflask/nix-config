@@ -39,6 +39,7 @@ end
 local servers = {
   -- 'dhall_lsp_server',
   'hls',
+  'nil_ls',
   'pyright',
   'rescriptls',
   -- 'rust_analyzer',

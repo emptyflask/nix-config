@@ -32,6 +32,7 @@ with pkgs;
 
     extraPackages = [
       # dhall-lsp-server
+      nil # nix language server
       nodePackages.typescript
       nodePackages.typescript-language-server
       rust-analyzer
