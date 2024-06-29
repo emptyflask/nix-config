@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
   concatFiles = files:
@@ -31,6 +31,7 @@ with pkgs;
     '';
 
     extraPackages = [
+      biome
       # dhall-lsp-server
       nil # nix language server
       nodePackages.typescript

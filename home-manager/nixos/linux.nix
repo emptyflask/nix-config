@@ -113,14 +113,14 @@ with pkgs;
     scrot               # CLI screenshotter
 
     # programming - general
-    dbeaver             # DB GUI
+    dbeaver-bin         # DB GUI
     docker-compose
     gcc
     lazydocker
     ltrace              # lib trace
     strace              # system call trace
     vscode
-    nixfmt     # format nix
+    nixfmt-classic      # format nix
     uncrustify # format c/c++/c#/java/etc
 
     # programming - haskell
@@ -239,7 +239,7 @@ with pkgs;
 
   qt = {
     enable = true;
-    platformTheme = "gtk"; # gnome or gtk
+    platformTheme.name = "gtk"; # gnome or gtk
   };
 
   xdg = {
