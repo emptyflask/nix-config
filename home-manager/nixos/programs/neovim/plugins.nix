@@ -13,6 +13,11 @@ let
   };
 
   custom = {
+    conform = { plugin = (pluginGit "refs/tags/v6.0.0" "stevearc/conform.nvim");
+      type = "lua";
+      config = builtins.readFile(./conform.lua);
+    };
+
     copilot-cmp = { plugin = pkgs.vimPlugins.copilot-cmp;
       type = "lua";
       config = ''
@@ -23,10 +28,10 @@ let
     copilot-lua = { plugin = pkgs.vimPlugins.copilot-lua;
       type = "lua";
       config = ''
-      require("copilot").setup({
-        suggestion  = { enabled = false },
-        panel       = { enabled = false },
-      })
+        require("copilot").setup({
+          suggestion  = { enabled = false },
+          panel       = { enabled = false },
+        })
       '';
     };
 
@@ -87,6 +92,16 @@ let
       config = builtins.readFile(./rust-tools.lua);
     };
 
+    supermaven = { # Supermaven copilot
+      plugin = (pluginGit "main" "supermaven-inc/supermaven-nvim");
+      type = "lua";
+      config = ''
+        require("supermaven-nvim").setup({
+
+        })
+      '';
+    };
+
     tabular = { plugin = pkgs.vimPlugins.Tabular;
       runtime = { "after/plugin/tabular.vim".source = ./after/plugin/tabular.vim; };
     };
@@ -117,11 +132,10 @@ let
   };
 in
 
-
-
     with pkgs.vimPlugins; [
       Rename
       Tagbar
+      custom.conform
       custom.dashboard
       custom.leap-nvim
       custom.lspconfig
@@ -200,6 +214,7 @@ in
       vim-snippets
 
       # COPILOT
-      custom.copilot-cmp
-      custom.copilot-lua
+      # custom.copilot-cmp
+      # custom.copilot-lua
+      custom.supermaven
     ]

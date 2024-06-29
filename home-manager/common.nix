@@ -47,6 +47,7 @@ with pkgs;
     elixir
 
     # programming - javascript
+    biome
     nodejs
     nodePackages.diagnostic-languageserver
     nodePackages.eslint_d

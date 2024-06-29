@@ -87,7 +87,6 @@ in
     experimental-features = "nix-command flakes";
 
     substituters = [
-      "https://all-hies.cachix.org"
       "https://cache.iog.io"
       "https://cache.nixos.org/"
       "https://devenv.cachix.org"
@@ -97,7 +96,6 @@ in
     ];
 
     trusted-public-keys = [
-      "all-hies.cachix.org-1:JjrzAOEUsD9ZMt8fdFbzo3jNAyEWlPAwdVuHw4RD43k="
       "cache.iog.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
       "digitallyinduced.cachix.org-1:y+wQvrnxQ+PdEsCt91rmvv39qRCYzEgGQaldK26hCKE="

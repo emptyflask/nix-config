@@ -1,4 +1,6 @@
 {
+  services.displayManager.defaultSession = "none+xmonad";
+
   services.xserver = {
     enable = true;
 
@@ -14,7 +16,6 @@
     videoDrivers = [ "nvidia" ];
 
     displayManager = {
-      defaultSession = "none+xmonad";
       lightdm.greeters.gtk = {
         enable = true;
         # user = "jon";
