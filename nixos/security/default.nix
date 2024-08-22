@@ -36,5 +36,7 @@ in
     ./ssl/certs/rootCA.pem
   ];
 
+  security.rtkit.enable = true;
+
   # security.dhparams.enable = true;
 }
