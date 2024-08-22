@@ -275,8 +275,8 @@ in
     # nvidia.prime.intelBusId = "PCI:1:0:1";
     # nvidia.modesetting.enable = true;
 
-    pulseaudio.enable = true;
-    pulseaudio.support32Bit = true;
+    # pulseaudio.enable = true;
+    # pulseaudio.support32Bit = true;
 
     graphics.enable = true;
     graphics.enable32Bit = true;
@@ -284,8 +284,6 @@ in
 
     # video.hidpi.enable = false;
   };
-
-  sound.enable = true;
 
   virtualisation = {
     docker = {

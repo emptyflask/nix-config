@@ -30,6 +30,7 @@ import           Graphics.X11.ExtraTypes.XF86
 import           System.Exit
 
 import           Managers                           (scratchpads)
+import qualified Paths
 
 -- Keyboard --
 myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
@@ -164,7 +165,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     , ((modm,                xK_x        ), namedScratchpadAction scratchpads "obsidian")
     , ((modm,                xK_z        ), namedScratchpadAction scratchpads "zeal")
 
-    , ((modm,                xK_v        ), runInTerm "" "alsamixer -c 0")
+    , ((modm,                xK_v        ), runInTerm "" $ Paths.alsamixer ++ " -c 0")
 
     -- screenshot tool
     , ((noModMask,           xK_Print ), spawn "flameshot gui")
@@ -225,9 +226,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
 
     mediaKeys :: [((KeyMask, KeySym), X ())]
     mediaKeys =
-      [ ((0 , xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +2%")
-      , ((0 , xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ -2%")
-      , ((0 , xF86XK_AudioMute),        spawn "pactl set-sink-mute   @DEFAULT_SINK@ toggle")
+      [ ((0 , xF86XK_AudioRaiseVolume), spawn "wpctl set-volume @DEFAULT_SINK@ 2%+")
+      , ((0 , xF86XK_AudioLowerVolume), spawn "wpctl set-volume @DEFAULT_SINK@ 2%-")
+      , ((0 , xF86XK_AudioMute),        spawn "wpctl set-mute   @DEFAULT_SINK@ toggle")
       ]
 
     realWorkspace :: WSType

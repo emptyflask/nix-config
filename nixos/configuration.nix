@@ -277,8 +277,8 @@ in
     # nvidia.prime.intelBusId = "PCI:1:0:1";
     # nvidia.modesetting.enable = true;
 
-    pulseaudio.enable = true;
-    pulseaudio.support32Bit = true;
+    # pulseaudio.enable = true;
+    # pulseaudio.support32Bit = true;
 
     opengl.enable = true;
     opengl.driSupport32Bit = true;

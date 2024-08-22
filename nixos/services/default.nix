@@ -97,6 +97,15 @@
     pcscd.enable    = true; # Smartcard reader
     peroxide.enable = true;
 
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+    };
+
 #     plex = {
 #       enable = true;
 #       dataDir = "/media/repository/movies";
