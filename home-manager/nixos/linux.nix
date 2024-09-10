@@ -26,7 +26,7 @@ with pkgs;
   };
 
   home.pointerCursor = {
-    package = pkgs.gnome.gnome-themes-extra;
+    package = pkgs.gnome-themes-extra;
     size = 16; # default = 32; example = 64;
     name = "Adwaita";
     x11 = {
@@ -49,7 +49,7 @@ with pkgs;
     };
     theme = {
       name = "Adwaita-dark";
-      package = pkgs.gnome.gnome-themes-extra;
+      package = pkgs.gnome-themes-extra;
     };
   };
 
