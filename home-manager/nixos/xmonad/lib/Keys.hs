@@ -226,9 +226,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
 
     mediaKeys :: [((KeyMask, KeySym), X ())]
     mediaKeys =
-      [ ((0 , xF86XK_AudioRaiseVolume), spawn "wpctl set-volume @DEFAULT_SINK@ 2%+")
-      , ((0 , xF86XK_AudioLowerVolume), spawn "wpctl set-volume @DEFAULT_SINK@ 2%-")
-      , ((0 , xF86XK_AudioMute),        spawn "wpctl set-mute   @DEFAULT_SINK@ toggle")
+      [ ((0 , xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +2%")
+      , ((0 , xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ -2%")
+      , ((0 , xF86XK_AudioMute),        spawn "pactl set-sink-mute   @DEFAULT_SINK@ toggle")
       ]
 
     realWorkspace :: WSType

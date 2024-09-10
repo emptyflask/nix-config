@@ -40,7 +40,7 @@ in
 
       "Paths.hs" = pkgs.writeText "Paths.hs" ''
         module Paths where
-        alsamixer   = "${pkgs.alsaUtils}/bin/alsamixer"
+        alsamixer   = "${pkgs.alsa-utils}/bin/alsamixer"
         chrome      = "${pkgs.google-chrome}/bin/google-chrome-stable"
         htop        = "${pkgs.htop}/bin/htop"
         kitty       = "${pkgs.kitty}/bin/kitty"

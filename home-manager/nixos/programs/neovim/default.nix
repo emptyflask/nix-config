@@ -33,13 +33,14 @@ with pkgs;
     extraPackages = [
       biome
       # dhall-lsp-server
+      haskellPackages.haskell-language-server
+      lua-language-server
       nil # nix language server
       nodePackages.typescript
       nodePackages.typescript-language-server
       rust-analyzer
       shfmt
       solargraph
-      sumneko-lua-language-server
       terraform-ls
       tree-sitter
     ];

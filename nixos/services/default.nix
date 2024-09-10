@@ -98,12 +98,12 @@
     peroxide.enable = true;
 
     pipewire = {
-      enable = true;
+      enable = false;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      # If you want to use JACK applications, uncomment this
-      #jack.enable = true;
+      jack.enable = true;
+      wireplumber.enable = true;
     };
 
 #     plex = {
@@ -127,10 +127,12 @@
     # Usenet downloader
     nzbget = {
       enable = true;
-      settings = {
-      };
     };
-    sabnzbd.enable = false;
+    sabnzbd = {
+      enable = false;
+      user = "usenet";
+      group = "usenet";
+    };
 
     # Windows file sharing
     samba = {
