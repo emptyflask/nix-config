@@ -89,6 +89,7 @@
             (proxy "mmx-broker.sxsw.localhost"    5017)
 
             (proxy "usenet.localhost"             6789)
+            # (proxy "sabnzbd.localhost"            8080)
             (proxy "hoogle.localhost"             6800)
           ];
     };

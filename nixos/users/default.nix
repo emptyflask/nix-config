@@ -27,6 +27,7 @@
         "plex"
         "podman"
         "postgres"
+        "storage"
         "usenet"
         "vboxusers"
         "wheel"

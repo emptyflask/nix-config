@@ -301,7 +301,7 @@ in
     };
     libvirtd.enable = true;
     virtualbox = {
-      host.enable = true;
+      host.enable = false;
       # enable extension pack to share usb ports, etc.
       # (requires building virtualbox)
       # host.enableExtensionPack = true;

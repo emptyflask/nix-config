@@ -31,6 +31,7 @@ with pkgs;
 
     # graphics / print
     imagemagick
+    inkscape
 
     # programming - general
     exercism

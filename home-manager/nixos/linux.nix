@@ -60,6 +60,7 @@ with pkgs;
 
     # _1password
     # _1password-gui
+    alsa-utils
     bmon                # network monitor
     # burpsuite  # network security tool
     dmenu               # minimal desktop menu
