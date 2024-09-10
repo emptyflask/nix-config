@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nur.url = "github:nix-community/nur";
   };
 
@@ -23,6 +28,7 @@
     self,
     nixpkgs,
     home-manager,
+    lix-module,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -61,6 +67,7 @@
         specialArgs = {inherit inputs outputs;};
         modules = [
           ./hosts/kepler/default.nix
+          lix-module.nixosModules.default
         ];
       };
     };
