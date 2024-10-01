@@ -137,20 +137,17 @@
     # Windows file sharing
     samba = {
       enable = true;
-      securityType = "user";
-      extraConfig = ''
-        workgroup      = WORKGROUP
-        server string  = kepler
-        netbios name   = kepler
-        security       = user
-        hosts allow    = 10., 192.168., localhost
-        hosts deny     = 0.0.0.0/0
-        guest account  = nobody
-        map to guest   = bad user
-        # use sendfile   = yes
-        # max protocol   = smb2
-      '';
-      shares = {
+      settings = {
+        global = {
+          "workgroup"      = "WORKGROUP";
+          "server string"  = "kepler";
+          "netbios name"   = "kepler";
+          "security"       = "user";
+          "hosts allow"    = ["10." "192.168." "localhost"];
+          "hosts deny"     = ["0.0.0.0/0"];
+          "guest account"  = "nobody";
+          "map to guest"   = "bad user";
+        };
         public = {
           "path"           = "/home/jon/public";
           "browseable"     = "yes";
