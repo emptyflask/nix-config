@@ -63,10 +63,11 @@ with pkgs;
     alsa-utils
     bmon                # network monitor
     # burpsuite  # network security tool
+    bruno # api tool
+    cheese       # webcam photos
     dmenu               # minimal desktop menu
     dropbox
     # exodus     # crypto wallet
-    gnome.cheese       # webcam photos
     # gnome.gnome-calendar
     # gnome.gnome-control-center
     google-chrome
@@ -194,7 +195,7 @@ with pkgs;
       fade         = true;
       fadeDelta    = 5;
       fadeSteps    = [0.04 0.04];
-      shadow       = true;
+      shadow       = false;
       backend      = "xrender";
       vSync        = true;
       # vSync        = "opengl";

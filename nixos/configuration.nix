@@ -104,6 +104,8 @@ in
     ];
   };
 
+  nix.useSandbox = true;
+
   fileSystems."/media/repository" = {
     device = "/dev/disk/by-uuid/8CFA8C6CFA8C547C";
     fsType = "ntfs";
