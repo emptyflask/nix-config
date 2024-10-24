@@ -44,9 +44,10 @@ local servers = {
   'pyright',
   'rescriptls',
   -- 'rust_analyzer',
+  -- 'ruby_lsp',
   'solargraph',
   'lua_ls',
-  'tsserver'
+  'ts_ls'
 }
 
 local lsp_flags = {

@@ -111,7 +111,7 @@ let
       config = builtins.readFile(./telescope.lua);
     };
 
-    treesitter = { plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+    treesitter = { plugin = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: with p; [ javascript haskell ruby rust tsx typescript ]);
       type = "lua";
       config = builtins.readFile(./treesitter.lua);
     };
