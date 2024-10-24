@@ -83,6 +83,7 @@ in
   nix.settings = {
     auto-optimise-store = true;
     experimental-features = "nix-command flakes";
+    sandbox = true;
 
     substituters = [
       "https://cache.iog.io"
@@ -302,7 +303,7 @@ in
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.production;
+      # package = config.boot.kernelPackages.nvidiaPackages.production;
     };
 
     pulseaudio.enable = true;
