@@ -115,6 +115,9 @@
 
     printing.enable = true;
 
+    # Mouse configuration
+    ratbagd.enable = true;
+
     redis.servers."" = {
       enable = false;
       port = 6379;
