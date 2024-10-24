@@ -41,6 +41,7 @@ with pkgs;
       rust-analyzer
       shfmt
       solargraph
+      ruby-lsp
       terraform-ls
       tree-sitter
     ];
