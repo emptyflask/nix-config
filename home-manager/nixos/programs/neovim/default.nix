@@ -4,15 +4,13 @@ let
   concatFiles = files:
     pkgs.lib.strings.concatMapStringsSep "\n" builtins.readFile files;
 
-in
-
-with pkgs;
+in with pkgs;
 
 {
   programs.neovim = {
-    enable    = true;
-    viAlias   = true;
-    vimAlias  = false;
+    enable = true;
+    viAlias = true;
+    vimAlias = false;
     withNodeJs = true;
 
     extraConfig = (concatFiles [
@@ -35,7 +33,8 @@ with pkgs;
       # dhall-lsp-server
       haskellPackages.haskell-language-server
       lua-language-server
-      nil # nix language server
+      # nil # nix language server
+      nixd # other nix language server
       nodePackages.typescript
       nodePackages.typescript-language-server
       rust-analyzer
@@ -46,7 +45,7 @@ with pkgs;
       tree-sitter
     ];
 
-    plugins = pkgs.callPackage ./plugins.nix {};
+    plugins = pkgs.callPackage ./plugins.nix { };
   };
 
   # all ftplugin configs:

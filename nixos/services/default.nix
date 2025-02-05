@@ -86,6 +86,11 @@
       musicDirectory = "/media/repository/music";
     };
 
+    ollama = {
+      enable = true;
+      acceleration = "cuda";
+    };
+
     openssh = {
       enable = true;
       settings = {
@@ -95,7 +100,7 @@
     };
 
     pcscd.enable    = true; # Smartcard reader
-    peroxide.enable = true;
+    peroxide.enable = false;
 
     pipewire = {
       enable = false;
@@ -114,6 +119,7 @@
 #     };
 
     printing.enable = true;
+    protonmail-bridge.enable = true;
 
     # Mouse configuration
     ratbagd.enable = true;

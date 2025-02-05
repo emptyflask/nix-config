@@ -39,8 +39,10 @@ end
 local servers = {
   'biome',
   -- 'dhall_lsp_server',
+  'gleam',
   'hls',
-  'nil_ls',
+  -- 'nil_ls',
+  'nixd',
   'pyright',
   'rescriptls',
   -- 'rust_analyzer',
@@ -63,6 +65,34 @@ nvim_lsp.lua_ls.setup {
       diagnostics = {
         -- Get the language server to recognize the `vim` global
         globals = { 'vim' },
+      },
+    },
+  },
+}
+
+-- nvim_lsp.nil_ls.setup {
+--   settings = {
+--     nix = {
+--       flake = {
+--         -- calls `nix flake archive` to put a flake and its output to store
+--         autoArchive = true,
+--       },
+--     },
+--   },
+-- }
+
+nvim_lsp.nixd.setup {
+  settings = {
+    nixd = {
+      nixpkgs = { expr = "import <nixpkgs> {}" },
+      formatting = { command = { "alejandra" } },
+      options = {
+        nixos = {
+          expr = "(builtins.getFlake \"github:emptyflask/nix-config\").nixosConfigurations.kepler.options",
+        },
+        home_manager = {
+          expr = "(builtins.getFlake \"github:emptyflask/nix-config\").homeConfigurations.kepler.options",
+        }
       },
     },
   },

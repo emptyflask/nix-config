@@ -5,6 +5,7 @@ module Paths where
 
 alsamixer   = "alsamixer"
 chrome      = "google-chrome-stable"
+firefox     = "firefox"
 htop        = "htop"
 kitty       = "kitty"
 obsidian    = "obsidian"

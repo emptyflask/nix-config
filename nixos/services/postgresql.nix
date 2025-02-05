@@ -8,10 +8,10 @@ in
     enable = false;
     package = mypg;
 
-    extraPlugins = with mypg.pkgs; [
-      # (pkgs.postgis.override { postgresql = pkgs.postgresql_10; })
-      # postgis
-    ];
+    # extensions = with mypg.pkgs; [
+    #   (pkgs.postgis.override { postgresql = pkgs.postgresql_10; })
+    #   postgis
+    # ];
 
     enableTCPIP = true;
 

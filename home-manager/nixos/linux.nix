@@ -70,6 +70,8 @@ with pkgs;
     # exodus     # crypto wallet
     # gnome.gnome-calendar
     # gnome.gnome-control-center
+    exiftool
+    glow                # markdown viewer
     google-chrome
     jmtpfs              # Media Transfer Protocol (usb device filesystems)
     joplin-desktop # notes
@@ -78,6 +80,7 @@ with pkgs;
     kitty               # terminal
     libreoffice
     lxmenu-data         # installed apps
+    miller              # csv tool
     pavucontrol
     postman
     protonvpn-cli
@@ -118,6 +121,7 @@ with pkgs;
     dbeaver-bin         # DB GUI
     docker-compose
     gcc
+    hexyl
     lazydocker
     ltrace              # lib trace
     strace              # system call trace
@@ -129,6 +133,9 @@ with pkgs;
     haskellPackages.stylish-haskell
     ormolu
     stack
+
+    # programming - nix
+    alejandra # format nix
 
     # chat / email
     discord
@@ -173,8 +180,11 @@ with pkgs;
     vistafonts
 
     (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    # nerd-fonts.droid-sans-mono
+    # nerd-fonts.fira-code
 
     # media
+    audacious           # music player
     calibre             # e-book library
     evince              # another PDF viewer
     # handbrake           # dvd ripper
@@ -263,13 +273,13 @@ with pkgs;
   };
 
   imports = [
-    ./services/protonmail-bridge
+    # ./services/protonmail-bridge
     ./xmobar
   ];
 
-  services.protonmail-bridge = {
-    enable = false;
-    nonInteractive = true;
-    logLevel = "debug";
-  };
+  # services.protonmail-bridge = {
+  #   enable = false;
+  #   nonInteractive = true;
+  #   logLevel = "debug";
+  # };
 }

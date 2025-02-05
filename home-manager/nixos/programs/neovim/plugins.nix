@@ -13,9 +13,23 @@ let
   };
 
   custom = {
+    avante = { plugin = pkgs.vimPlugins.avante-nvim;
+      type = "lua";
+      config = builtins.readFile(./avante.lua);
+    };
+
     conform = { plugin = (pluginGit "refs/tags/v6.0.0" "stevearc/conform.nvim");
       type = "lua";
       config = builtins.readFile(./conform.lua);
+    };
+
+    copilot-chat = { plugin = pkgs.vimPlugins.CopilotChat-nvim;
+      type = "lua";
+      config = ''
+        require("CopilotChat").setup {
+          model = "claude-3.5-sonnet"
+        }
+      '';
     };
 
     copilot-cmp = { plugin = pkgs.vimPlugins.copilot-cmp;
@@ -29,8 +43,8 @@ let
       type = "lua";
       config = ''
         require("copilot").setup({
-          suggestion  = { enabled = false },
-          panel       = { enabled = false },
+          -- suggestion  = { enabled = false },
+          -- panel       = { enabled = false },
         })
       '';
     };
@@ -111,7 +125,52 @@ let
       config = builtins.readFile(./telescope.lua);
     };
 
-    treesitter = { plugin = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: with p; [ javascript haskell ruby rust tsx typescript ]);
+    treesitter = { plugin = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: with p; [
+      awk
+      bash
+      c
+      cpp
+      css
+      dhall
+      elixir
+      erlang
+      fennel
+      git-config
+      git-rebase
+      gitattributes
+      gitcommit
+      gitignore
+      graphql
+      gleam
+      haskell
+      java
+      javascript
+      jq
+      json
+      lua
+      markdown
+      nginx
+      nim
+      nix
+      python
+      swift
+      rbs
+      ruby
+      rust
+      scss
+      sql
+      ssh-config
+      terraform
+      toml
+      tsx
+      typescript
+      vim
+      vimdoc
+      vue
+      xml
+      yaml
+      zig
+    ]);
       type = "lua";
       config = builtins.readFile(./treesitter.lua);
     };
@@ -146,6 +205,7 @@ in
       editorconfig-vim
       fugitive
       gitsigns-nvim
+      img-clip-nvim
       neoformat
       none-ls-nvim
       nvim-jdtls
@@ -183,7 +243,7 @@ in
 
       # LANGUAGE / FILETYPE SPECIFIC
       Hoogle
-      custom.ruby-code-actions
+      # custom.ruby-code-actions
       custom.rust-tools
       dhall-vim
       elm-vim
@@ -214,7 +274,9 @@ in
       vim-snippets
 
       # COPILOT
-      # custom.copilot-cmp
-      # custom.copilot-lua
-      custom.supermaven
+      # custom.avante
+      custom.copilot-chat
+      custom.copilot-cmp
+      custom.copilot-lua
+      # custom.supermaven
     ]
