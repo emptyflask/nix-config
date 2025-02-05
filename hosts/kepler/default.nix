@@ -1,18 +1,10 @@
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ inputs, outputs, lib, config, pkgs, ... }:
 
 let
   plexTcpPorts = [ 32400 3005 8324 32469 ];
   plexUdpPorts = [ 1900 5353 32410 32412 32413 32414 ];
 
-in
-{
+in {
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
@@ -45,25 +37,22 @@ in
       # })
     ];
     # Configure your nixpkgs instance
-    config = {
-      allowUnfree = true;
-    };
+    config = { allowUnfree = true; };
   };
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: {inherit flake;})) ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+    ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = ["/etc/nix/path"];
-  environment.etc =
-    lib.mapAttrs'
-    (name: value: {
-      name = "nix/path/${name}";
-      value.source = value.flake;
-    })
-    config.nix.registry;
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+
+  environment.etc = lib.mapAttrs' (name: value: {
+    name = "nix/path/${name}";
+    value.source = value.flake;
+  }) config.nix.registry;
 
   nix.gc = {
     automatic = true;
@@ -76,7 +65,7 @@ in
   nix.extraOptions = ''
     keep-derivations = true
     keep-outputs = true
-    min-free = ${toString  (100 * 1024 * 1024)} # 100MiB
+    min-free = ${toString (100 * 1024 * 1024)} # 100MiB
     max-free = ${toString (1024 * 1024 * 1024)} # 1GiB
   '';
 
@@ -86,12 +75,12 @@ in
     sandbox = true;
 
     substituters = [
-      "https://cache.iog.io"
-      "https://cache.nixos.org/"
-      "https://devenv.cachix.org"
-      "https://digitallyinduced.cachix.org"
-      "https://ghcide-nix.cachix.org"
       "https://nix-community.cachix.org"
+      # "https://cache.iog.io"
+      "https://cache.nixos.org/"
+      # "https://devenv.cachix.org"
+      # "https://digitallyinduced.cachix.org"
+      "https://ghcide-nix.cachix.org"
     ];
 
     trusted-public-keys = [
@@ -106,7 +95,7 @@ in
   fileSystems."/media/repository" = {
     device = "/dev/disk/by-uuid/8CFA8C6CFA8C547C";
     fsType = "ntfs";
-    options = ["defaults" "user"];
+    options = [ "defaults" "user" ];
   };
 
   # fileSystems."/media/backup" =
@@ -116,9 +105,7 @@ in
   # };
 
   boot = {
-    kernel = {
-      sysctl = { "vm.swappiness" = "10"; };
-    };
+    kernel = { sysctl = { "vm.swappiness" = "10"; }; };
     loader = {
       efi.canTouchEfiVariables = true;
       # grub = {
@@ -138,7 +125,7 @@ in
 
     # Kernel modules:
     # don't load module for secondary ethernet adapter
-    blacklistedKernelModules = ["alx"];
+    blacklistedKernelModules = [ "alx" ];
     # disable usb suspend so devices work after waking
     extraModprobeConfig = ''
       options usbcore       autosuspend=-1
@@ -174,59 +161,57 @@ in
     };
   };
 
-  environment.systemPackages =
-    let
-      # Packages to always install.
-      common = with pkgs; [
-        arion
-        bind
-        binutils
-        file
-        fzf
-        git
-        gnupg
-        gotop
-        htop
-        hwinfo
-        lsof
-        neovim
-        nmap
-        mkpasswd
-        p7zip
-        pciutils
-        ripgrep
-        rsync
-        tree
-        unrar
-        unzip
-        usbutils
-        w3m
-        wget
-        zip
-      ];
+  environment.systemPackages = let
+    # Packages to always install.
+    common = with pkgs; [
+      arion
+      bind
+      binutils
+      file
+      fzf
+      git
+      gnupg
+      gotop
+      htop
+      hwinfo
+      lsof
+      neovim
+      nmap
+      mkpasswd
+      p7zip
+      pciutils
+      ripgrep
+      rsync
+      trashy
+      tree
+      unrar
+      unzip
+      usbutils
+      w3m
+      wget
+      zip
+    ];
 
-      # command-line-only
-      nox = with pkgs; [ vim ];
+    # command-line-only
+    nox = with pkgs; [ vim ];
 
-      # with Xorg
-      x = with pkgs; [
-        feh
-        firefox
-        rxvt-unicode
-        (steam.override {
-          extraPkgs = pkgs: [ wavpack ];
-        }).run
-        xclip
-        xorg.xkill
-        xorg.xmessage
-        xsel
-        vimHugeX
-        # vulkan-tools
-        # vulkan-loader
-        # vulkan-validation-layers
-      ];
+    # with Xorg
+    x = with pkgs; [
+      feh
+      firefox
+      rxvt-unicode
+      (steam.override { extraPkgs = pkgs: [ wavpack ]; }).run
+      xclip
+      xorg.xkill
+      xorg.xmessage
+      xsel
+      vimHugeX
+      # vulkan-tools
+      # vulkan-loader
+      # vulkan-validation-layers
+    ];
 
-    in common ++ (if config.services.xserver.enable then x else nox);
+  in common ++ (if config.services.xserver.enable then x else nox);
 
   fonts = {
     enableDefaultPackages = true;
@@ -247,7 +232,7 @@ in
       libre-caslon
       libre-franklin
       noto-fonts
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       noto-fonts-emoji
       roboto
       ubuntu_font_family
@@ -255,7 +240,7 @@ in
     ];
     fontconfig = {
       defaultFonts = {
-        serif     = [ "DejaVu Serif" ];
+        serif = [ "DejaVu Serif" ];
         sansSerif = [ "DejaVu Sans" ];
         monospace = [ "Fira Mono" ];
       };
@@ -263,9 +248,15 @@ in
   };
 
   programs._1password.enable = true;
-  programs._1password-gui = { enable = true; polkitPolicyOwners = [ "jon" ]; };
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "jon" ];
+  };
   programs.adb.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
   programs.seahorse.enable = true;
   programs.ssh.startAgent = false;
   programs.steam.enable = true;
@@ -291,12 +282,11 @@ in
 
       # Use the NVidia open source kernel module (not to be confused with the
       # independent third-party "nouveau" open source driver).
-      # Support is limited to the Turing and later architectures. Full list of 
-      # supported GPUs is at: 
-      # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+      # Support is limited to the Turing and later architectures. Full list of
+      # supported GPUs is at:
+      # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
       # Only available from driver 515.43.04+
-      # Currently alpha-quality/buggy, so false is currently the recommended setting.
-      open = false;
+      open = true;
 
       # Enable the Nvidia settings menu,
       # accessible via `nvidia-settings`.
@@ -355,7 +345,7 @@ in
     config.common.default = "lxqt";
     lxqt = {
       enable = true;
-      styles = [];
+      styles = [ ];
     };
   };
 

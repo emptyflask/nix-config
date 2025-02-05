@@ -73,7 +73,7 @@ with pkgs;
         history_length      = "20";          # Maximum amount of notifications kept in history
 
         dmenu               = ''${pkgs.rofi}/bin/rofi -dmenu -p dunst:'';
-        browser             = ''${pkgs.google-chrome}/bin/google-chrome-stable'';
+        browser             = ''${pkgs.firefox}/bin/firefox'';
       };
 
     };

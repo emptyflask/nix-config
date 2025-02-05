@@ -64,7 +64,7 @@ main = do
   where
     startup = do
       startupHook desktopConfig
-      spawnOnOnce "1" Paths.chrome
+      spawnOnOnce "1" Paths.firefox
       spawnOnOnce "2" Paths.thunderbird
       spawnOnOnce "3" Paths.slack
       spawnOnOnce "4" Paths.kitty

@@ -42,6 +42,7 @@ in
         module Paths where
         alsamixer   = "${pkgs.alsa-utils}/bin/alsamixer"
         chrome      = "${pkgs.google-chrome}/bin/google-chrome-stable"
+        firefox     = "${pkgs.firefox}/bin/firefox"
         htop        = "${pkgs.htop}/bin/htop"
         kitty       = "${pkgs.kitty}/bin/kitty"
         obsidian    = "${pkgs.obsidian}/bin/obsidian"
@@ -51,6 +52,7 @@ in
         spotify     = "${pkgs.spotify}/bin/spotify"
         thunderbird = "${pkgs.thunderbird-bin}/bin/thunderbird"
         xmobar      = "${pkgs.xmobar}/bin/xmobar"
+        yazi        = "${pkgs.yazi}/bin/yazi"
         zeal        = "${pkgs.zeal}/bin/zeal"
       '';
     };

@@ -16,5 +16,5 @@
         name = "${old.pname}-${version}.tar.gz";
       };
     });
-  };
+  } // inputs.yazi.overlays.default final prev;
 }
