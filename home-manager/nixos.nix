@@ -1,38 +1,7 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
-let rubyVersion = pkgs.ruby;
-in
 {
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    config = {
-      allowUnfree = true;
-
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
-
-      permittedInsecurePackages =
-        lib.optional (pkgs.obsidian.version == "1.5.3") "electron-25.9.0";
-    };
-  };
-
-  programs = {
-    beets = {
+  programs.beets = {
       enable = true;
       mpdIntegration.enableStats = true;
       mpdIntegration.enableUpdate = true;
@@ -66,42 +35,11 @@ in
           force = "no";
         };
       };
-    };
+  };
 
-    broot.enable = true; # directory browser
+  programs.firefox.enable      = true;
 
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    firefox.enable      = true;
-    fzf.enable          = true;
-
-    gh = {
-      enable = true;
-      extensions = with pkgs; [
-        gh-cal
-        gh-eco
-      ];
-      settings = {
-        aliases = {
-          co = "pr checkout";
-          pv = "pr view";
-        };
-        git-protocol = "https";
-      };
-    };
-    gh-dash = {
-      enable = true;
-    };
-
-    go.enable           = true;
-    home-manager.enable = true;
-    keychain.enable     = true;
-    ncmpcpp.enable      = true;
-
-    yazi = {
+programs.yazi = {
       enable         = true;
       # plugins = {
       #   hexyl = builtins.fetchGit {
@@ -153,15 +91,6 @@ in
       };
     };
 
-    zoxide.enable       = true;
-
-    # z-lua = {       # directory quick nav
-    #   enable        = true;
-    #   enableAliases = true;
-    #   options       = ["enhanced" "once" "fzf"];
-    # };
-  };
-
   home = {
     username = "jon";
     homeDirectory = "/home/jon";
@@ -171,7 +100,7 @@ in
       ".railsrc".source = ./nixos/home/railsrc;
     };
     sessionPath = [
-      "$HOME/.gem/ruby/${rubyVersion.version.libDir}/bin"
+      "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin"
     ];
   };
 
@@ -179,7 +108,7 @@ in
   systemd.user.startServices = "sd-switch";
 
   imports = [
-    (import ./common.nix { inherit pkgs rubyVersion; })
+    ./common.nix
     ./nixos/linux.nix
     ./nixos/environment.nix
     ./nixos/accounts
