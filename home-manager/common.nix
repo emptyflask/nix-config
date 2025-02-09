@@ -1,10 +1,55 @@
-{ pkgs, rubyVersion ? pkgs.ruby, ... }:
+{ outputs, pkgs, ... }:
 
-with pkgs;
 {
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.additions
+      outputs.overlays.modifications
+    ];
+    config = {
+      allowUnfree = true;
+      # Workaround for https://github.com/nix-community/home-manager/issues/2942
+      allowUnfreePredicate = _: true;
+    };
+  };
+
+  programs = {
+    broot.enable = true; # directory browser
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    fzf.enable          = true;
+
+    gh = {
+      enable = true;
+      extensions = with pkgs; [
+        gh-cal
+        gh-eco
+      ];
+      settings = {
+        aliases = {
+          co = "pr checkout";
+          pv = "pr view";
+        };
+        git-protocol = "https";
+      };
+    };
+    gh-dash = {
+      enable = true;
+    };
+
+    go.enable           = true;
+    home-manager.enable = true;
+    keychain.enable     = true;
+    ncmpcpp.enable      = true;
+
+    zoxide.enable       = true;
+  };
 
   home.packages = with pkgs; [
-
     bat                 # cat clone with syntax highlighting and git integration
     bc                  # cli calculator
     du-dust             # rust modern clone of du
@@ -71,8 +116,8 @@ with pkgs;
     # programming - ruby
     bundix
     jekyll
-    rubyVersion
-    rubyVersion.gems.pry
+    ruby
+    ruby.gems.pry
 
     # programming - rust
     cargo

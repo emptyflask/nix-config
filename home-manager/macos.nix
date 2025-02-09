@@ -1,18 +1,36 @@
 { lib, config, pkgs, nixpkgs, ... }:
 
-let
-  nixFlakes = (pkgs.writeScriptBin "nixFlakes" ''
-      exec ${pkgs.nixUnstable}/bin/nix --experimental-features "nix-command flakes" "$@"
-    '');
+{
+  home = {
+    username = "jonroberts";
+    homeDirectory = "/Users/jonroberts";
+    file = {
+      ".ghci".source = ./nixos/home/ghci;
+      ".psqlrc".source = ./nixos/home/psqlrc;
+      ".railsrc".source = ./nixos/home/railsrc;
+    };
 
-in {
-  imports = [
-   ../common.nix
-   ../../programs/non-free.nix
+    packages = with pkgs; [
+      zlib
+      # nixFlakes
+    ];
+
+    sessionPath = [
+      "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin"
+    ];
+  };
+
+ imports = [
+    ./common.nix
+    ./nixos/programs/git
+    ./nixos/programs/kitty
+    ./nixos/programs/neomutt
+    ./nixos/programs/neovim
+    ./nixos/programs/tmux
+    ./nixos/programs/vim
+    ./nixos/programs/zathura
+    ./nixos/programs/zsh
  ];
 
- home.packages = with pkgs; [
-   zlib
-   nixFlakes
- ];
+ home.stateVersion = "23.11";
 }
