@@ -1,43 +1,36 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   services = {
     accounts-daemon.enable = true;
-    acpid.enable           = true; # Advanced Configuration and Power Interface
-    apcupsd.enable         = true; # UPS daemon
+    acpid.enable = true; # Advanced Configuration and Power Interface
+    apcupsd.enable = true; # UPS daemon
 
     avahi = {
       enable = true;
       nssmdns4 = true;
       publish = {
-        enable       = true;
-        addresses    = true;
-        domain       = true;
-        hinfo        = true;
+        enable = true;
+        addresses = true;
+        domain = true;
+        hinfo = true;
         userServices = true;
-        workstation  = true;
+        workstation = true;
       };
     };
 
-    blueman.enable         = true; # bluetooth manager
-    chrony.enable          = true; # Time sync (replaces ntpd)
-    clipmenu.enable        = true;
+    blueman.enable = true; # bluetooth manager
+    chrony.enable = true; # Time sync (replaces ntpd)
+    clipmenu.enable = true;
 
     dbus.packages = with pkgs; [ dconf ];
 
     devmon.enable = true;
 
-    elasticsearch = {
+    opensearch = {
       enable = false;
-      cluster_name = "schrödinger";
-      package = pkgs.elasticsearch7;
-      plugins = with pkgs.elasticsearchPlugins; [
-        analysis-icu
-        analysis-lemmagen
-        analysis-phonetic
-      ];
-      extraConf = "";
-      extraJavaOptions = [ "-Xms500m" "-Xmx1g" ];
+      settings = { "cluster.name" = "schrödinger"; };
+      extraJavaOptions = [ "-Xms512m" "-Xmx1g" ];
     };
 
     emacs.enable = false;
@@ -48,17 +41,18 @@
       gnome-keyring.enable = true;
     };
 
-    flatpak.enable              = true;
-    gvfs.enable                 = true; # automount
-    kbfs.enable                 = true; # $HOME/keybase
-    keybase.enable              = true;
+    flatpak.enable = true;
+    gvfs.enable = true; # automount
+    kbfs.enable = true; # $HOME/keybase
+    keybase.enable = true;
 
     kmscon = {
       enable = true;
       hwRender = false;
-      fonts = [
-        { name = "Fira Code Regular"; package = pkgs.fira-code; }
-      ];
+      fonts = [{
+        name = "Fira Code Regular";
+        package = pkgs.fira-code;
+      }];
       extraConfig = ''
         font-size=12
         font-dpi=110
@@ -66,10 +60,10 @@
     };
 
     locate = {
-      enable    = true;
-      interval  = "hourly";
+      enable = true;
+      interval = "hourly";
       localuser = null;
-      package   = pkgs.mlocate;
+      package = pkgs.mlocate;
     };
 
     logind.extraConfig = ''
@@ -99,7 +93,7 @@
       };
     };
 
-    pcscd.enable    = true; # Smartcard reader
+    pcscd.enable = true; # Smartcard reader
     peroxide.enable = false;
 
     pipewire = {
@@ -111,12 +105,12 @@
       wireplumber.enable = true;
     };
 
-#     plex = {
-#       enable = true;
-#       dataDir = "/media/repository/movies";
-#       openFirewall = true;
-#       package = nixUnstable.plex;
-#     };
+    #     plex = {
+    #       enable = true;
+    #       dataDir = "/media/repository/movies";
+    #       openFirewall = true;
+    #       package = nixUnstable.plex;
+    #     };
 
     printing.enable = true;
     protonmail-bridge.enable = true;
@@ -134,9 +128,7 @@
     };
 
     # Usenet downloader
-    nzbget = {
-      enable = true;
-    };
+    nzbget = { enable = true; };
     sabnzbd = {
       enable = false;
       user = "usenet";
@@ -148,34 +140,34 @@
       enable = true;
       settings = {
         global = {
-          "workgroup"      = "WORKGROUP";
-          "server string"  = "kepler";
-          "netbios name"   = "kepler";
-          "security"       = "user";
-          "hosts allow"    = ["10." "192.168." "localhost"];
-          "hosts deny"     = ["0.0.0.0/0"];
-          "guest account"  = "nobody";
-          "map to guest"   = "bad user";
+          "workgroup" = "WORKGROUP";
+          "server string" = "kepler";
+          "netbios name" = "kepler";
+          "security" = "user";
+          "hosts allow" = [ "10." "192.168." "localhost" ];
+          "hosts deny" = [ "0.0.0.0/0" ];
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
         };
         public = {
-          "path"           = "/home/jon/public";
-          "browseable"     = "yes";
-          "read only"      = "no";
-          "guest ok"       = "yes";
-          "create mask"    = "0644";
+          "path" = "/home/jon/public";
+          "browseable" = "yes";
+          "read only" = "no";
+          "guest ok" = "yes";
+          "create mask" = "0644";
           "directory mask" = "0755";
-          "force user"     = "jon";
-          "force group"    = "users";
+          "force user" = "jon";
+          "force group" = "users";
         };
         incoming = {
-          "path"           = "/home/jon/public/incoming";
-          "browseable"     = "no";
-          "read only"      = "no";
-          "guest ok"       = "yes";
-          "create mask"    = "0644";
+          "path" = "/home/jon/public/incoming";
+          "browseable" = "no";
+          "read only" = "no";
+          "guest ok" = "yes";
+          "create mask" = "0644";
           "directory mask" = "0755";
-          "force user"     = "jon";
-          "force group"    = "users";
+          "force user" = "jon";
+          "force group" = "users";
         };
       };
     };
@@ -183,10 +175,7 @@
     tumbler.enable = true; # thumbnail generator
 
     udev = {
-      packages = [
-        pkgs.libu2f-host
-        pkgs.yubikey-personalization
-      ];
+      packages = [ pkgs.libu2f-host pkgs.yubikey-personalization ];
       extraRules = ''
         SUBSYSTEM=="block", ENV{UDISKS_FILESYSTEM_SHARED}="1"
 
@@ -204,7 +193,7 @@
 
     zerotierone = {
       enable = false;
-      joinNetworks = ["8bd5124fd6f9a7e6"];
+      joinNetworks = [ "8bd5124fd6f9a7e6" ];
     };
   };
 
