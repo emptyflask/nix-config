@@ -155,8 +155,15 @@ in {
       allowedTCPPorts = [ 22 139 445 5000 8080 ] ++ plexTcpPorts;
       allowedUDPPorts = [ 137 138 ] ++ plexUdpPorts;
       allowPing = true;
+
+      # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/8
       extraCommands = ''
         iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
+
+        iptables -I INPUT 1 -i docker0 -p tcp -d 172.17.0.1 -j ACCEPT
+        iptables -I INPUT 2 -i docker0 -p udp -d 172.17.0.1 -j ACCEPT
+        iptables -I INPUT 1 -s 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
+        iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
       '';
     };
   };
