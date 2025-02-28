@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
     darwin = {
-      url = "github:lnl7/nix-darwin/master";
+      url = "github:lnl7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -27,7 +27,7 @@
     yazi.url = "github:sxyazi/yazi";
   };
 
-  outputs = { self, nixpkgs, home-manager, lix-module, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, home-manager, lix-module, ... }@inputs:
     let
       inherit (self) outputs;
       # Supported systems for your flake packages, shell, etc.
@@ -59,6 +59,16 @@
       # Reusable home-manager modules you might want to export
       # These are usually stuff you would upstream into home-manager
       homeManagerModules = import ./modules/home-manager;
+
+      darwinConfigurations = {
+        gaudi = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          modules = [
+            ./hosts/gaudi/darwin-configuration.nix
+          ];
+          specialArgs = {inherit inputs outputs;};
+        };
+      };
 
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#kepler'
