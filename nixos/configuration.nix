@@ -177,60 +177,57 @@ in
     };
   };
 
-  environment.systemPackages =
-    let
-      # Packages to always install.
-      common = with pkgs; [
-        arion
-        bind
-        binutils
-        file
-        fzf
-        git
-        gnupg
-        gotop
-        htop
-        hwinfo
-        lsof
-        neovim
-        nmap
-        mkpasswd
-        p7zip
-        pciutils
-        ripgrep
-        rsync
-        silver-searcher
-        tree
-        unrar
-        unzip
-        usbutils
-        w3m
-        wget
-        zip
-      ];
+  environment.systemPackages = let
+    # Packages to always install.
+    common = with pkgs; [
+      arion
+      bind
+      binutils
+      file
+      fzf
+      git
+      gnupg
+      gotop
+      htop
+      hwinfo
+      lsof
+      neovim
+      nmap
+      mkpasswd
+      p7zip
+      pciutils
+      ripgrep
+      rsync
+      silver-searcher
+      tree
+      unrar
+      unzip
+      usbutils
+      w3m
+      wget
+      zip
+    ];
 
-      # command-line-only
-      nox = with pkgs; [ vim ];
+    # command-line-only
+    nox = with pkgs; [ vim ];
 
-      # with Xorg
-      x = with pkgs; [
-        feh
-        firefox
-        rxvt-unicode
-        (steam.override {
-          extraPkgs = pkgs: [ wavpack ];
-        }).run
-        xclip
-        xorg.xkill
-        xorg.xmessage
-        xsel
-        vimHugeX
-        # vulkan-tools
-        # vulkan-loader
-        # vulkan-validation-layers
-      ];
+    # with Xorg
+    x = with pkgs; [
+      feh
+      firefox
+      rxvt-unicode
+      (steam.override { extraPkgs = pkgs: [ wavpack ]; }).run
+      xclip
+      xorg.xkill
+      xorg.xmessage
+      xsel
+      vimHugeX
+      # vulkan-tools
+      # vulkan-loader
+      # vulkan-validation-layers
+    ];
 
-    in common ++ (if config.services.xserver.enable then x else nox);
+  in common ++ (if config.services.xserver.enable then x else nox);
 
   fonts = {
     enableDefaultPackages = true;

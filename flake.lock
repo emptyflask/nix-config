@@ -142,7 +142,7 @@
         "narHash": "sha256-YMLrcBpf0TR5r/eaqm8lxzFPap2TxCor0ZGcK3a7+b8=",
         "rev": "b90bf629bbd835e61f1317b99e12f8c831017006",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/nixos-module/archive/b90bf629bbd835e61f1317b99e12f8c831017006.tar.gz"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/nixos-module/archive/b90bf629bbd835e61f1317b99e12f8c831017006.tar.gz?rev=b90bf629bbd835e61f1317b99e12f8c831017006"
       },
       "original": {
         "type": "tarball",
@@ -204,11 +204,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1740757750,
-        "narHash": "sha256-9dF1ZCt9ZY8M426ASdsynaq+yRdO4EHBM7r56e6qS2I=",
+        "lastModified": 1740776117,
+        "narHash": "sha256-zQuEScC1oP5q9Qtu+IthuD9AUeYx0f9dGCqHYxkVUDE=",
         "owner": "nix-community",
         "repo": "nur",
-        "rev": "602ad15b538463340c12fa303aeb99758231f95f",
+        "rev": "2efd087395c3c3a0778af4bfb79ea8955a5dbb17",
         "type": "github"
       },
       "original": {
