@@ -83,19 +83,19 @@ in
     experimental-features = "nix-command flakes";
 
     substituters = [
-      "https://cache.iog.io"
+      # "https://cache.iog.io"
       "https://cache.nixos.org/"
-      "https://devenv.cachix.org"
-      "https://digitallyinduced.cachix.org"
-      "https://ghcide-nix.cachix.org"
+      # "https://devenv.cachix.org"
+      # "https://digitallyinduced.cachix.org"
+      # "https://ghcide-nix.cachix.org"
       "https://nix-community.cachix.org"
     ];
 
     trusted-public-keys = [
-      "cache.iog.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      "digitallyinduced.cachix.org-1:y+wQvrnxQ+PdEsCt91rmvv39qRCYzEgGQaldK26hCKE="
-      "ghcide-nix.cachix.org-1:ibAY5FD+XWLzbLr8fxK6n8fL9zZe7jS+gYeyxyWYK5c="
+      # "cache.iog.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+      # "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+      # "digitallyinduced.cachix.org-1:y+wQvrnxQ+PdEsCt91rmvv39qRCYzEgGQaldK26hCKE="
+      # "ghcide-nix.cachix.org-1:ibAY5FD+XWLzbLr8fxK6n8fL9zZe7jS+gYeyxyWYK5c="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
