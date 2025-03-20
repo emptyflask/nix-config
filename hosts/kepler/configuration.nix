@@ -1,6 +1,8 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
 let
+  common = import ../common.nix { inherit pkgs; };
+
   plexTcpPorts = [ 32400 3005 8324 32469 ];
   plexUdpPorts = [ 1900 5353 32410 32412 32413 32414 ];
 
@@ -167,42 +169,8 @@ in {
     };
   };
 
-  environment.systemPackages = let
-    # Packages to always install.
-    common = with pkgs; [
-      arion
-      bind
-      binutils
-      file
-      fzf
-      git
-      gnupg
-      gotop
-      htop
-      hwinfo
-      lsof
-      neovim
-      nmap
-      mkpasswd
-      p7zip
-      pciutils
-      ripgrep
-      rsync
-      trashy
-      tree
-      unrar
-      unzip
-      usbutils
-      w3m
-      wget
-      zip
-    ];
-
-    # command-line-only
-    nox = with pkgs; [ vim ];
-
-    # with Xorg
-    x = with pkgs; [
+  environment.systemPackages = with pkgs;
+    common.packages ++ [
       feh
       firefox
       rxvt-unicode
@@ -212,38 +180,23 @@ in {
       xorg.xmessage
       xsel
       vimHugeX
-      # vulkan-tools
-      # vulkan-loader
-      # vulkan-validation-layers
     ];
-
-  in common ++ (if config.services.xserver.enable then x else nox);
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [
-      corefonts
-      dejavu_fonts
-      fira
-      fira-code
-      fira-code-symbols
-      fira-mono
-      helvetica-neue-lt-std
-      ibm-plex
-      inconsolata
-      inter
-      liberation_ttf
-      libre-baskerville
-      libre-bodoni
-      libre-caslon
-      libre-franklin
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-emoji
-      roboto
-      ubuntu_font_family
-      vistafonts
-    ];
+    packages = with pkgs;
+      common.fonts ++ [
+        aileron
+        helvetica-neue-lt-std
+        ibm-plex
+        inconsolata
+        inter
+        liberation_ttf
+        libre-baskerville
+        libre-bodoni
+        libre-caslon
+        libre-franklin
+      ];
     fontconfig = {
       defaultFonts = {
         serif = [ "DejaVu Serif" ];

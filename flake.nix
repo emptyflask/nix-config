@@ -1,9 +1,7 @@
 {
-  description = "Your new nix config";
+  description = "Jon's nix configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
-
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,18 +14,32 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     lix-module = {
       url =
         "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-apple-silicon = {
+      url = "github:tpwrules/nixos-apple-silicon";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
     nur.url = "github:nix-community/nur";
 
     yazi.url = "github:sxyazi/yazi";
   };
 
-  outputs = { self, darwin, nixpkgs, home-manager, lix-module, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, lix-module, ... }@inputs:
     let
       inherit (self) outputs;
       # Supported systems for your flake packages, shell, etc.
@@ -61,12 +73,10 @@
       homeManagerModules = import ./modules/home-manager;
 
       darwinConfigurations = {
-        gaudi = darwin.lib.darwinSystem {
+        gaudi = inputs.darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          modules = [
-            ./hosts/gaudi/darwin-configuration.nix
-          ];
-          specialArgs = {inherit inputs outputs;};
+          modules = [ ./hosts/gaudi/configuration.nix ];
+          specialArgs = { inherit inputs outputs; };
         };
       };
 
@@ -75,8 +85,20 @@
       nixosConfigurations = {
         kepler = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
-          modules =
-            [ ./hosts/kepler/default.nix lix-module.nixosModules.default ];
+          modules = [
+            ./hosts/kepler/configuration.nix
+            lix-module.nixosModules.default
+          ];
+        };
+
+        newton = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs outputs; };
+          pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
+          modules = [
+            ./hosts/newton/configuration.nix
+            lix-module.nixosModules.default
+          ];
         };
       };
 
@@ -88,11 +110,19 @@
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/macos.nix ];
         };
+
         "jon@kepler" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/nixos.nix ];
         };
+
+        "jon@newton" =
+          inputs.home-manager-unstable.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.aarch64-linux;
+            extraSpecialArgs = { inherit inputs outputs; };
+            modules = [ ./home-manager/nixos.nix ];
+          };
       };
     };
 }
