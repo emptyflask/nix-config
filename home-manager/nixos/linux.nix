@@ -13,12 +13,14 @@ let
     };
   };
 
-  latlong = location: if (lib.hasAttrByPath [ location ] locations) then locations.${location} else locations.home;
+  latlong = location:
+    if (lib.hasAttrByPath [ location ] locations) then
+      locations.${location}
+    else
+      locations.home;
   background = "$HOME/.config/wallpaper/current";
 
-in
-with pkgs;
-{
+in with pkgs; {
 
   home.keyboard = {
     layout = "us";
@@ -61,41 +63,46 @@ with pkgs;
     # _1password
     # _1password-gui
     alsa-utils
-    bmon                # network monitor
+    bmon # network monitor
     # burpsuite  # network security tool
     bruno # api tool
-    cheese       # webcam photos
-    dmenu               # minimal desktop menu
+    cheese # webcam photos
+    dmenu # minimal desktop menu
     dropbox
     # exodus     # crypto wallet
     # gnome.gnome-calendar
     # gnome.gnome-control-center
     exiftool
-    glow                # markdown viewer
+    glow # markdown viewer
     google-chrome
-    jmtpfs              # Media Transfer Protocol (usb device filesystems)
+    jmtpfs # Media Transfer Protocol (usb device filesystems)
     joplin-desktop # notes
     keybase
     keybase-gui
-    kitty               # terminal
+    kitty # terminal
     libreoffice
-    lxmenu-data         # installed apps
-    miller              # csv tool
+    lxmenu-data # installed apps
+    miller # csv tool
     pavucontrol
     postman
     protonvpn-cli
-    qalculate-gtk       # calculator
+    qalculate-gtk # calculator
     qemu
-    scowl               # spellchecker / dictionary
+    scowl # spellchecker / dictionary
     st
     xdg-utils
     whois
-    (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
+    (xfce.thunar.override {
+      thunarPlugins = with pkgs; [
+        xfce.thunar-volman
+        xfce.thunar-archive-plugin
+      ];
+    })
     xfce.xfconf
     xfce.exo
     yubioath-flutter
     yubikey-personalization
-    zeal                # docs (like dash)
+    zeal # docs (like dash)
 
     # games
     # steam-run
@@ -110,23 +117,24 @@ with pkgs;
     # blender
     # darktable
     ffmpegthumbnailer
-    flameshot           # screenshots (PrtSc)
+    flameshot # screenshots (PrtSc)
     # gimp-with-plugins
     # krita
     # meshlab
     # scribus             # page layout
-    scrot               # CLI screenshotter
+    scrot # CLI screenshotter
 
     # programming - general
-    dbeaver-bin         # DB GUI
+    android-studio
+    dbeaver-bin # DB GUI
     docker-compose
     gcc
     hexyl
     lazydocker
-    ltrace              # lib trace
-    strace              # system call trace
+    ltrace # lib trace
+    strace # system call trace
     vscode
-    nixfmt-classic      # format nix
+    nixfmt-classic # format nix
     uncrustify # format c/c++/c#/java/etc
 
     # programming - haskell
@@ -184,9 +192,9 @@ with pkgs;
     # nerd-fonts.fira-code
 
     # media
-    audacious           # music player
-    calibre             # e-book library
-    evince              # another PDF viewer
+    audacious # music player
+    calibre # e-book library
+    evince # another PDF viewer
     # handbrake           # dvd ripper
     mplayer
     mpv
@@ -201,36 +209,36 @@ with pkgs;
     blueman-applet.enable = true;
 
     picom = {
-      enable       = true;
-      fade         = true;
-      fadeDelta    = 5;
-      fadeSteps    = [0.04 0.04];
-      shadow       = false;
-      backend      = "xrender";
-      vSync        = true;
+      enable = true;
+      fade = true;
+      fadeDelta = 5;
+      fadeSteps = [ 4.0e-2 4.0e-2 ];
+      shadow = false;
+      backend = "xrender";
+      vSync = true;
       # vSync        = "opengl";
       settings = {
-        glx-no-rebind-pixmap  = true;
-        glx-no-stencil        = true;
+        glx-no-rebind-pixmap = true;
+        glx-no-stencil = true;
         # glx-copy-from-front   = false;
-        use-damage            = true;
-        xrender-sync-fence    = true;
+        use-damage = true;
+        xrender-sync-fence = true;
       };
     };
 
     gpg-agent = {
-      enable           = true;
-      defaultCacheTtl  = (60 * 60 * 4);
+      enable = true;
+      defaultCacheTtl = (60 * 60 * 4);
       enableSshSupport = true;
     };
 
     mpd.enable = true;
 
     redshift = {
-      enable    = true;
-      latitude  = toString (latlong myLocation).lat;
+      enable = true;
+      latitude = toString (latlong myLocation).lat;
       longitude = toString (latlong myLocation).long;
-      tray      = true;
+      tray = true;
     };
 
     screen-locker = {
@@ -243,9 +251,7 @@ with pkgs;
 
     xscreensaver = {
       enable = true;
-      settings = {
-        lock = true;
-      };
+      settings = { lock = true; };
     };
   };
 
