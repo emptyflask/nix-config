@@ -1,20 +1,12 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ inputs, outputs, lib, config, pkgs, ... }:
 
 let
   plexTcpPorts = [ 32400 3005 8324 32469 ];
   plexUdpPorts = [ 1900 5353 32410 32412 32413 32414 ];
 
-in
-{
+in {
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
@@ -74,7 +66,7 @@ in
   nix.extraOptions = ''
     keep-derivations = true
     keep-outputs = true
-    min-free = ${toString  (100 * 1024 * 1024)} # 100MiB
+    min-free = ${toString (100 * 1024 * 1024)} # 100MiB
     max-free = ${toString (1024 * 1024 * 1024)} # 1GiB
   '';
 
@@ -105,7 +97,7 @@ in
   fileSystems."/media/repository" = {
     device = "/dev/disk/by-uuid/8CFA8C6CFA8C547C";
     fsType = "ntfs";
-    options = ["defaults" "user"];
+    options = [ "defaults" "user" ];
   };
 
   # fileSystems."/media/backup" =
@@ -115,9 +107,7 @@ in
   # };
 
   boot = {
-    kernel = {
-      sysctl = { "vm.swappiness" = "10"; };
-    };
+    kernel = { sysctl = { "vm.swappiness" = "10"; }; };
     loader = {
       efi.canTouchEfiVariables = true;
       # grub = {
@@ -137,7 +127,7 @@ in
 
     # Kernel modules:
     # don't load module for secondary ethernet adapter
-    blacklistedKernelModules = ["alx"];
+    blacklistedKernelModules = [ "alx" ];
     # disable usb suspend so devices work after waking
     extraModprobeConfig = ''
       options usbcore       autosuspend=-1
@@ -250,7 +240,7 @@ in
     ];
     fontconfig = {
       defaultFonts = {
-        serif     = [ "DejaVu Serif" ];
+        serif = [ "DejaVu Serif" ];
         sansSerif = [ "DejaVu Sans" ];
         monospace = [ "Fira Mono" ];
       };
@@ -258,9 +248,15 @@ in
   };
 
   programs._1password.enable = true;
-  programs._1password-gui = { enable = true; polkitPolicyOwners = [ "jon" ]; };
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "jon" ];
+  };
   programs.adb.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
   programs.seahorse.enable = true;
   programs.ssh.startAgent = false;
   programs.steam.enable = true;
