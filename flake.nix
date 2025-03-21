@@ -3,8 +3,8 @@
 
   inputs = {
     darwin = {
-      url = "github:lnl7/nix-darwin/nix-darwin-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     # hardware.url = "github:nixos/nixos-hardware";
@@ -22,7 +22,7 @@
     lix-module = {
       url =
         "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     nixos-apple-silicon = {
@@ -100,13 +100,20 @@
             lix-module.nixosModules.default
           ];
         };
+
+        nada = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs outputs; };
+          modules =
+            [ /etc/nixos/configuration.nix ./hosts/nada/default.nix lix-module.nixosModules.default ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#jon@kepler'
       homeConfigurations = {
-        "jon@gaudi" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        "jon@gaudi" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-darwin;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/gaudi/home.nix ];
         };

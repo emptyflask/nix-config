@@ -36,6 +36,6 @@
     };
   };
 
-  # system.keyboard.enableKeyMapping = true;
-  # system.keyboard.remapCapsLockToControl = true;
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToControl = true;
 }
