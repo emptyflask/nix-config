@@ -27,7 +27,7 @@ in {
   environment.systemPackages = with pkgs;
     common.packages ++ [
       asahi-bless
-      inputs.home-manager-unstable.home-manager
+      home-manager
       kitty
       rxvt-unicode
       wofi
@@ -65,7 +65,7 @@ in {
         iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
       '';
     };
-    hostname = "newton";
+    hostName = "newton";
     networkmanager = {
       enable = true;
       enableStrongSwan = true;
@@ -84,7 +84,7 @@ in {
       options = "--delete-older-than 30d";
     };
 
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" ];
 
     optimise.automatic = true;
 
@@ -94,9 +94,6 @@ in {
       min-free = ${toString (100 * 1024 * 1024)} # 100MiB
       max-free = ${toString (1024 * 1024 * 1024)} # 1GiB
     '';
-
-    registry = (lib.mapAttrs (_: flake: { inherit flake; }))
-      ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
     settings = {
       auto-optimise-store = true;
@@ -109,25 +106,23 @@ in {
     };
   };
 
-  nixpkgs = {
-    overlays = [ outputs.overlays.additions outputs.overlays.modifications ];
-    config = { allowUnfree = true; };
-  };
+  # nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [ outputs.overlays.additions outputs.overlays.modifications ];
 
   programs = {
-    _1password.enable = true;
-    _1password-gui = {
-      enable = true;
-      polkitPolicyOwners = [ "jon" ];
-    };
+    # _1password.enable = true;
+    # _1password-gui = {
+    #   enable = true;
+    #   polkitPolicyOwners = [ "jon" ];
+    # };
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
     };
     hyprland.enable = true;
-    seahorse.enable = true;
+    # seahorse.enable = true;
     ssh.startAgent = false;
-    steam.enable = true;
+    # steam.enable = true;
     sway.enable = true;
     zsh.enable = true;
   };
