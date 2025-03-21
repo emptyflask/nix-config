@@ -2,15 +2,15 @@
 
 let
   imports = [
-    ../home-manager/common.nix
-    ../home-manager/environment.nix
-    ../home-manager/programs/git
-    ../home-manager/programs/kitty
-    ../home-manager/programs/neovim
-    ../home-manager/programs/tmux
-    ../home-manager/programs/vim
-    ../home-manager/programs/zathura
-    ../home-manager/programs/zsh
+    ../../home-manager/common.nix
+    ../../home-manager/environment.nix
+    ../../home-manager/programs/git
+    ../../home-manager/programs/kitty
+    ../../home-manager/programs/neovim
+    ../../home-manager/programs/tmux
+    ../../home-manager/programs/vim
+    ../../home-manager/programs/zathura
+    ../../home-manager/programs/zsh
   ];
 
 in {
@@ -20,9 +20,9 @@ in {
     username = "jon";
     homeDirectory = "/home/jon";
     file = {
-      ".ghci".source = ../home-manager/home/ghci;
-      ".psqlrc".source = ../home-manager/home/psqlrc;
-      ".railsrc".source = ../home-manager/home/railsrc;
+      ".ghci".source = ../../home-manager/home/ghci;
+      ".psqlrc".source = ../../home-manager/home/psqlrc;
+      ".railsrc".source = ../../home-manager/home/railsrc;
     };
 
     packages = with pkgs; [
@@ -33,16 +33,11 @@ in {
       cachix
       cheese # webcam photos
       dmenu # minimal desktop menu
-      dropbox
       exiftool
       glow # markdown viewer
-      google-chrome
       jmtpfs # Media Transfer Protocol (usb device filesystems)
-      joplin-desktop # notes
-      keybase
-      keybase-gui
       kitty # terminal
-      libreoffice
+      # libreoffice
       lxmenu-data # installed apps
       miller # csv tool
       pavucontrol
@@ -54,8 +49,6 @@ in {
       st
       xdg-utils
       whois
-      wine
-      winetricks
       yubioath-flutter
       yubikey-personalization
       zeal # docs (like dash)
@@ -66,7 +59,7 @@ in {
       scrot # CLI screenshotter
 
       # programming - general
-      dbeaver-bin # DB GUI
+      # dbeaver-bin # DB GUI
       docker-compose
       gcc
       hexyl
@@ -78,20 +71,16 @@ in {
       uncrustify # format c/c++/c#/java/etc
 
       # programming - haskell
-      haskellPackages.stylish-haskell
-      ormolu
-      stack
+      # haskellPackages.stylish-haskell
+      # ormolu
+      # stack
 
       # programming - nix
       alejandra # format nix
 
       # chat / email
-      discord
       protonmail-bridge
       signal-desktop
-      slack
-      thunderbird-bin
-      zoom-us
 
       # fonts
       aileron
@@ -128,12 +117,10 @@ in {
 
       # media
       audacious # music player
-      calibre # e-book library
       evince # another PDF viewer
       mplayer
       mpv
       smplayer
-      spotify
       vlc
     ];
 
@@ -142,7 +129,10 @@ in {
     stateVersion = "25.05";
   };
 
-  programs.firefox.enable = true;
+  programs = {
+    chromium.enable = true;
+    firefox.enable = true;
+  };
 
   services = {
     gpg-agent = {

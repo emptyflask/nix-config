@@ -41,7 +41,7 @@ with pkgs;
     rsync
     trashy
     tree
-    unrar
+    # unrar
     unzip
     usbutils
     w3m

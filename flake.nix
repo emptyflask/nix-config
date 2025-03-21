@@ -108,20 +108,20 @@
         "jon@gaudi" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.aarch64-darwin;
           extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./home-manager/macos.nix ];
+          modules = [ ./hosts/gaudi/home.nix ];
         };
 
         "jon@kepler" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./home-manager/nixos.nix ];
+          modules = [ ./hosts/kepler/home.nix ];
         };
 
         "jon@newton" =
           inputs.home-manager-unstable.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.aarch64-linux;
+            pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
             extraSpecialArgs = { inherit inputs outputs; };
-            modules = [ ./home-manager/nixos.nix ];
+            modules = [ ./hosts/newton/home.nix ];
           };
       };
     };
