@@ -1,28 +1,29 @@
 { pkgs, ... }:
 
 let
+  hm = path: "${../../home-manager}/${path}";
   imports = [
-    ../home-manager/common.nix
-    ../home-manager/linux.nix
-    ../home-manager/environment.nix
-    ../home-manager/accounts
-    ../home-manager/services/dunst
-    ../home-manager/services/mpd
-    ../home-manager/services/spotifyd
-    ../home-manager/services/trayer
-    ../home-manager/programs/alacritty
-    ../home-manager/programs/git
-    ../home-manager/programs/kitty
-    ../home-manager/programs/neomutt
-    ../home-manager/programs/neovim
-    ../home-manager/programs/rofi
-    ../home-manager/programs/tmux
-    ../home-manager/programs/vim
-    ../home-manager/programs/yazi
-    ../home-manager/programs/zathura
-    ../home-manager/programs/zsh
-    ../home-manager/xmobar
-    ../home-manager/xresources
+    (hm "common.nix")
+    (hm "linux.nix")
+    (hm "environment.nix")
+    (hm "accounts")
+    (hm "services/dunst")
+    (hm "services/mpd")
+    (hm "services/spotifyd")
+    (hm "services/trayer")
+    (hm "programs/alacritty")
+    (hm "programs/git")
+    (hm "programs/kitty")
+    (hm "programs/neomutt")
+    (hm "programs/neovim")
+    (hm "programs/rofi")
+    (hm "programs/tmux")
+    (hm "programs/vim")
+    (hm "programs/yazi")
+    (hm "programs/zathura")
+    (hm "programs/zsh")
+    (hm "xmobar")
+    (hm "xresources")
   ];
 
 in {
@@ -33,9 +34,9 @@ in {
     homeDirectory = "/home/jon";
 
     file = {
-      ".ghci".source = ../home-manager/home/ghci;
-      ".psqlrc".source = ../home-manager/home/psqlrc;
-      ".railsrc".source = ../home-manager/home/railsrc;
+      ".ghci".source = (hm "home/ghci");
+      ".psqlrc".source = (hm "home/psqlrc");
+      ".railsrc".source = (hm "home/railsrc");
     };
 
     keyboard = {
