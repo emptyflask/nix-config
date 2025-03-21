@@ -143,12 +143,12 @@ in {
   time.timeZone = "America/Chicago";
 
   networking = {
-    hostName = "kepler"; # Define your hostname.
-    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    hostName = "kepler";
 
     networkmanager = {
       enable = true;
       enableStrongSwan = true;
+      wifi.backend = "iwd";
     };
 
     firewall = {
@@ -166,6 +166,11 @@ in {
         iptables -I INPUT 1 -s 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
         iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
       '';
+    };
+
+    wireless.iwd = {
+      enable = true;
+      settings = { Settings = { AutoConnect = true; }; };
     };
   };
 
