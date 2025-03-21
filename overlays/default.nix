@@ -7,14 +7,23 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
+
+    karabiner-elements = prev.karabiner-elements.overrideAttrs (old: {
+      version = "14.13.0";
+      src = final.fetchurl {
+        inherit (old.src) url;
+        hash = "sha256-gmJwoht/Tfm5qMecmq1N6PSAIfWOqsvuHU8VDJY8bLw=";
+      };
+    });
+
     postman = prev.postman.overrideAttrs(old: rec {
       version = "20230716100528";
       src = final.fetchurl {
         url = "https://web.archive.org/web/${version}/https://dl.pstmn.io/download/latest/linux_64";
         sha256 = "sha256-svk60K4pZh0qRdx9+5OUTu0xgGXMhqvQTGTcmqBOMq8=";
-
         name = "${old.pname}-${version}.tar.gz";
       };
     });
+
   } // inputs.yazi.overlays.default final prev;
 }

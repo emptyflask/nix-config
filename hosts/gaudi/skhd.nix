@@ -7,7 +7,7 @@ let
     ##########################
 
     # open terminal
-    alt - return : ${pkgs.kitty}/bin/kitty --directory $HOME
+    alt - return : open -na ${pkgs.iterm2}/Applications/iTerm2.app
 
     alt - q : launchctl kickstart -k "gui/''${UID}/org.nixos.yabai"
 
@@ -138,11 +138,11 @@ let
     # shift + cmd + alt - 3  : yabai -m window --display 3; yabai -m display --focus 3
 
     # prevents skhd from monitoring events for listed processes.
-    .blacklist [
-      "kitty"
-      "qutebrowser"
-      "terminal"
-    ]
+    # .blacklist [
+    #   "kitty"
+    #   "qutebrowser"
+    #   "terminal"
+    # ]
   '';
 
 in

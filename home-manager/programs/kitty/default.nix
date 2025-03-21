@@ -49,6 +49,9 @@
 
       hide_window_decorations = "titlebar-only";
 
+      macos_option_as_alt = "left";
+      macos_quit_when_last_window_closed = true;
+
       # normal
       color0  = "#1d2021";
       color1  = "#fb4934";

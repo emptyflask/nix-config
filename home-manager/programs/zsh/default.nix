@@ -68,7 +68,7 @@ in
 
       j = "jira ls -a emptyflask";
 
-      open = "xdg-open";
+      # open = "xdg-open";
     };
 
     sessionVariables = {

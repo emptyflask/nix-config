@@ -17,6 +17,8 @@
       fzf
       gnupg
       home-manager
+      karabiner-elements
+      lix
       neovim
       nmap
       nodejs
@@ -50,6 +52,8 @@
     casks = [
       "alfred"
       "dash"
+      "iterm2"
+      # "karabiner-elements"
       "protonvpn"
     ];
     whalebrews = [];
@@ -91,12 +95,18 @@
       "ghcide-nix.cachix.org-1:ibAY5FD+XWLzbLr8fxK6n8fL9zZe7jS+gYeyxyWYK5c="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
+
+    trusted-users = [ "root" "jonroberts" ];
+  };
+
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
   };
 
   programs.zsh.enable = true;
 
-  services.nix-daemon.enable = true;
-  services.karabiner-elements.enable = true;
+  services.karabiner-elements.enable = false;
 
   system.stateVersion = 4;
 
