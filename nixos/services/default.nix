@@ -23,7 +23,7 @@
     chrony.enable = true; # Time sync (replaces ntpd)
     clipmenu.enable = true;
 
-    dbus.packages = with pkgs; [ dconf ];
+    dbus.packages = [ pkgs.dconf ];
 
     devmon.enable = true;
 
@@ -66,12 +66,15 @@
       package = pkgs.mlocate;
     };
 
-    logind.extraConfig = ''
-      HandlePowerKey=suspend
-      IdleAction=suspend
-      IdleActionSec=60m
-      RuntimeDirectorySize=2G
-    '';
+    logind = {
+      extraConfig = ''
+        IdleAction=suspend
+        IdleActionSec=60m
+        RuntimeDirectorySize=2G
+      '';
+      powerKey = "suspend";
+      powerKeyLongPress = "poweroff";
+    };
 
     memcached.enable = true;
 
@@ -118,7 +121,7 @@
     # Mouse configuration
     ratbagd.enable = true;
 
-    redis.servers."" = {
+    redis.servers.default = {
       enable = false;
       port = 6379;
       settings = {
