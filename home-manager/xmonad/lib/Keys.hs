@@ -23,7 +23,7 @@ import qualified XMonad.Prompt                      as Prompt
 import           XMonad.Prompt.Man
 import           XMonad.Prompt.Ssh
 
-import           XMonad.Util.NamedScratchpad        (namedScratchpadAction)
+import           XMonad.Util.NamedScratchpad        (allNamedScratchpadAction, namedScratchpadAction)
 import           XMonad.Util.Run                    (runInTerm)
 
 import           Graphics.X11.ExtraTypes.XF86
@@ -163,7 +163,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
     -- scratchpads
     , ((modm,                xK_c        ), namedScratchpadAction scratchpads "calc")
     , ((modm,                xK_grave    ), namedScratchpadAction scratchpads "htop")
-    , ((modm,                xK_x        ), namedScratchpadAction scratchpads "obsidian")
+    , ((modm,                xK_x        ), allNamedScratchpadAction scratchpads "obsidian")
     , ((modm,                xK_z        ), namedScratchpadAction scratchpads "zeal")
 
     , ((modm,                xK_v        ), runInTerm "" $ Paths.alsamixer ++ " -c 0")
