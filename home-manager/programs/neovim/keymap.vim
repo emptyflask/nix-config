@@ -7,23 +7,23 @@ nmap <S-Enter> O<ESC>
 
 " FZF ------------------------------------
 " Search
-map <leader>a :Rg<cr>
+map <leader>a :FzfLua grep_project<cr>
 
 " Open files with <leader>f
-map <leader>f :Files<cr>
+map <leader>f :FzfLua files<cr>
 
 " Open files, limited to the directory of the current file, with <leader>gf
 " This requires the %% mapping in .vimrc
-map <leader>gf :Files %%<cr>
+map <leader>gf :FzfLua files cwd=%%<cr>
 
 " Search modified files in git repo
-map <leader>d :GFiles?<cr>
+map <leader>d :FzfLua git_status<cr>
 
 " Open a buffer
-map <leader>b :Buffers<cr>
+map <leader>b :FzfLua buffers<cr>
 
 " Search all buffers
-map <leader>/ :Lines<cr>
+map <leader>/ :FzfLua grep_curbuf<cr>
 
 " Word completion
 inoremap <expr> <c-x><c-k> fzf#vim#complete('cat ' . g:dictionary)

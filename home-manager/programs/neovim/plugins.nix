@@ -1,16 +1,10 @@
-{ pkgs, lib, ... }:
+{ inputs, pkgs, lib, ... }:
 
 let
-  # installs a vim plugin from git with a given tag / branch
-  # usage: pluginGit "HEAD" "ellisonleao/gruvbox.nvim");
-  pluginGit = ref: repo:
+  mkPlugin = name:
     pkgs.vimUtils.buildVimPlugin {
-      pname = "${lib.strings.sanitizeDerivationName repo}";
-      version = ref;
-      src = builtins.fetchGit {
-        url = "https://github.com/${repo}.git";
-        ref = ref;
-      };
+      inherit name;
+      src = inputs.${name};
     };
 
   custom = {
@@ -21,7 +15,7 @@ let
     };
 
     conform = {
-      plugin = (pluginGit "refs/tags/v6.0.0" "stevearc/conform.nvim");
+      plugin = mkPlugin "conform-nvim";
       type = "lua";
       config = builtins.readFile ./conform.lua;
     };
@@ -29,11 +23,7 @@ let
     copilot-chat = {
       plugin = pkgs.vimPlugins.CopilotChat-nvim;
       type = "lua";
-      config = ''
-        require("CopilotChat").setup {
-          model = "claude-3.5-sonnet"
-        }
-      '';
+      config = builtins.readFile ./copilot-chat.lua;
     };
 
     copilot-cmp = {
@@ -62,7 +52,7 @@ let
     };
 
     gruvbox = { # Lua port of gruvbox-community w/ treesitter support
-      plugin = (pluginGit "main" "ellisonleao/gruvbox.nvim");
+      plugin = pkgs.vimPlugins.gruvbox-nvim;
       type = "lua";
       config = ''
         require("gruvbox").setup({ contrast = "hard" })
@@ -82,10 +72,34 @@ let
       config = builtins.readFile ./lspconfig.lua;
     };
 
+    lsp-selection-range = {
+      plugin = mkPlugin "nvim-lsp-selection-range";
+      type = "lua";
+      config = "require('lsp-selection-range')";
+    };
+
+    lualine-nvim = {
+      plugin = pkgs.vimPlugins.lualine-nvim;
+      type = "lua";
+      config = builtins.readFile ./lualine.lua;
+    };
+
     mini = {
-      plugin = (pluginGit "main" "echasnovski/mini.nvim");
+      plugin = pkgs.vimPlugins.mini-nvim;
       type = "lua";
       config = builtins.readFile ./mini.lua;
+    };
+
+    neotest = {
+      plugin = pkgs.vimPlugins.neotest;
+      type = "lua";
+      config = ''
+        require("neotest").setup({
+          adapters = {
+            require("neotest-minitest")
+          },
+        })
+      '';
     };
 
     nvim-autopairs = {
@@ -106,6 +120,12 @@ let
       config = builtins.readFile ./nvim-tree.lua;
     };
 
+    obsidian = {
+      plugin = pkgs.vimPlugins.obsidian-nvim;
+      type = "lua";
+      config = builtins.readFile ./obsidian.lua;
+    };
+
     onedark = {
       plugin = pkgs.vimPlugins.onedark-nvim;
       type = "lua";
@@ -115,7 +135,7 @@ let
     };
 
     ruby-code-actions = {
-      plugin = pluginGit "main" "semanticart/ruby-code-actions.nvim";
+      plugin = mkPlugin "ruby-code-actions";
       type = "lua";
       config = builtins.readFile ./ruby-code-actions.lua;
     };
@@ -127,7 +147,7 @@ let
     };
 
     supermaven = { # Supermaven copilot
-      plugin = (pluginGit "main" "supermaven-inc/supermaven-nvim");
+      plugin = mkPlugin "supermaven-nvim";
       type = "lua";
       config = ''
         require("supermaven-nvim").setup({
@@ -202,7 +222,7 @@ let
     };
 
     ts-node-action = {
-      plugin = (pluginGit "master" "ckolkey/ts-node-action");
+      plugin = mkPlugin "ts-node-action";
       type = "lua";
       config = ''
         require("ts-node-action").setup({})
@@ -218,6 +238,7 @@ let
   };
 
 in with pkgs.vimPlugins; [
+  FixCursorHold-nvim
   Rename
   Tagbar
   custom.conform
@@ -226,6 +247,8 @@ in with pkgs.vimPlugins; [
   custom.lspconfig
   custom.mini
   custom.nvim-autopairs
+  custom.lsp-selection-range
+  custom.obsidian
   custom.tabular
   custom.treesitter
   custom.ts-node-action
@@ -236,6 +259,9 @@ in with pkgs.vimPlugins; [
   neoformat
   none-ls-nvim
   nvim-jdtls
+  nvim-nio
+  nvim-ufo
+  plenary-nvim
   repeat
   sensible
   tlib
@@ -253,20 +279,21 @@ in with pkgs.vimPlugins; [
 
   # THEME / VISUAL
   custom.gruvbox
+  custom.lualine-nvim
   custom.onedark
-  lightline-vim
   kanagawa-nvim
-  tokyonight-nvim
   rainbow-delimiters-nvim # Treesitter multicolored parens/brackets
+  tokyonight-nvim
 
   # FILE EXPLORER
   custom.nvim-tree
   custom.telescope
   nvim-web-devicons
-  fzf-vim
-  fzfWrapper
-  plenary-nvim
-  telescope-fzf-native-nvim
+  fzf-lua
+  telescope-fzy-native-nvim
+  telescope-ui-select-nvim
+  telescope_hoogle # hoogle search
+  telescope-manix # nix search
 
   # LANGUAGE / FILETYPE SPECIFIC
   Hoogle
@@ -274,9 +301,10 @@ in with pkgs.vimPlugins; [
   custom.rust-tools
   dhall-vim
   elm-vim
-  ghc-mod-vim
-  haskell-vim
-  neco-ghc
+  # ghc-mod-vim
+  # haskell-vim
+  haskell-tools-nvim
+  # neco-ghc
   hlint-refactor
   # intero-neovim
   vim-stylish-haskell
@@ -284,7 +312,7 @@ in with pkgs.vimPlugins; [
   vim-rails
   vim-terraform
 
-  (pluginGit "master" "rescript-lang/vim-rescript")
+  # (pluginGit "master" "rescript-lang/vim-rescript")
 
   # COMPLETION
   cmp-buffer
@@ -299,6 +327,15 @@ in with pkgs.vimPlugins; [
   lspkind-nvim
   vim-vsnip-integ
   vim-snippets
+
+  # TESTING
+  custom.neotest
+  neotest-haskell
+  neotest-minitest
+  neotest-plenary
+  neotest-rspec
+  neotest-rust
+  neotest-vitest
 
   # COPILOT
   # custom.avante
