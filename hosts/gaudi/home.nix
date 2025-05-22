@@ -9,6 +9,7 @@ let
     (hm "programs/kitty")
     (hm "programs/neomutt")
     (hm "programs/neovim")
+    (hm "programs/starship")
     (hm "programs/tmux")
     (hm "programs/vim")
     (hm "programs/zathura")
@@ -26,15 +27,14 @@ in {
       ".railsrc".source = ../../home-manager/home/railsrc;
     };
 
-    packages = with pkgs; [
-      zlib
-      # nixFlakes
-    ];
+    packages = with pkgs;
+      [
+        zlib
+        # nixFlakes
+      ];
 
-    sessionPath = [
-      "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin"
-    ];
+    sessionPath = [ "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin" ];
   };
 
- home.stateVersion = "23.11";
+  home.stateVersion = "23.11";
 }
