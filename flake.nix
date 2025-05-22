@@ -2,41 +2,60 @@
   description = "Jon's nix configuration";
 
   inputs = {
+    # Core
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    lix-module = {
+      url =
+        "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    # Apple
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-
-    # hardware.url = "github:nixos/nixos-hardware";
-
-    home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    home-manager-unstable = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
-    lix-module = {
-      url =
-        "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
     nixos-apple-silicon = {
       url = "github:tpwrules/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    # Home manager
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-
+    # Tools
     nur.url = "github:nix-community/nur";
-
     yazi.url = "github:sxyazi/yazi";
+
+    # Neovim plugins
+    conform-nvim = {
+      url = "github:stevearc/conform.nvim?ref=v9.0.0";
+      flake = false;
+    };
+    nvim-lsp-selection-range = {
+      url = "github:camilledejoye/nvim-lsp-selection-range";
+      flake = false;
+    };
+    ruby-code-actions = {
+      url = "github:semanticart/ruby-code-actions.nvim";
+      flake = false;
+    };
+    supermaven-nvim = {
+      url = "github:supermaven-inc/supermaven-nvim";
+      flake = false;
+    };
+    ts-node-action = {
+      url = "github:ckolkey/ts-node-action";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, lix-module, ... }@inputs:
@@ -104,19 +123,23 @@
         nada = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           specialArgs = { inherit inputs outputs; };
-          modules =
-            [ /etc/nixos/configuration.nix ./hosts/nada/default.nix lix-module.nixosModules.default ];
+          modules = [
+            /etc/nixos/configuration.nix
+            ./hosts/nada/default.nix
+            lix-module.nixosModules.default
+          ];
         };
       };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#jon@kepler'
       homeConfigurations = {
-        "jon@gaudi" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-darwin;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/gaudi/home.nix ];
-        };
+        "jon@gaudi" =
+          inputs.home-manager-unstable.lib.homeManagerConfiguration {
+            pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-darwin;
+            extraSpecialArgs = { inherit inputs outputs; };
+            modules = [ ./hosts/gaudi/home.nix ];
+          };
 
         "jon@kepler" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;

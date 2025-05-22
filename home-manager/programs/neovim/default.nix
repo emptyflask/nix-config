@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 let
   concatFiles = files:
@@ -13,14 +13,7 @@ in with pkgs;
     vimAlias = false;
     withNodeJs = true;
 
-    extraConfig = (concatFiles [
-      ./config.vim
-      ./haskell.vim
-      ./keymap.vim
-      ./netrw.vim
-      ./rename.vim
-      ./status.vim
-    ]) + ''
+    extraConfig = ''
       let g:dictionary = "${scowl}/share/dict/words.txt"
 
       function! UUID()
@@ -28,11 +21,20 @@ in with pkgs;
       endfunction
     '';
 
+    extraLuaConfig = (concatFiles [
+      ./config.lua
+      ./haskell.lua
+      ./keymap.lua
+      ./netrw.lua
+      ./rename.lua
+    ]);
+
     extraPackages = [
       biome
       # dhall-lsp-server
       haskellPackages.haskell-language-server
       lua-language-server
+      luaPackages.tiktoken_core
       # nil # nix language server
       nixd # other nix language server
       nodePackages.typescript
@@ -45,7 +47,7 @@ in with pkgs;
       tree-sitter
     ];
 
-    plugins = pkgs.callPackage ./plugins.nix { };
+    plugins = pkgs.callPackage ./plugins.nix { inherit inputs; };
   };
 
   # all ftplugin configs:
@@ -54,3 +56,4 @@ in with pkgs;
     recursive = true;
   };
 }
+
