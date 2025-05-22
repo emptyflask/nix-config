@@ -106,7 +106,7 @@ in {
   # };
 
   boot = {
-    kernel = { sysctl = { "vm.swappiness" = "10"; }; };
+    kernel = { sysctl = { "vm.swappiness" = "20"; }; };
     loader = {
       efi.canTouchEfiVariables = true;
       # grub = {
@@ -221,6 +221,12 @@ in {
     enable = true;
     enableSSHSupport = true;
   };
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep 5 --keep-since 30d";
+    flake = "/home/jon/dev/nix-config";
+  };
   programs.seahorse.enable = true;
   programs.ssh.startAgent = false;
   programs.steam.enable = true;
@@ -311,6 +317,12 @@ in {
       enable = true;
       styles = [ ];
     };
+  };
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 25;
+    priority = 100;
   };
 
   system = {
