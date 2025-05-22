@@ -16,6 +16,7 @@ let
     (hm "programs/neomutt")
     (hm "programs/neovim")
     (hm "programs/rofi")
+    (hm "programs/starship")
     (hm "programs/tmux")
     (hm "programs/vim")
     (hm "programs/yazi")
@@ -107,6 +108,7 @@ in {
       kitty # terminal
       libreoffice
       lxmenu-data # installed apps
+      lynx # text web browser
       miller # csv tool
       pavucontrol
       postman
@@ -256,13 +258,12 @@ in {
         write = "yes";
       };
       paths = {
-        default = "$genre/$albumartist/$album/$track $title";
+        default = "$albumartist/$album/$track $title";
         singleton = "Singles/$artist - $title";
-        comp = "$genre/$album/$track $title";
+        comp = "Compilations/$album/$track $title";
         "albumtype:soundtrack" = "Soundtracks/$album/$track $title";
       };
-      plugins =
-        [ "fetchart" "lastgenre" "lyrics" "mpdstats" "mpdupdate" "web" ];
+      plugins = [ "fetchart" "lastgenre" "lyrics" "web" ];
       ui = { color = "yes"; };
       wlg = {
         auto = "yes";
@@ -271,7 +272,21 @@ in {
     };
   };
 
+  programs.eza = {
+    enable = true;
+    git = true;
+    icons = "auto";
+  };
   programs.firefox.enable = true;
+  programs.ncspot = {
+    enable = true;
+    settings = {
+      initial_screen = "library";
+      notify = true;
+      use_nerd_font = true;
+      shuffle = false;
+    };
+  };
 
   qt = {
     enable = true;
