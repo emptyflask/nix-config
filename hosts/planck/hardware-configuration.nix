@@ -8,20 +8,31 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot/firmware" =
-    { device = "systemd-1";
-      fsType = "autofs";
-    };
+  fileSystems."/boot/firmware" = {
+    device = "systemd-1";
+    fsType = "autofs";
+  };
+
+  fileSystems."/mnt/sda1" = {
+    device = "/dev/disk/by-uuid/823aa65e-d3e9-4f93-9cb3-d7e8955bb274";
+    fsType = "btrfs";
+    options = [ "nofail" ];
+  };
+
+  fileSystems."/export/photon" = {
+    device = "/mnt/sda1";
+    options = [ "bind" ];
+  };
 
   swapDevices = [ ];
 
@@ -30,7 +41,9 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
   # networking.interfaces.end0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth248fcf1.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
