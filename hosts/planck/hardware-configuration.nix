@@ -23,15 +23,26 @@
     fsType = "autofs";
   };
 
-  fileSystems."/mnt/sda1" = {
+  fileSystems."/mnt/photon" = {
     device = "/dev/disk/by-uuid/823aa65e-d3e9-4f93-9cb3-d7e8955bb274";
     fsType = "btrfs";
-    options = [ "nofail" ];
+    options = [ "nofail" "x-systemd.automount" "x-systemd.device-timeout=10s" ];
+  };
+
+  fileSystems."/mnt/squid" = {
+    device = "/dev/disk/by-uuid/fedaf19b-45b8-4694-bcfc-c8739e64d262";
+    fsType = "btrfs";
+    options = [ "nofail" "x-systemd.automount" "x-systemd.device-timeout=10s"];
   };
 
   fileSystems."/export/photon" = {
-    device = "/mnt/sda1";
-    options = [ "bind" ];
+    device = "/mnt/photon";
+    options = [ "bind" "nofail" ];
+  };
+
+  fileSystems."/export/squid" = {
+    device = "/mnt/squid";
+    options = [ "bind" "nofail" ];
   };
 
   swapDevices = [ ];

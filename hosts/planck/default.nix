@@ -152,7 +152,6 @@ in
         "security" = "user";
         #"use sendfile" = "yes";
         #"max protocol" = "smb2";
-        # note: localhost is the ipv6 localhost ::1
         "hosts allow" = "10.9.8. 10.9.11. localhost";
         "hosts deny" = "0.0.0.0/0";
         "guest account" = "nobody";
@@ -178,22 +177,21 @@ in
         "force user" = "jon";
         "force group" = "users";
       };
-
-      "public" = {
-        "path" = "/mnt/sda1/public";
+      photon = {
+        "path" = "/mnt/sda1";
         "browseable" = "yes";
-        "read only" = "yes";
-        "guest ok" = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
         "force user" = "jon";
         "force group" = "users";
       };
-      "incoming" = {
-        "path" = "/mnt/sda1/public/incoming";
-        "browseable" = "no";
+      squid = {
+        "path" = "/mnt/sdb1";
+        "browseable" = "yes";
         "read only" = "no";
-        "guest ok" = "yes";
+        "guest ok" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
         "force user" = "jon";
