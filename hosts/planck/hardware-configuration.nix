@@ -37,12 +37,12 @@
 
   fileSystems."/export/photon" = {
     device = "/mnt/photon";
-    options = [ "bind" "nofail" ];
+    options = [ "bind" "nofail" "x-systemd.device-timeout=10s"];
   };
 
   fileSystems."/export/squid" = {
     device = "/mnt/squid";
-    options = [ "bind" "nofail" ];
+    options = [ "bind" "nofail" "x-systemd.device-timeout=10s"];
   };
 
   swapDevices = [ ];
