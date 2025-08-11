@@ -1,10 +1,6 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
-let
-  common = import ../common.nix { inherit pkgs; };
-
-  plexTcpPorts = [ 32400 3005 8324 32469 ];
-  plexUdpPorts = [ 1900 5353 32410 32412 32413 32414 ];
+let common = import ../common.nix { inherit pkgs; };
 
 in {
   imports = [
@@ -16,6 +12,7 @@ in {
     # inputs.hardware.nixosModules.common-ssd
 
     ./hardware-configuration.nix
+    ./nfs.nix
     ../../nixos/security
     ../../nixos/services
     ../../nixos/users
@@ -76,19 +73,8 @@ in {
     experimental-features = "nix-command flakes";
     sandbox = true;
 
-    substituters = [
-      "https://nix-community.cachix.org"
-      # "https://cache.iog.io"
-      # "https://devenv.cachix.org"
-      # "https://digitallyinduced.cachix.org"
-      # "https://ghcide-nix.cachix.org"
-    ];
-
+    substituters = [ "https://nix-community.cachix.org" ];
     trusted-public-keys = [
-      # "cache.iog.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-      # "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      # "digitallyinduced.cachix.org-1:y+wQvrnxQ+PdEsCt91rmvv39qRCYzEgGQaldK26hCKE="
-      # "ghcide-nix.cachix.org-1:ibAY5FD+XWLzbLr8fxK6n8fL9zZe7jS+gYeyxyWYK5c="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
@@ -124,6 +110,8 @@ in {
       };
     };
 
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
+
     # Kernel modules:
     # don't load module for secondary ethernet adapter
     blacklistedKernelModules = [ "alx" ];
@@ -151,10 +139,21 @@ in {
       wifi.backend = "iwd";
     };
 
-    firewall = {
+    firewall = let
+    in {
       enable = true;
-      allowedTCPPorts = [ 22 139 445 5000 8080 ] ++ plexTcpPorts;
-      allowedUDPPorts = [ 137 138 ] ++ plexUdpPorts;
+      allowedTCPPorts = let
+        homeAssistant = 8123;
+        jellyfinPorts = [ 8096 8920 ];
+        plexPorts = [ 32400 3005 8324 32469 ];
+        sambaPorts = [ 139 445 ];
+        ssh = 22;
+      in [ homeAssistant ssh ] ++ jellyfinPorts ++ sambaPorts ++ plexPorts;
+      allowedUDPPorts = let
+        jellyfinPorts = [ 7359 ];
+        netbiosPorts = [ 137 138 ];
+        plexPorts = [ 1900 5353 32410 32412 32413 32414 ];
+      in jellyfinPorts ++ netbiosPorts ++ plexPorts;
       allowPing = true;
 
       # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/8
@@ -223,8 +222,6 @@ in {
   };
   programs.nh = {
     enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep 5 --keep-since 30d";
     flake = "/home/jon/dev/nix-config";
   };
   programs.seahorse.enable = true;
@@ -266,9 +263,6 @@ in {
       # package = config.boot.kernelPackages.nvidiaPackages.production;
     };
 
-    pulseaudio.enable = true;
-    pulseaudio.support32Bit = true;
-
     graphics.enable = true;
     graphics.enable32Bit = true;
     graphics.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
@@ -286,28 +280,32 @@ in {
       defaultNetwork.settings.dns_enabled = true;
     };
     libvirtd.enable = true;
-    virtualbox = {
-      host.enable = true;
-      # enable extension pack to share usb ports, etc.
-      # (requires building virtualbox)
-      # host.enableExtensionPack = true;
-      host.addNetworkInterface = true;
+
+    oci-containers.containers = {
+      homeassistant = {
+        volumes = [ "home-assistant:/config" ];
+        environment.TZ = config.time.timeZone;
+        image = "ghcr.io/home-assistant/home-assistant:stable";
+        extraOptions = [
+          "--network=host"
+          # "--device=/dev/ttyACM0:/dev/ttyACM0"
+        ];
+      };
+
+      # plex = {
+      #   environment = {
+      #     TZ = config.time.timeZone;
+      #     PUID = toString config.users.users.plex.uid;
+      #     PGID = toString config.users.groups.media.gid;
+      #     PLEX_CLAIM = "claim-yxovhjy9R4QmnHSVMvUZ";
+      #     VERSION = "latest";
+      #   };
+      #   extraOptions = [ "--network=host" ];
+      #   image = "linuxserver/plex";
+      #   volumes =
+      #     [ "/media/repository/movies:/media" "/media/plex-config:/config" ];
+      # };
     };
-    # oci-containers.containers.plex = {
-    #   environment = {
-    #     TZ = "America/Chicago";
-    #     PUID = toString config.users.users.plex.uid;
-    #     PGID = toString config.users.groups.media.gid;
-    #     PLEX_CLAIM = "claim-yxovhjy9R4QmnHSVMvUZ";
-    #     VERSION = "latest";
-    #   };
-    #   extraOptions = ["--network=host"];
-    #   image = "linuxserver/plex";
-    #   volumes = [
-    #     "/media/repository/movies:/media"
-    #     "/media/plex-config:/config"
-    #   ];
-    # };
   };
 
   xdg.portal = {

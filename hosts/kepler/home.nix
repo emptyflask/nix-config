@@ -214,9 +214,9 @@ in {
       vegur
       vistafonts
 
-      (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-      # nerd-fonts.droid-sans-mono
-      # nerd-fonts.fira-code
+      # (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.fira-code
 
       # media
       audacious # music player
