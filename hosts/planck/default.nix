@@ -1,9 +1,5 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
-let
-  piholeDomain = "pihole.emptyflask.dev";
-  nodeRedDomain = "node-red.emptyflask.net";
-in
 {
   imports = [
     # ../../nixos/security
@@ -35,12 +31,13 @@ in
     firewall = let
       dns = 53;
       http = 80;
+      https = 443;
       nfs = 2049;
       ssh = 22;
     in {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [ dns http nfs ssh ];
+      allowedTCPPorts = [ dns http https nfs ssh ];
       allowedUDPPorts = [ dns nfs ];
     };
     nameservers = ["1.1.1.1" "1.0.0.1"];
@@ -127,6 +124,7 @@ in
             TZ = "America/Chicago";
             FTLCONF_webserver_api_password = "piholio";
             FTLCONF_dns_listeningMode = "all";
+            FTLCONF_webserver_port: '8082,443s'
           };
           volumes = [
             "/var/lib/pihole/etc-pihole:/etc/pihole"
@@ -215,10 +213,12 @@ in
   services.traefik = {
     enable = true;
     staticConfigOptions = {
+      api = {
+        dashboard = true;
+      };
       entryPoints = {
         web = {
           address = ":80";
-          asDefault = true;
           http.redirections.entrypoint = {
             to = "websecure";
             scheme = "https";
@@ -226,7 +226,6 @@ in
         };
         websecure = {
           address = ":443";
-          asDefault = true;
           http.tls.certResolver = "letsencrypt";
         };
       };
@@ -243,14 +242,21 @@ in
 
     dynamicConfigOptions = {
       http.routers = {
+        default = {
+          rule = "PathPrefix(`/`)";
+          entryPoints = [ "websecure" ];
+          service = "pihole";
+          priority = 1;
+          tls.certResolver = "myresolver";
+        };
         pihole = {
-          rule = "Host(`${piholeDomain}`)";
+          rule = "Host(`pihole.lan`) || Host(`pi.hole`)";
           entryPoints = [ "websecure" ];
           service = "pihole";
           tls.certResolver = "myresolver";
         };
         nodeRed = {
-          rule = "Host(`${nodeRedDomain}`)";
+          rule = "Host(`node-red.lan`)";
           entryPoints = [ "websecure" ];
           service = "nodeRed";
           tls.certResolver = "myresolver";

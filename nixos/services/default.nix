@@ -87,6 +87,16 @@
       extraJavaOptions = [ "-Xms512m" "-Xmx1g" ];
     };
 
+    openssh = {
+      enable = true;
+      settings = {
+        AllowUsers = [ "jon" ];
+        PasswordAuthentication = false;
+        PermitRootLogin = "no";
+        X11Forwarding = false;
+      };
+    };
+
     pcscd.enable = true; # Smartcard reader
     peroxide.enable = false;
 

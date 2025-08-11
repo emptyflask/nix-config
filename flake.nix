@@ -22,14 +22,9 @@
     };
 
     # Raspberry Pi
-    nixos-anywhere = {
-      url = "github:nix-community/nixos-anywhere";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-anywhere = { url = "github:nix-community/nixos-anywhere"; };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
 
     # Home manager
     home-manager = {
@@ -41,11 +36,10 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    # Tools
-    nur = {
-      url = "github:nix-community/nur";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Programs & Tools
+    agenix.url = "github:ryantm/agenix";
+    # impermanence.url = "github:nix-community/impermanence";
+    # nur.url = "github:nix-community/nur";
     yazi.url = "github:sxyazi/yazi";
 
     # Neovim plugins
@@ -146,12 +140,19 @@
 
         planck = nixos-raspberrypi.lib.nixosSystem {
           system = "aarch64-linux";
-          specialArgs = { inherit inputs outputs; };
+          specialArgs = { inherit inputs outputs nixos-raspberrypi ; };
           modules = [
             nixos-raspberrypi.nixosModules.raspberry-pi-4.base
             # nixos-raspberrypi.nixosModules.raspberry-pi-4.display-vc4
             # nixos-raspberrypi.nixosModules.raspberry-pi-4.bluetooth
             ./hosts/planck/default.nix
+            home-manager.nixosModules.home-manager
+            {
+              # home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.jon = import ./hosts/planck/home.nix;
+              home-manager.extraSpecialArgs = { inherit inputs outputs; };
+            }
             # lix-module.nixosModules.default
           ];
         };
@@ -180,5 +181,6 @@
             modules = [ ./hosts/newton/home.nix ];
           };
       };
+
     };
 }

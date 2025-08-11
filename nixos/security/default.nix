@@ -12,7 +12,7 @@ let
 
 in {
   security.pam.services.lightdm.enableGnomeKeyring = true;
-  services.xscreensaver.enable = true;
+  security.pam.services.xscreensaver.enable = true;
 
   # security.polkit.enable = true;
 
