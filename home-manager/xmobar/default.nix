@@ -1,55 +1,53 @@
 { pkgs, lib, config, ... }:
 
 let
-   popupCalendar = pkgs.writeScript "popup-calendar.sh" ''
-      #!/bin/sh
+  popupCalendar = pkgs.writeScript "popup-calendar.sh" ''
+    #!/bin/sh
 
-      BAR_HEIGHT=27  # polybar height
-      BORDER_SIZE=0  # border size from your wm settings
-      YAD_WIDTH=222  # 222 is minimum possible value
-      YAD_HEIGHT=193 # 193 is minimum possible value
-      DATE="$(${pkgs.coreutils}/bin/date +"%A  %Y-%m-%d  %I:%M %p")"
+    BAR_HEIGHT=27  # polybar height
+    BORDER_SIZE=0  # border size from your wm settings
+    YAD_WIDTH=222  # 222 is minimum possible value
+    YAD_HEIGHT=193 # 193 is minimum possible value
+    DATE="$(${pkgs.coreutils}/bin/date +"%A  %Y-%m-%d  %I:%M %p")"
 
-      case "$1" in
-        --popup)
-          if [ "$(${pkgs.xdotool}/bin/xdotool getwindowfocus getwindowname)" = "yad-calendar" ]; then
-            exit 0
-          fi
+    case "$1" in
+      --popup)
+        if [ "$(${pkgs.xdotool}/bin/xdotool getwindowfocus getwindowname)" = "yad-calendar" ]; then
+          exit 0
+        fi
 
-          eval "$(${pkgs.xdotool}/bin/xdotool getmouselocation --shell)"
-          eval "$(${pkgs.xdotool}/bin/xdotool getdisplaygeometry --shell)"
+        eval "$(${pkgs.xdotool}/bin/xdotool getmouselocation --shell)"
+        eval "$(${pkgs.xdotool}/bin/xdotool getdisplaygeometry --shell)"
 
-          # X
-          if [ "$((X + YAD_WIDTH / 2 + BORDER_SIZE))" -gt "$WIDTH" ]; then #Right side
-            : $((pos_x = WIDTH - YAD_WIDTH - BORDER_SIZE))
-          elif [ "$((X - YAD_WIDTH / 2 - BORDER_SIZE))" -lt 0 ]; then #Left side
-            : $((pos_x = BORDER_SIZE))
-          else #Center
-            : $((pos_x = X - YAD_WIDTH / 2))
-          fi
+        # X
+        if [ "$((X + YAD_WIDTH / 2 + BORDER_SIZE))" -gt "$WIDTH" ]; then #Right side
+          : $((pos_x = WIDTH - YAD_WIDTH - BORDER_SIZE))
+        elif [ "$((X - YAD_WIDTH / 2 - BORDER_SIZE))" -lt 0 ]; then #Left side
+          : $((pos_x = BORDER_SIZE))
+        else #Center
+          : $((pos_x = X - YAD_WIDTH / 2))
+        fi
 
-          # Y
-          if [ "$Y" -gt "$((HEIGHT / 2))" ]; then #Bottom
-            : $((pos_y = HEIGHT - YAD_HEIGHT - BAR_HEIGHT - BORDER_SIZE))
-          else #Top
-            : $((pos_y = BAR_HEIGHT + BORDER_SIZE))
-          fi
+        # Y
+        if [ "$Y" -gt "$((HEIGHT / 2))" ]; then #Bottom
+          : $((pos_y = HEIGHT - YAD_HEIGHT - BAR_HEIGHT - BORDER_SIZE))
+        else #Top
+          : $((pos_y = BAR_HEIGHT + BORDER_SIZE))
+        fi
 
-          ${pkgs.yad}/bin/yad \
-            --calendar --undecorated --fixed --close-on-unfocus --no-buttons \
-            --width=$YAD_WIDTH --height=$YAD_HEIGHT --posx=$pos_x --posy=$pos_y \
-            --class="yad-calendar" --borders=0 >/dev/null &
-          ;;
+        ${pkgs.yad}/bin/yad \
+          --calendar --undecorated --fixed --close-on-unfocus --no-buttons \
+          --width=$YAD_WIDTH --height=$YAD_HEIGHT --posx=$pos_x --posy=$pos_y \
+          --class="yad-calendar" --borders=0 >/dev/null &
+        ;;
 
-        *)
-          echo "$DATE"
-          ;;
-      esac
-    '';
+      *)
+        echo "$DATE"
+        ;;
+    esac
+  '';
 
-in
-
-{
+in {
   xdg.configFile."xmobar/resources" = {
     recursive = true;
     source = ./resources;
@@ -97,7 +95,7 @@ in
              [ "-t", "<fn=1><fc=#928374></fc></fn> <dev> <fn=1><fc=#98971a></fc></fn><rx> <fn=1><fc=#d65d0e></fc></fn><tx>"
              , "-w", "7"
              , "-S", "True"
-             , "--", "--devices", "wlp10s0,eno1,wlp4s0"
+             , "--", "--devices", "wlan0,eno1,enp4s0"
              ] 20
 
           , Run Memory

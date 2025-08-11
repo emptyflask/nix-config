@@ -32,7 +32,7 @@ in {
       size = 50000;
     };
 
-    initExtra = (builtins.readFile ./zshrc) + source_chruby + ''
+    initContent = (builtins.readFile ./zshrc) + source_chruby + ''
       source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
       eval "$(${pkgs.fasd}/bin/fasd --init auto)"
       eval $(${pkgs.coreutils}/bin/dircolors -b ${lscolors}/LS_COLORS)
