@@ -27,12 +27,6 @@
 
     devmon.enable = true;
 
-    opensearch = {
-      enable = false;
-      settings = { "cluster.name" = "schrödinger"; };
-      extraJavaOptions = [ "-Xms512m" "-Xmx1g" ];
-    };
-
     emacs.enable = false;
 
     gnome = {
@@ -62,7 +56,6 @@
     locate = {
       enable = true;
       interval = "hourly";
-      localuser = null;
       package = pkgs.mlocate;
     };
 
@@ -88,12 +81,10 @@
       acceleration = "cuda";
     };
 
-    openssh = {
-      enable = true;
-      settings = {
-        PasswordAuthentication = false;
-        PermitRootLogin = "no";
-      };
+    opensearch = {
+      enable = false;
+      settings = { "cluster.name" = "schrödinger"; };
+      extraJavaOptions = [ "-Xms512m" "-Xmx1g" ];
     };
 
     pcscd.enable = true; # Smartcard reader
@@ -118,6 +109,11 @@
     printing.enable = true;
     protonmail-bridge.enable = true;
 
+    pulseaudio = {
+      enable = true;
+      support32Bit = true;
+    };
+
     # Mouse configuration
     ratbagd.enable = true;
 
@@ -129,6 +125,9 @@
         maxmemory-policy = "allkeys-lru";
       };
     };
+
+    # Support different DNS servers per interface
+    resolved.enable = true;
 
     # Usenet downloader
     nzbget = { enable = true; };
@@ -147,7 +146,7 @@
           "server string" = "kepler";
           "netbios name" = "kepler";
           "security" = "user";
-          "hosts allow" = [ "10." "192.168." "localhost" ];
+          "hosts allow" = [ "10.9.8" "10.9.11." "localhost" ];
           "hosts deny" = [ "0.0.0.0/0" ];
           "guest account" = "nobody";
           "map to guest" = "bad user";
@@ -206,6 +205,7 @@
     ./hoogle
     # ./nginx.nix
     # ./openvpn
+    ./openssh.nix
     ./postgresql.nix
     ./traefik.nix
     ./xserver.nix
