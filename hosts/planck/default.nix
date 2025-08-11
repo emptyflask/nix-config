@@ -32,10 +32,17 @@ in
   networking = {
     hostName = "planck";
     useDHCP = true;
-    firewall.enable = true;
-    firewall.allowPing = true;
-    firewall.allowedTCPPorts = [ 22 53 80 ];
-    firewall.allowedUDPPorts = [ 53 ];
+    firewall = let
+      dns = 53;
+      http = 80;
+      nfs = 2049;
+      ssh = 22;
+    in {
+      enable = true;
+      allowPing = true;
+      allowedTCPPorts = [ dns http nfs ssh ];
+      allowedUDPPorts = [ dns nfs ];
+    };
     nameservers = ["1.1.1.1" "1.0.0.1"];
   };
 
@@ -88,11 +95,11 @@ in
   services.nfs.server = {
     enable = true;
     exports = ''
-      /export 10.9.0.0/16(fsid=0,crossmnt,insecure,sync,no_subtree_check)
-      /export/photon 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
-      /export/photon 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
-      /export/squid 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
-      /export/squid 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
+      /       10.9.0.0/16(ro,insecure,sync,no_subtree_check,crossmnt,fsid=0)
+      /photon 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
+      /photon 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
+      /squid  10.9.8.0/24(rw,insecure,sync,no_subtree_check)
+      /squid  10.9.0.0/16(ro,insecure,sync,no_subtree_check)
     '';
   };
 
