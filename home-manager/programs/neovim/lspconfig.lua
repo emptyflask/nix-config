@@ -46,8 +46,8 @@ local servers = {
   'pyright',
   'rescriptls',
   -- 'rust_analyzer',
-  'ruby_lsp',
-  -- 'solargraph',
+  -- 'ruby_lsp',
+  'solargraph',
   'lua_ls',
   'ts_ls'
 }
