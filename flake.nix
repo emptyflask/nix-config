@@ -56,9 +56,17 @@
       url = "github:ckolkey/ts-node-action";
       flake = false;
     };
+  nixConfig = {
+    extra-substituters =
+      [ "https://nixos-raspberrypi.cachix.org" "https://yazi.cachix.org" ];
+    extra-trusted-public-keys = [
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+      "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
+    ];
   };
 
-  outputs = { self, nixpkgs, home-manager, lix-module, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, lix-module, nixos-raspberrypi, agenix
+    , ... }@inputs:
     let
       inherit (self) outputs;
       # Supported systems for your flake packages, shell, etc.
@@ -77,6 +85,7 @@
       # Accessible through 'nix build', 'nix shell', etc
       packages =
         forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+
       # Formatter for your nix files, available through 'nix fmt'
       # Other options beside 'alejandra' include 'nixpkgs-fmt'
       formatter =
@@ -106,6 +115,7 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/kepler/configuration.nix
+            agenix.nixosModules.default
             lix-module.nixosModules.default
           ];
         };
@@ -120,13 +130,15 @@
           ];
         };
 
-        nada = nixpkgs.lib.nixosSystem {
+        planck = nixos-raspberrypi.lib.nixosSystem {
           system = "aarch64-linux";
           specialArgs = { inherit inputs outputs; };
           modules = [
-            /etc/nixos/configuration.nix
-            ./hosts/nada/default.nix
-            lix-module.nixosModules.default
+            nixos-raspberrypi.nixosModules.raspberry-pi-4.base
+            # nixos-raspberrypi.nixosModules.raspberry-pi-4.display-vc4
+            # nixos-raspberrypi.nixosModules.raspberry-pi-4.bluetooth
+            ./hosts/planck/default.nix
+            # lix-module.nixosModules.default
           ];
         };
       };
