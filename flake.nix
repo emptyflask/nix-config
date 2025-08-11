@@ -3,11 +3,11 @@
 
   inputs = {
     # Core
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     lix-module = {
       url =
-        "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
+        "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
@@ -21,9 +21,19 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
+    # Raspberry Pi
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-raspberrypi = {
+      url = "github:nvmd/nixos-raspberrypi/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager-unstable = {
@@ -32,7 +42,10 @@
     };
 
     # Tools
-    nur.url = "github:nix-community/nur";
+    nur = {
+      url = "github:nix-community/nur";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     yazi.url = "github:sxyazi/yazi";
 
     # Neovim plugins
@@ -56,6 +69,7 @@
       url = "github:ckolkey/ts-node-action";
       flake = false;
     };
+  };
   nixConfig = {
     extra-substituters =
       [ "https://nixos-raspberrypi.cachix.org" "https://yazi.cachix.org" ];
