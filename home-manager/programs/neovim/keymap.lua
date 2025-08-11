@@ -3,11 +3,20 @@ vim.keymap.set('n', '<Enter>', 'o<ESC>', { silent = true })
 vim.keymap.set('n', '<S-Enter>', 'O<ESC>', { silent = true })
 
 -- FZF Lua mappings
-vim.keymap.set('n', '<leader>a', ':FzfLua grep_project<CR>', { silent = true })
-vim.keymap.set('n', '<leader>f', ':FzfLua files<CR>', { silent = true })
-vim.keymap.set('n', '<leader>gf', function()
-  require('fzf-lua').files({ cwd = vim.fn.expand('%:h') })
+local fzflua = require('fzf-lua')
+
+vim.keymap.set('n', '<leader>a', function()
+  fzflua.grep_project({
+    rg_opts = "--color=always --line-number --column --smart-case --no-heading --with-filename"
+  })
 end, { silent = true })
+
+vim.keymap.set('n', '<leader>f', function() fzflua.files() end, { silent = true })
+
+vim.keymap.set('n', '<leader>gf', function()
+  fzflua.files({ cwd = vim.fn.expand('%:h') })
+end, { silent = true })
+
 vim.keymap.set('n', '<leader>d', ':FzfLua git_status<CR>', { silent = true })
 vim.keymap.set('n', '<leader>b', ':FzfLua buffers<CR>', { silent = true })
 vim.keymap.set('n', '<leader>/', ':FzfLua grep_curbuf<CR>', { silent = true })
