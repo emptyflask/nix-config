@@ -3,8 +3,7 @@
 let
   piholeDomain = "pihole.emptyflask.dev";
   nodeRedDomain = "node-red.emptyflask.net";
-in
-{
+in {
   imports = [
     # ../../nixos/security
     # ../../nixos/services
@@ -35,15 +34,19 @@ in
     firewall = let
       dns = 53;
       http = 80;
+      mountd = 20048;
+      rpcbind = 111;
       nfs = 2049;
       ssh = 22;
+      statd = 4000;
+      lockd = 4001;
     in {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [ dns http nfs ssh ];
-      allowedUDPPorts = [ dns nfs ];
+      allowedTCPPorts = [ dns http lockd mountd nfs rpcbind ssh statd ];
+      allowedUDPPorts = [ dns lockd mountd nfs rpcbind statd ];
     };
-    nameservers = ["1.1.1.1" "1.0.0.1"];
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
 
   nix.settings = {
@@ -94,6 +97,11 @@ in
 
   services.nfs.server = {
     enable = true;
+    enableNFSv4 = true;
+    ports = {
+      statd = 4000;
+      lockd = 4001;
+    };
     exports = ''
       /       10.9.0.0/16(ro,insecure,sync,no_subtree_check,crossmnt,fsid=0)
       /photon 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
@@ -112,6 +120,8 @@ in
       X11Forwarding = false;
     };
   };
+
+  services.rpcbind.enable = true;
 
   time.timeZone = "America/Chicago";
 
@@ -132,17 +142,14 @@ in
             "/var/lib/pihole/etc-pihole:/etc/pihole"
             "/var/lib/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
           ];
-          extraOptions = [
-            "--cap-add=NET_ADMIN"
-            "--cap-add=SYS_TIME"
-            "--cap-add=SYS_NICE"
-          ];
+          extraOptions =
+            [ "--cap-add=NET_ADMIN" "--cap-add=SYS_TIME" "--cap-add=SYS_NICE" ];
         };
 
         nodered = {
           image = "nodered/node-red:latest";
           ports = [ "127.0.0.1:1880:1880" ];
-          volumes = [ "/var/lib/nodered:/data" ]; 
+          volumes = [ "/var/lib/nodered:/data" ];
         };
       };
     };
@@ -271,12 +278,12 @@ in
     "d /var/lib/traefik 0700 traefik traefik -"
   ];
 
-#  users.users.traefik = {
-#    isSystemUser = true;
-#    group = "traefik";
-#  };
-#
-#  users.groups.traefik = {};
+  #  users.users.traefik = {
+  #    isSystemUser = true;
+  #    group = "traefik";
+  #  };
+  #
+  #  users.groups.traefik = {};
 
   system.autoUpgrade.enable = false;
   system.stateVersion = "25.05";
