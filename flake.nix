@@ -42,6 +42,7 @@
     };
 
     # Tools
+    agenix.url = "github:ryantm/agenix";
     nur = {
       url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";

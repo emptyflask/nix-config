@@ -1,11 +1,14 @@
 { ... }: {
-  boot.supportedFilesystems = [ "nfs" ];
+  boot.supportedFilesystems = [ "nfs" "nfs4" "nfsv4" ];
   services.rpcbind.enable = true; # needed for NFS
+  nfs.client.enable = true;
 
   systemd.mounts = let
     commonMountOptions = {
       type = "nfs";
-      mountConfig = { Options = "noatime,nfsvers=4.2"; };
+      mountConfig = {
+        Options = "noatime,nfsvers=4.2,_netdev,x-systemd.automount";
+      };
     };
 
   in [
