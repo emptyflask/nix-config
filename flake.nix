@@ -26,10 +26,8 @@
       url = "github:nix-community/nixos-anywhere";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
 
     # Home manager
     home-manager = {
@@ -147,13 +145,14 @@
 
         planck = nixos-raspberrypi.lib.nixosSystem {
           system = "aarch64-linux";
-          specialArgs = { inherit inputs outputs; };
+          specialArgs = { inherit inputs outputs nixos-raspberrypi; };
           modules = [
             nixos-raspberrypi.nixosModules.raspberry-pi-4.base
             # nixos-raspberrypi.nixosModules.raspberry-pi-4.display-vc4
             # nixos-raspberrypi.nixosModules.raspberry-pi-4.bluetooth
             ./hosts/planck/default.nix
             # lix-module.nixosModules.default
+	    outputs.nixosModules.local-ca
           ];
         };
       };
