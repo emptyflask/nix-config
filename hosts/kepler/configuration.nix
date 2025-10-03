@@ -14,9 +14,9 @@ in {
     ./hardware-configuration.nix
     ./filesystems.nix
     ./nfs.nix
-    ../../nixos/security
-    ../../nixos/services
-    ../../nixos/users
+    ./nixos/security
+    ./nixos/services
+    ./nixos/users
   ];
 
   nixpkgs = {
