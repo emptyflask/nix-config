@@ -1,15 +1,13 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
-let
-  piholeDomain = "pihole.emptyflask.dev";
-  nodeRedDomain = "node-red.emptyflask.net";
-in {
+{
   imports = [
     # ../../nixos/security
     # ../../nixos/services
     ./hardware-configuration.nix
     ../../nixos/users
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
+    ./samba.nix
   ];
 
   boot.loader.grub.enable = false;
@@ -37,6 +35,7 @@ in {
       mountd = 20048;
       rpcbind = 111;
       nfs = 2049;
+      ntp = 123;
       ssh = 22;
       statd = 4000;
       lockd = 4001;
@@ -44,7 +43,7 @@ in {
       enable = true;
       allowPing = true;
       allowedTCPPorts = [ dns http lockd mountd nfs rpcbind ssh statd ];
-      allowedUDPPorts = [ dns lockd mountd nfs rpcbind statd ];
+      allowedUDPPorts = [ dns lockd mountd nfs ntp rpcbind statd ];
     };
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
@@ -92,23 +91,42 @@ in {
   programs.ssh.startAgent = false;
   programs.zsh.enable = true;
 
+  # power.ups.enable = true;
+
   # services.couchdb.enable = true;
   # services.docker.enable = true;
 
-  services.nfs.server = {
+  # services.localCA = {
+  #   enable = true;
+  #   certFile = "planck.pem";
+  #   keyFile = "planck-key.pem";
+  #   domains = [ "planck.lan" "pi.hole" "pihole.lan" "node-red.lan" ];
+  #   validityDays = 730;
+  #   renewBeforeDays = 30;
+  # };
+
+  services.chrony = {
     enable = true;
-    enableNFSv4 = true;
-    ports = {
-      statd = 4000;
-      lockd = 4001;
+    extraConfig = "allow 10.9.0.0/16";
+    servers = [
+      "ns.nts.umn.edu"
+      "ntp.state.mn.us"
+      "time.nist.gov"
+      "0.us.pool.ntp.org"
+    ];
+  };
+
+  services.nfs = {
+    server = {
+      enable = true;
+      exports = ''
+        /       10.9.0.0/16(ro,insecure,sync,no_subtree_check,crossmnt,fsid=0)
+        /photon 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
+        /photon 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
+        /squid  10.9.8.0/24(rw,insecure,sync,no_subtree_check)
+        /squid  10.9.0.0/16(ro,insecure,sync,no_subtree_check)
+        '';
     };
-    exports = ''
-      /       10.9.0.0/16(ro,insecure,sync,no_subtree_check,crossmnt,fsid=0)
-      /photon 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
-      /photon 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
-      /squid  10.9.8.0/24(rw,insecure,sync,no_subtree_check)
-      /squid  10.9.0.0/16(ro,insecure,sync,no_subtree_check)
-    '';
   };
 
   services.openssh = {
@@ -123,102 +141,6 @@ in {
 
   services.rpcbind.enable = true;
 
-  time.timeZone = "America/Chicago";
-
-  virtualisation = {
-    oci-containers = {
-      backend = "podman";
-      containers = {
-        pihole = {
-          image = "pihole/pihole:latest";
-          autoStart = true;
-          ports = [ "53:53/tcp" "53:53/udp" "8080:80/tcp" ];
-          environment = {
-            TZ = "America/Chicago";
-            FTLCONF_webserver_api_password = "piholio";
-            FTLCONF_dns_listeningMode = "all";
-          };
-          volumes = [
-            "/var/lib/pihole/etc-pihole:/etc/pihole"
-            "/var/lib/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
-          ];
-          extraOptions =
-            [ "--cap-add=NET_ADMIN" "--cap-add=SYS_TIME" "--cap-add=SYS_NICE" ];
-        };
-
-        nodered = {
-          image = "nodered/node-red:latest";
-          ports = [ "127.0.0.1:1880:1880" ];
-          volumes = [ "/var/lib/nodered:/data" ];
-        };
-      };
-    };
-  };
-
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    settings = {
-      global = {
-        "workgroup" = "WORKGROUP";
-        "server string" = "planck";
-        "netbios name" = "planck";
-        "security" = "user";
-        #"use sendfile" = "yes";
-        #"max protocol" = "smb2";
-        "hosts allow" = "10.9.8. 10.9.11. localhost";
-        "hosts deny" = "0.0.0.0/0";
-        "guest account" = "nobody";
-        "map to guest" = "bad user";
-      };
-      public = {
-        "path" = "/home/jon/public";
-        "browseable" = "yes";
-        "read only" = "no";
-        "guest ok" = "yes";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        "force user" = "jon";
-        "force group" = "users";
-      };
-      incoming = {
-        "path" = "/home/jon/public/incoming";
-        "browseable" = "no";
-        "read only" = "no";
-        "guest ok" = "yes";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        "force user" = "jon";
-        "force group" = "users";
-      };
-      photon = {
-        "path" = "/mnt/sda1";
-        "browseable" = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        "force user" = "jon";
-        "force group" = "users";
-      };
-      squid = {
-        "path" = "/mnt/sdb1";
-        "browseable" = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        "force user" = "jon";
-        "force group" = "users";
-      };
-    };
-  };
-
-  services.samba-wsdd = {
-    enable = true;
-    openFirewall = true;
-  };
-
   services.traefik = {
     enable = true;
     staticConfigOptions = {
@@ -226,10 +148,10 @@ in {
         web = {
           address = ":80";
           asDefault = true;
-          http.redirections.entrypoint = {
-            to = "websecure";
-            scheme = "https";
-          };
+          # http.redirections.entrypoint = {
+          #   to = "websecure";
+          #   scheme = "https";
+          # };
         };
         websecure = {
           address = ":443";
@@ -246,18 +168,22 @@ in {
         storage = "${config.services.traefik.dataDir}/acme.json";
         httpChallenge.entryPoint = "web";
       };
+      # tls.stores.default.defaultCertificate = {
+      #   certFile = config.services.localCA.certFilePath;
+      #   keyFile  = config.services.localCA.keyFilePath;
+      # };
     };
 
     dynamicConfigOptions = {
       http.routers = {
         pihole = {
-          rule = "Host(`${piholeDomain}`)";
+          rule = "Host(`pi.hole`) || Host(`pihole.lan`)";
           entryPoints = [ "websecure" ];
           service = "pihole";
           tls.certResolver = "myresolver";
         };
         nodeRed = {
-          rule = "Host(`${nodeRedDomain}`)";
+          rule = "Host(`node-red.lan`)";
           entryPoints = [ "websecure" ];
           service = "nodeRed";
           tls.certResolver = "myresolver";
@@ -278,12 +204,39 @@ in {
     "d /var/lib/traefik 0700 traefik traefik -"
   ];
 
-  #  users.users.traefik = {
-  #    isSystemUser = true;
-  #    group = "traefik";
-  #  };
-  #
-  #  users.groups.traefik = {};
+  time.timeZone = "America/Chicago";
+
+  virtualisation = {
+    oci-containers = {
+      backend = "podman";
+      containers = {
+        pihole = {
+          image = "pihole/pihole:latest";
+          autoStart = true;
+          ports = [ "53:53/tcp" "53:53/udp" "8080:80/tcp" ];
+          environment = {
+            TZ = "America/Chicago";
+            FTLCONF_webserver_api_password = "piholio";
+            FTLCONF_dns_listeningMode = "all";
+            FTLCONF_dns_reply_host_force4 = "true";
+            FTLCONF_dns_reply_host_IPv4 = "10.9.8.6";
+          };
+          volumes = [
+            "/var/lib/pihole/etc-pihole:/etc/pihole"
+            "/var/lib/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
+          ];
+          extraOptions =
+            [ "--cap-add=NET_ADMIN" "--cap-add=SYS_TIME" "--cap-add=SYS_NICE" ];
+        };
+
+        # nodered = {
+        #   image = "nodered/node-red:latest";
+        #   ports = [ "1880:1880" ];
+        #   volumes = [ "/var/lib/nodered:/data" ];
+        # };
+      };
+    };
+  };
 
   system.autoUpgrade.enable = false;
   system.stateVersion = "25.05";
