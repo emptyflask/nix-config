@@ -21,7 +21,14 @@ let
     };
 
     copilot-chat = {
-      plugin = pkgs.vimPlugins.CopilotChat-nvim;
+      plugin = (mkPlugin "copilot-chat-nvim").overrideAttrs {
+        checkInputs = with pkgs.vimPlugins; [
+          fzf-lua
+          telescope-nvim
+          snacks-nvim
+        ];
+        dependencies = with pkgs.vimPlugins; [ copilot-lua plenary-nvim ];
+      };
       type = "lua";
       config = builtins.readFile ./copilot-chat.lua;
     };
