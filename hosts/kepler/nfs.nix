@@ -1,7 +1,6 @@
 { ... }: {
   boot.supportedFilesystems = [ "nfs" "nfs4" "nfsv4" ];
   services.rpcbind.enable = true; # needed for NFS
-  nfs.client.enable = true;
 
   systemd.mounts = let
     commonMountOptions = {

@@ -52,6 +52,10 @@
       url = "github:stevearc/conform.nvim?ref=v9.0.0";
       flake = false;
     };
+    copilot-chat-nvim = {
+      url = "github:CopilotC-Nvim/CopilotChat.nvim";
+      flake = false;
+    };
     nvim-lsp-selection-range = {
       url = "github:camilledejoye/nvim-lsp-selection-range";
       flake = false;

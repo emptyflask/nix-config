@@ -12,6 +12,7 @@ in {
     # inputs.hardware.nixosModules.common-ssd
 
     ./hardware-configuration.nix
+    ./filesystems.nix
     ./nfs.nix
     ../../nixos/security
     ../../nixos/services
@@ -78,18 +79,6 @@ in {
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
-
-  fileSystems."/media/repository" = {
-    device = "/dev/disk/by-uuid/8CFA8C6CFA8C547C";
-    fsType = "ntfs";
-    options = [ "defaults" "user" ];
-  };
-
-  # fileSystems."/media/backup" =
-  #   { device = "/dev/disk/by-uuid/82d748cc-d038-405c-9d5d-82d381a0999e";
-  #   fsType = "ext4";
-  #   options = ["defaults" "nofail" "user"];
-  # };
 
   boot = {
     kernel = { sysctl = { "vm.swappiness" = "20"; }; };
@@ -224,6 +213,7 @@ in {
     enable = true;
     flake = "/home/jon/dev/nix-config";
   };
+  programs.nix-ld.enable = true; # For running non-nix binaries
   programs.seahorse.enable = true;
   programs.ssh.startAgent = false;
   programs.steam.enable = true;
