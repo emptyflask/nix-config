@@ -1,50 +1,34 @@
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, self, ... }:
 
 let
-  hm = path: "${../../home-manager}/${path}";
-  imports = [
-    (hm "common.nix")
-    (hm "environment.nix")
-    (hm "accounts")
-    (hm "services/dunst")
-    (hm "services/mpd")
-    (hm "services/spotifyd")
-    (hm "services/trayer")
-    (hm "programs/alacritty")
-    (hm "programs/git")
-    (hm "programs/kitty")
-    (hm "programs/neomutt")
-    (hm "programs/neovim")
-    (hm "programs/rofi")
-    (hm "programs/starship")
-    (hm "programs/tmux")
-    (hm "programs/vim")
-    (hm "programs/yazi")
-    (hm "programs/zathura")
-    (hm "programs/zsh")
-    (hm "xmobar")
-    (hm "xresources")
-  ];
-
-  myLocation = "home";
-
-  locations = {
-    home = {
-      lat = 44.9466;
-      long = -93.1517;
-    };
-  };
-
-  latlong = location:
-    if (lib.hasAttrByPath [ location ] locations) then
-      locations.${location}
-    else
-      locations.home;
+  location = import "${self}/home-manager/locations/oakwood.nix";
 
   background = "$HOME/.config/wallpaper/current";
 
 in {
-  inherit imports;
+  imports = [
+    "${self}/home-manager/common.nix"
+    "${self}/home-manager/environment.nix"
+    "${self}/home-manager/accounts"
+    "${self}/home-manager/services/dunst"
+    "${self}/home-manager/services/mpd"
+    "${self}/home-manager/services/spotifyd"
+    "${self}/home-manager/services/trayer"
+    "${self}/home-manager/programs/alacritty"
+    "${self}/home-manager/programs/git"
+    "${self}/home-manager/programs/kitty"
+    "${self}/home-manager/programs/neomutt"
+    "${self}/home-manager/programs/neovim"
+    "${self}/home-manager/programs/rofi"
+    "${self}/home-manager/programs/starship"
+    "${self}/home-manager/programs/tmux"
+    "${self}/home-manager/programs/vim"
+    "${self}/home-manager/programs/yazi"
+    "${self}/home-manager/programs/zathura"
+    "${self}/home-manager/programs/zsh"
+    "${self}/home-manager/xmobar"
+    "${self}/home-manager/xresources"
+  ];
 
   dconf.enable = false;
 
@@ -71,9 +55,9 @@ in {
     homeDirectory = "/home/jon";
 
     file = {
-      ".ghci".source = (hm "home/ghci");
-      ".psqlrc".source = (hm "home/psqlrc");
-      ".railsrc".source = (hm "home/railsrc");
+      ".ghci".source = "${self}/home-manager/home/ghci";
+      ".psqlrc".source = "${self}/home-manager/home/psqlrc";
+      ".railsrc".source = "${self}/home-manager/home/railsrc";
     };
 
     keyboard = {
@@ -101,6 +85,7 @@ in {
       exiftool
       glow # markdown viewer
       google-chrome
+      httpie
       jmtpfs # Media Transfer Protocol (usb device filesystems)
       joplin-desktop # notes
       keybase
@@ -110,6 +95,8 @@ in {
       lxmenu-data # installed apps
       lynx # text web browser
       miller # csv tool
+      obsidian # note taking
+      pandoc # document converter
       pavucontrol
       postman
       protonvpn-cli
@@ -151,27 +138,6 @@ in {
       # scribus             # page layout
       scrot # CLI screenshotter
 
-      # programming - general
-      android-studio
-      dbeaver-bin # DB GUI
-      docker-compose
-      gcc
-      hexyl
-      lazydocker
-      ltrace # lib trace
-      strace # system call trace
-      vscode
-      nixfmt-classic # format nix
-      uncrustify # format c/c++/c#/java/etc
-
-      # programming - haskell
-      haskellPackages.stylish-haskell
-      ormolu
-      stack
-
-      # programming - nix
-      alejandra # format nix
-
       # chat / email
       discord
       protonmail-bridge
@@ -192,12 +158,14 @@ in {
       ferrum
       fira
       fira-code-symbols
+      font-awesome
       font-awesome_5
       font-awesome_6
       helvetica-neue-lt-std
       hermit
       ibm-plex
       inconsolata
+      jetbrains-mono
       league-of-moveable-type
       liberation_ttf
       libre-baskerville
@@ -206,6 +174,8 @@ in {
       libre-franklin
       medio
       national-park-typeface
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.fira-code
       norwester-font
       penna
       route159
@@ -214,20 +184,89 @@ in {
       vegur
       vistafonts
 
-      # (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-      nerd-fonts.droid-sans-mono
-      nerd-fonts.fira-code
+      # graphics / print
+      imagemagick
+      inkscape
 
       # media
+      # handbrake           # dvd ripper
       audacious # music player
       calibre # e-book library
       evince # another PDF viewer
-      # handbrake           # dvd ripper
+      mpc_cli
       mplayer
       mpv
+      ncmpcpp
       smplayer
       spotify
       vlc
+
+      # programming - general
+      android-studio
+      dbeaver-bin # DB GUI
+      docker-compose
+      exercism
+      foreman
+      gcc
+      gitui # git tui frontend
+      gnumake
+      hexyl
+      html-tidy # format html
+      lazydocker
+      ltrace # lib trace
+      niv # nix channel config
+      nixfmt-classic # format nix
+      shellcheck # shell script analyzer
+      sourceHighlight
+      strace # system call trace
+      tig # git tui frontend
+      uncrustify # format c/c++/c#/java/etc
+      universal-ctags
+      vscode
+
+      # programming - nix
+      alejandra # format nix
+
+      # programming - elixir / erlang
+      elixir
+
+      # programming - javascript
+      biome
+      nodejs
+      nodePackages.diagnostic-languageserver
+      nodePackages.eslint_d
+      nodePackages.typescript
+      nodePackages.typescript-language-server
+
+      # programming - haskell
+      ghc
+      cabal2nix
+      cabal-install
+      haskellPackages.apply-refact
+      haskellPackages.ghcid
+      haskellPackages.haskell-language-server
+      haskellPackages.hlint
+      haskellPackages.stylish-haskell
+      haskellPackages.yesod
+      ormolu
+      stack
+
+      # programming - python
+      python3Packages.pynvim # for neovim
+
+      # programming - ruby
+      bundix
+      jekyll
+      ruby
+      ruby.gems.pry
+
+      # programming - rust
+      cargo
+      rustc
+      rustfmt
+
+      # chat / email
+      neomutt # CLI mail
     ];
 
     pointerCursor = {
@@ -272,12 +311,16 @@ in {
     };
   };
 
+  programs.broot.enable = true; # directory browser
+
   programs.eza = {
     enable = true;
     git = true;
     icons = "auto";
   };
+
   programs.firefox.enable = true;
+
   programs.ncspot = {
     enable = true;
     settings = {
@@ -286,6 +329,36 @@ in {
       use_nerd_font = true;
       shuffle = false;
     };
+  };
+
+  programs.gh = {
+    enable = true;
+    extensions = with pkgs; [ gh-cal gh-eco ];
+    settings = {
+      aliases = {
+        co = "pr checkout";
+        pv = "pr view";
+      };
+      git-protocol = "https";
+    };
+  };
+  programs.gh-dash = { enable = true; };
+
+  programs.go.enable = true;
+  programs.keychain.enable = true;
+
+  programs.ncmpcpp = {
+    bindings = [ ];
+    enable = true;
+    settings = let
+      nowPlaying = pkgs.writeShellScript "now-playing-notify" ''
+      readarray -t info < <(${pkgs.mpc_cli}/bin/mpc --format '%title%\n%artist%\n%album%' current | head -n 3)
+      title=''${info[0]}
+      artist=''${info[1]}
+      album=''${info[2]}
+      ${pkgs.dunst}/bin/dunstify -a "Now Playing" "$title" "$artist\n$album" -t 4000
+      '';
+    in { execute_on_song_change = "${nowPlaying}"; };
   };
 
   qt = {
@@ -324,8 +397,8 @@ in {
 
     redshift = {
       enable = true;
-      latitude = toString (latlong myLocation).lat;
-      longitude = toString (latlong myLocation).long;
+      latitude = toString location.lat;
+      longitude = toString location.lon;
       tray = true;
     };
 
@@ -361,6 +434,6 @@ in {
       ${pkgs.alsa-utils}/bin/amixer -c0 set Headphone 100%,100%
     '';
 
-    windowManager = import (hm "xmonad/default.nix") pkgs;
+    windowManager = import "${self}/home-manager/xmonad/default.nix" pkgs;
   };
 }

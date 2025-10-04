@@ -1,10 +1,10 @@
-{ inputs, pkgs, lib, ... }:
+{ inputs, pkgs, lib, minimal ? false, ... }:
 
 let
   mkPlugin = name:
     pkgs.vimUtils.buildVimPlugin {
       inherit name;
-      src = inputs.${name};
+      src = inputs.neovim-plugins.${name};
     };
 
   custom = {
@@ -244,110 +244,119 @@ let
 
   };
 
-in with pkgs.vimPlugins; [
-  FixCursorHold-nvim
-  Rename
-  Tagbar
-  custom.conform
-  custom.dashboard
-  custom.leap-nvim
-  custom.lspconfig
-  custom.mini
-  custom.nvim-autopairs
-  custom.lsp-selection-range
-  custom.obsidian
-  custom.tabular
-  custom.treesitter
-  custom.ts-node-action
-  editorconfig-vim
-  fugitive
-  gitsigns-nvim
-  img-clip-nvim
-  neoformat
-  none-ls-nvim
-  nvim-jdtls
-  nvim-nio
-  nvim-ufo
-  plenary-nvim
-  repeat
-  sensible
-  tlib
-  undotree
-  vim-abolish
-  # vim-commentary
-  vim-dispatch
-  vim-grepper
-  vim-gutentags
-  vim-sandwich
-  vim-test
-  vim-tmux-navigator
-  # vim-unimpaired
-  vimproc
+  corePlugins = with pkgs.vimPlugins; [
+    Rename
+    Tagbar
+    custom.conform
+    custom.dashboard
+    custom.leap-nvim
+    custom.lspconfig
+    custom.mini
+    custom.nvim-autopairs
+    custom.lsp-selection-range
+    custom.tabular
+    custom.treesitter
+    editorconfig-vim
+    fugitive
+    gitsigns-nvim
+    neoformat
+    none-ls-nvim
+    nvim-nio
+    nvim-ufo
+    plenary-nvim
+    repeat
+    sensible
+    tlib
+    undotree
+    vim-abolish
+    # vim-commentary
+    vim-dispatch
+    vim-grepper
+    vim-gutentags
+    vim-sandwich
+    vim-test
+    # vim-unimpaired
+    vimproc
 
-  # THEME / VISUAL
-  custom.gruvbox
-  custom.lualine-nvim
-  custom.onedark
-  kanagawa-nvim
-  rainbow-delimiters-nvim # Treesitter multicolored parens/brackets
-  tokyonight-nvim
+    # THEME / VISUAL
+    custom.gruvbox
+    custom.lualine-nvim
+    rainbow-delimiters-nvim # Treesitter multicolored parens/brackets
 
-  # FILE EXPLORER
-  custom.nvim-tree
-  custom.telescope
-  nvim-web-devicons
-  fzf-lua
-  telescope-fzy-native-nvim
-  telescope-ui-select-nvim
-  telescope_hoogle # hoogle search
-  telescope-manix # nix search
+    # FILE EXPLORER
+    custom.nvim-tree
+    custom.telescope
+    nvim-web-devicons
+    fzf-lua
+    telescope-fzy-native-nvim
+    telescope-ui-select-nvim
+    telescope_hoogle # hoogle search
+    telescope-manix # nix search
 
-  # LANGUAGE / FILETYPE SPECIFIC
-  Hoogle
-  # custom.ruby-code-actions
-  custom.rust-tools
-  dhall-vim
-  elm-vim
-  # ghc-mod-vim
-  # haskell-vim
-  haskell-tools-nvim
-  # neco-ghc
-  hlint-refactor
-  # intero-neovim
-  vim-stylish-haskell
-  vim-polyglot # syntax highlighting for most languages
-  vim-rails
-  vim-terraform
+    # LANGUAGE / FILETYPE SPECIFIC
+    vim-polyglot # syntax highlighting for most languages
 
-  # (pluginGit "master" "rescript-lang/vim-rescript")
+    # COMPLETION
+    cmp-buffer
+    cmp-cmdline
+    cmp-cmdline-history
+    custom.nvim-cmp
+    cmp-nvim-lsp
+    cmp-nvim-lua
+    cmp-path
+    cmp-vsnip
+    custom.vsnip
+    lspkind-nvim
+    vim-vsnip-integ
+    vim-snippets
+  ];
 
-  # COMPLETION
-  cmp-buffer
-  cmp-cmdline
-  cmp-cmdline-history
-  custom.nvim-cmp
-  cmp-nvim-lsp
-  cmp-nvim-lua
-  cmp-path
-  cmp-vsnip
-  custom.vsnip
-  lspkind-nvim
-  vim-vsnip-integ
-  vim-snippets
+  fullPlugins = with pkgs.vimPlugins; [
+    custom.obsidian
+    custom.ts-node-action
+    img-clip-nvim
+    nvim-jdtls # java lsp
+    vim-tmux-navigator
 
-  # TESTING
-  custom.neotest
-  neotest-haskell
-  neotest-minitest
-  neotest-plenary
-  neotest-rspec
-  neotest-rust
-  neotest-vitest
+    # THEME / VISUAL
+    custom.onedark
+    kanagawa-nvim
+    tokyonight-nvim
 
-  # COPILOT
-  # custom.avante
-  custom.copilot-chat
-  custom.copilot-cmp
-  custom.copilot-lua
-  # custom.supermaven
-]
+    # LANGUAGE / FILETYPE SPECIFIC
+    Hoogle
+    # custom.ruby-code-actions
+    custom.rust-tools
+    dhall-vim
+    elm-vim
+    # ghc-mod-vim
+    # haskell-vim
+    haskell-tools-nvim
+    # neco-ghc
+    hlint-refactor
+    # intero-neovim
+    vim-stylish-haskell
+    vim-rails
+    vim-terraform
+
+    # TESTING
+    custom.neotest
+    neotest-haskell
+    neotest-minitest
+    neotest-plenary
+    neotest-rspec
+    neotest-rust
+    neotest-vitest
+
+    # COPILOT
+    # custom.avante
+    custom.copilot-chat
+    custom.copilot-cmp
+    custom.copilot-lua
+    # custom.supermaven
+  ];
+
+in
+  if minimal
+  then corePlugins
+  else corePlugins ++ fullPlugins

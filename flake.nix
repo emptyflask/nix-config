@@ -47,31 +47,7 @@
     };
     yazi.url = "github:sxyazi/yazi";
 
-    # Neovim plugins
-    conform-nvim = {
-      url = "github:stevearc/conform.nvim?ref=v9.0.0";
-      flake = false;
-    };
-    copilot-chat-nvim = {
-      url = "github:CopilotC-Nvim/CopilotChat.nvim";
-      flake = false;
-    };
-    nvim-lsp-selection-range = {
-      url = "github:camilledejoye/nvim-lsp-selection-range";
-      flake = false;
-    };
-    ruby-code-actions = {
-      url = "github:semanticart/ruby-code-actions.nvim";
-      flake = false;
-    };
-    supermaven-nvim = {
-      url = "github:supermaven-inc/supermaven-nvim";
-      flake = false;
-    };
-    ts-node-action = {
-      url = "github:ckolkey/ts-node-action";
-      flake = false;
-    };
+    neovim-plugins.url = "path:inputs/neovim-plugins";
   };
   nixConfig = {
     extra-substituters =
@@ -131,8 +107,17 @@
         kepler = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/kepler/configuration.nix
+            ./hosts/kepler
             agenix.nixosModules.default
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.jon = ./hosts/kepler/home.nix;
+                extraSpecialArgs = { inherit inputs self; };
+              };
+            }
             lix-module.nixosModules.default
           ];
         };
@@ -142,7 +127,7 @@
           specialArgs = { inherit inputs outputs; };
           pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
           modules = [
-            ./hosts/newton/configuration.nix
+            ./hosts/newton
             lix-module.nixosModules.default
           ];
         };
@@ -152,11 +137,18 @@
           specialArgs = { inherit inputs outputs nixos-raspberrypi; };
           modules = [
             nixos-raspberrypi.nixosModules.raspberry-pi-4.base
-            # nixos-raspberrypi.nixosModules.raspberry-pi-4.display-vc4
-            # nixos-raspberrypi.nixosModules.raspberry-pi-4.bluetooth
-            ./hosts/planck/default.nix
+            ./hosts/planck
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.jon = ./hosts/planck/home.nix;
+                extraSpecialArgs = { inherit inputs self; };
+              };
+            }
             # lix-module.nixosModules.default
-	    outputs.nixosModules.local-ca
+            outputs.nixosModules.local-ca
           ];
         };
       };

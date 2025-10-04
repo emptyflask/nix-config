@@ -1,18 +1,6 @@
-{ pkgs, config, ... }:
+{ inputs, pkgs, config, ... }:
 
 let
-  lscolors = builtins.fetchGit {
-    url = "https://github.com/trapd00r/LS_COLORS.git";
-    ref = "master";
-  };
-
-  chruby = false;
-  source_chruby = if builtins.isAttrs chruby then ''
-    source ${chruby}/share/chruby/chruby.sh
-    source ${chruby}/share/chruby/auto.sh
-  '' else
-    "";
-
   # Define ls aliases only if eza is not enabled
   lsAliases = if (!config.programs.eza.enable) then {
     l = "ls -alh";
@@ -20,6 +8,8 @@ let
     ls = "ls --color -F";
   } else
     { };
+
+  unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
 
 in {
   programs.zsh = {
@@ -32,10 +22,8 @@ in {
       size = 50000;
     };
 
-    initContent = (builtins.readFile ./zshrc) + source_chruby + ''
-      source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
+    initContent = (builtins.readFile ./zshrc) + ''
       eval "$(${pkgs.fasd}/bin/fasd --init auto)"
-      eval $(${pkgs.coreutils}/bin/dircolors -b ${lscolors}/LS_COLORS)
     '';
 
     shellAliases = lsAliases // {
@@ -53,9 +41,10 @@ in {
       grep = "grep --color=auto";
 
       # image output in kitty terminal
-      icat = "kitty +kitten icat";
+      icat = "${pkgs.kitty}/bin/kitty +kitten icat";
 
-      j = "jira ls -a emptyflask";
+      j = ''
+        ${unstable.jira-cli-go}/bin/jira issue list -sopen -s"In Review" -a"jon@sxsw.com"'';
       json = "jq '.' -C | less";
 
       m = "ncmpcpp";
@@ -94,48 +83,22 @@ in {
     };
 
     plugins = [
-      # {
-      #   name = "blox";
-      #   src = builtins.fetchGit {
-      #     url = "https://github.com/yardnsm/blox-zsh-theme.git";
-      #     ref = "master";
-      #   };
-      # }
-
       {
-        name = "fast-syntax-highlighting";
-        src = builtins.fetchGit {
-          url =
-            "https://github.com/zdharma-continuum/fast-syntax-highlighting.git";
-          ref = "refs/tags/v1.55";
-        };
+        name = "nix-zsh-completions";
+        src = pkgs.nix-zsh-completions;
       }
-
-      {
-        name = "zsh-256color";
-        src = builtins.fetchGit {
-          url = "https://github.com/chrissicool/zsh-256color.git";
-          ref = "master";
-        };
-      }
-
       {
         name = "zsh-completions";
-        src = builtins.fetchGit {
-          url = "https://github.com/zsh-users/zsh-completions.git";
-          ref = "master";
-        };
+        src = pkgs.zsh-completions;
       }
-
+      {
+        name = "fast-syntax-highlighting";
+        src = pkgs.zsh-fast-syntax-highlighting;
+      }
       {
         name = "zsh-nix-shell";
-        file = "nix-shell.plugin.zsh";
-        src = pkgs.fetchFromGitHub {
-          owner = "chisui";
-          repo = "zsh-nix-shell";
-          rev = "v0.5.0";
-          sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
-        };
+        src = pkgs.zsh-nix-shell;
+        file = "${pkgs.zsh-nix-shell}/nix-shell.plugin.zsh";
       }
     ];
 

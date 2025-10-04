@@ -14,9 +14,9 @@ in {
     ./hardware-configuration.nix
     ./filesystems.nix
     ./nfs.nix
-    ./nixos/security
-    ./nixos/services
-    ./nixos/users
+    ../../nixos/security
+    ./services
+    ../../nixos/users
   ];
 
   nixpkgs = {
@@ -205,6 +205,7 @@ in {
     polkitPolicyOwners = [ "jon" ];
   };
   programs.adb.enable = true;
+  programs.command-not-found.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
@@ -217,7 +218,10 @@ in {
   programs.seahorse.enable = true;
   programs.ssh.startAgent = false;
   programs.steam.enable = true;
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableLsColors = true;
+  };
 
   hardware = {
     alsa.enablePersistence = true;

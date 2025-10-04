@@ -1,10 +1,10 @@
-{ pkgs, ...}:
+{ pkgs, ... }:
 
 with pkgs;
 
-{ 
+{
   programs.vim = {
-    enable    = true;
+    enable = true;
 
     extraConfig = (builtins.readFile ./vimrc) + ''
       syntax on
@@ -20,17 +20,14 @@ with pkgs;
     '';
 
     plugins = with pkgs.vimPlugins; [
-      Hoogle
       Rename
       Tabular
       Tagbar
       ale
-      # elm-vim
       fastfold
       fugitive
       fzf-vim
       fzfWrapper
-      ghc-mod-vim
       gitgutter
       gruvbox-community
       hlint-refactor
@@ -45,8 +42,6 @@ with pkgs;
       undotree
       vim-commentary
       vim-dispatch
-      # vim-elixir
-      # vim-go
       vim-grepper
       vim-gutentags
       vim-hindent
@@ -55,18 +50,9 @@ with pkgs;
       vim-speeddating
       vim-startify
       vim-test
-      # vim-toml
       vim-unimpaired
       vimproc
       vimwiki
-      # gtags.vim
-      # html5.vim
-      # vim-endwise
-      # vim-handlebars           { 'for': 'handlebars.html' }
-      # vim-projectroot
-      # vim-ref
-      # vim-sneak             " move using sXX / XzXX
-      # vim-togglelist
     ];
   };
 }
