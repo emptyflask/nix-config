@@ -341,6 +341,26 @@
         "url": "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz"
       }
     },
+    "neovim-plugins": {
+      "inputs": {
+        "conform-nvim": "conform-nvim",
+        "copilot-chat-nvim": "copilot-chat-nvim",
+        "nvim-lsp-selection-range": "nvim-lsp-selection-range",
+        "ruby-code-actions": "ruby-code-actions",
+        "supermaven-nvim": "supermaven-nvim",
+        "ts-node-action": "ts-node-action"
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-RNCmg3p4nBUuUC1F82YrEYCmAx+zzh4EzqpLcnWHk1g=",
+        "path": "inputs/neovim-plugins",
+        "type": "path"
+      },
+      "original": {
+        "path": "inputs/neovim-plugins",
+        "type": "path"
+      }
+    },
     "nix-vm-test": {
       "inputs": {
         "nixpkgs": [
@@ -633,12 +653,11 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "conform-nvim": "conform-nvim",
-        "copilot-chat-nvim": "copilot-chat-nvim",
         "darwin": "darwin_2",
         "home-manager": "home-manager_2",
         "home-manager-unstable": "home-manager-unstable",
         "lix-module": "lix-module",
+        "neovim-plugins": "neovim-plugins",
         "nixos-anywhere": "nixos-anywhere",
         "nixos-apple-silicon": "nixos-apple-silicon",
         "nixos-hardware": "nixos-hardware",
@@ -646,10 +665,6 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
-        "nvim-lsp-selection-range": "nvim-lsp-selection-range",
-        "ruby-code-actions": "ruby-code-actions",
-        "supermaven-nvim": "supermaven-nvim",
-        "ts-node-action": "ts-node-action",
         "yazi": "yazi"
       }
     },

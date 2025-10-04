@@ -131,11 +131,6 @@
 
     # Usenet downloader
     nzbget = { enable = true; };
-    sabnzbd = {
-      enable = false;
-      user = "usenet";
-      group = "usenet";
-    };
 
     # Windows file sharing
     samba = {
@@ -201,13 +196,6 @@
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  imports = [
-    ./hoogle
-    # ./nginx.nix
-    # ./openvpn
-    ./openssh.nix
-    ./postgresql.nix
-    ./traefik.nix
-    ./xserver.nix
-  ];
+  imports =
+    [ ./hoogle ./openssh.nix ./postgresql.nix ./traefik.nix ./xserver.nix ];
 }

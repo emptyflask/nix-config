@@ -1,11 +1,12 @@
-{ pkgs, ... }:
+{ inputs, lib, pkgs, self, ... }:
 
 let
   imports = [
-    ../../home-manager/environment.nix
-    ../../home-manager/programs/git
-    ../../home-manager/programs/vim
-    ../../home-manager/programs/zsh
+    "${self}/home-manager/environment.nix"
+    "${self}/home-manager/programs/git"
+    "${self}/home-manager/programs/neovim/minimal.nix"
+    "${self}/home-manager/programs/vim"
+    "${self}/home-manager/programs/zsh"
   ];
 
 in {

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   services.traefik = {
@@ -83,7 +83,7 @@
         (proxy "mmx-broker.sxsw.localhost" 5017)
 
         (proxy "usenet.localhost" 6789)
-        (proxy "hoogle.localhost" 6800)
+        (proxy "hoogle.localhost" config.services.hoogle.port)
       ];
     };
 
