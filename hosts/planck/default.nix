@@ -6,8 +6,9 @@
     # ../../nixos/services
     ./hardware-configuration.nix
     ../../nixos/users
-    inputs.nixos-hardware.nixosModules.raspberry-pi-4
+    ../common.nix
     ./samba.nix
+    inputs.nixos-hardware.nixosModules.raspberry-pi-4
   ];
 
   boot.loader.grub.enable = false;
@@ -25,6 +26,15 @@
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+
+  nix.settings.substituters = [
+    "https://nix-community.cachix.org"
+    "https://cache.nixos.org/"
+  ];
+
+  nix.settings.trusted-public-keys = [
+    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  ];
 
   networking = {
     hostName = "planck";
@@ -48,25 +58,11 @@
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
 
-  nix.settings = {
-    auto-optimise-store = true;
-    experimental-features = "nix-command flakes";
-    sandbox = true;
-
-    substituters =
-      [ "https://nix-community.cachix.org" "https://cache.nixos.org/" ];
-
-    trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
-
   i18n.defaultLocale = "en_US.UTF-8";
 
   environment.systemPackages = with pkgs; [
     bind
     binutils
-    docker
     file
     git
     gnupg
@@ -81,7 +77,6 @@
     raspberrypi-eeprom
     rsync
     tree
-    unrar
     unzip
     usbutils
     vim

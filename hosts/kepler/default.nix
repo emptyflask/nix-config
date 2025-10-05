@@ -1,8 +1,6 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
-let common = import ../common.nix { inherit pkgs; };
-
-in {
+{
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
@@ -12,68 +10,15 @@ in {
     # inputs.hardware.nixosModules.common-ssd
 
     ./hardware-configuration.nix
+    ../../nixos/security
+    ../../nixos/users
+    ../common.nix
     ./filesystems.nix
     ./nfs.nix
-    ../../nixos/security
     ./services
-    ../../nixos/users
   ];
 
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = { allowUnfree = true; };
-  };
-
-  # This will add each flake input as a registry
-  # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
-    ((lib.filterAttrs (_: lib.isType "flake")) inputs);
-
-  # This will additionally add your inputs to the system's legacy channels
-  # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-
-  environment.etc = lib.mapAttrs' (name: value: {
-    name = "nix/path/${name}";
-    value.source = value.flake;
-  }) config.nix.registry;
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
-  nix.optimise.automatic = true;
-
-  nix.extraOptions = ''
-    keep-derivations = true
-    keep-outputs = true
-    min-free = ${toString (100 * 1024 * 1024)} # 100MiB
-    max-free = ${toString (1024 * 1024 * 1024)} # 1GiB
-  '';
-
   nix.settings = {
-    auto-optimise-store = true;
-    experimental-features = "nix-command flakes";
-    sandbox = true;
-
     substituters = [ "https://nix-community.cachix.org" ];
     trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -162,34 +107,44 @@ in {
     };
   };
 
-  environment.systemPackages = with pkgs;
-    common.packages ++ [
-      feh
-      firefox
-      rxvt-unicode
-      (steam.override { extraPkgs = pkgs: [ wavpack ]; }).run
-      xclip
-      xorg.xkill
-      xorg.xmessage
-      xsel
-      vimHugeX
-    ];
+  environment.systemPackages = with pkgs; [
+    feh
+    firefox
+    rxvt-unicode
+    (steam.override { extraPkgs = pkgs: [ wavpack ]; }).run
+    xclip
+    xorg.xkill
+    xorg.xmessage
+    xsel
+    vimHugeX
+  ];
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs;
-      common.fonts ++ [
-        aileron
-        helvetica-neue-lt-std
-        ibm-plex
-        inconsolata
-        inter
-        liberation_ttf
-        libre-baskerville
-        libre-bodoni
-        libre-caslon
-        libre-franklin
-      ];
+    packages = with pkgs; [
+      aileron
+      corefonts
+      dejavu_fonts
+      fira
+      fira-code
+      fira-code-symbols
+      fira-mono
+      helvetica-neue-lt-std
+      ibm-plex
+      inconsolata
+      inter
+      liberation_ttf
+      libre-baskerville
+      libre-bodoni
+      libre-caslon
+      libre-franklin
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      roboto
+      ubuntu_font_family
+      vistafonts
+    ];
     fontconfig = {
       defaultFonts = {
         serif = [ "DejaVu Serif" ];
