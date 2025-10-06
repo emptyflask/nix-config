@@ -27,10 +27,8 @@
   # Making legacy nix commands consistent as well, awesome!
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
-  nix.settings.substituters = [
-    "https://nix-community.cachix.org"
-    "https://cache.nixos.org/"
-  ];
+  nix.settings.substituters =
+    [ "https://nix-community.cachix.org" "https://cache.nixos.org/" ];
 
   nix.settings.trusted-public-keys = [
     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -120,7 +118,7 @@
         /photon 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
         /squid  10.9.8.0/24(rw,insecure,sync,no_subtree_check)
         /squid  10.9.0.0/16(ro,insecure,sync,no_subtree_check)
-        '';
+      '';
     };
   };
 
@@ -211,7 +209,8 @@
           ports = [ "53:53/tcp" "53:53/udp" "8080:80/tcp" ];
           environment = {
             TZ = "America/Chicago";
-            FTLCONF_webserver_api_password = "piholio";
+            FTLCONF_webserver_api_password =
+              "${builtins.readFile config.age.secrets.pi-hole.path}";
             FTLCONF_dns_listeningMode = "all";
             FTLCONF_dns_reply_host_force4 = "true";
             FTLCONF_dns_reply_host_IPv4 = "10.9.8.6";

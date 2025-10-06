@@ -45,6 +45,10 @@
       url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     yazi.url = "github:sxyazi/yazi";
 
     neovim-plugins.url = "path:inputs/neovim-plugins";
@@ -58,8 +62,8 @@
     ];
   };
 
-  outputs = { self, nixpkgs, home-manager, lix-module, nixos-raspberrypi, agenix
-    , ... }@inputs:
+  outputs =
+    { self, nixpkgs, home-manager, lix-module, nixos-raspberrypi, ... }@inputs:
     let
       inherit (self) outputs;
       # Supported systems for your flake packages, shell, etc.
@@ -96,7 +100,10 @@
       darwinConfigurations = {
         gaudi = inputs.darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          modules = [ ./hosts/gaudi/configuration.nix ];
+          modules = [
+            ./hosts/gaudi/configuration.nix
+            inputs.sops-nix.darwinModules.sops
+          ];
           specialArgs = { inherit inputs outputs; };
         };
       };
@@ -108,17 +115,26 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/kepler
-            agenix.nixosModules.default
+            inputs.agenix.nixosModules.default
             home-manager.nixosModules.home-manager
+            inputs.sops-nix.nixosModules.sops
             {
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.jon = ./hosts/kepler/home.nix;
                 extraSpecialArgs = { inherit inputs self; };
+                sharedModules = [
+                  inputs.agenix.homeManagerModules.default
+                  inputs.sops-nix.homeManagerModules.default
+                  outputs.nixosModules.agenix
+                  outputs.nixosModules.sops
+                ];
               };
             }
             lix-module.nixosModules.default
+            outputs.nixosModules.agenix
+            outputs.nixosModules.sops
           ];
         };
 
@@ -126,10 +142,7 @@
           system = "aarch64-linux";
           specialArgs = { inherit inputs outputs; };
           pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
-          modules = [
-            ./hosts/newton
-            lix-module.nixosModules.default
-          ];
+          modules = [ ./hosts/newton lix-module.nixosModules.default ];
         };
 
         planck = nixos-raspberrypi.lib.nixosSystem {
@@ -139,6 +152,7 @@
             nixos-raspberrypi.nixosModules.raspberry-pi-4.base
             ./hosts/planck
             home-manager.nixosModules.home-manager
+            inputs.sops-nix.nixosModules.sops
             {
               home-manager = {
                 useGlobalPkgs = true;
