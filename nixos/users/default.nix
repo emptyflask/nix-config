@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   # imports = [ <home-manager/nixos> ];
@@ -37,6 +37,7 @@
       openssh.authorizedKeys.keys = [
         (builtins.readFile ./keys/id_gaudi.pub)
         (builtins.readFile ./keys/id_kepler.pub)
+        (builtins.readFile ./keys/id_raspberrypi.pub)
         (builtins.readFile ./keys/id_sargent.pub)
       ];
     };
@@ -45,7 +46,7 @@
       group = "media";
       isSystemUser = true;
     };
-    groups.media = {};
+    groups.media = { };
   };
 
   # home-manager = {

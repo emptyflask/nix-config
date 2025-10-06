@@ -1,10 +1,10 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
 let
-  megabyte = 1024 * 1024;
+  mebibyte = 1024 * 1024;
+  gibibyte = 1024 * mebibyte;
 
-in
-{
+in {
   # Make flakes accessible in the filesystem
   environment.etc = lib.mapAttrs' (name: value: {
     name = "nix/path/${name}";
@@ -14,14 +14,14 @@ in
   nix.extraOptions = ''
     keep-derivations = true
     keep-outputs = true
-    min-free = ${toString (100 * megabyte)} # 100MiB
-    max-free = ${toString (1024 * megabyte)} # 1GiB
+    min-free = ${toString (2 * gibibyte)} # Reserve 2GiB minimum free
+    max-free = ${toString (4 * gibibyte)} # Target 4GiB free space after GC
   '';
 
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 30d";
+    options = "--delete-older-than 14d";
   };
 
   # This will additionally add your inputs to the system's legacy channels
@@ -37,7 +37,6 @@ in
 
   nix.settings = {
     auto-optimise-store = true;
-    download-buffer-size = (50 * megabyte);
     experimental-features = "nix-command flakes";
     sandbox = true;
   };
