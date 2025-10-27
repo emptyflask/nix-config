@@ -345,18 +345,21 @@ in {
   programs.gh-dash = { enable = true; };
 
   programs.go.enable = true;
-  programs.keychain.enable = true;
+  programs.keychain = {
+    enable = true;
+    keys = [ "id_rsa" "id_ed25519" ];
+  };
 
   programs.ncmpcpp = {
     bindings = [ ];
     enable = true;
     settings = let
       nowPlaying = pkgs.writeShellScript "now-playing-notify" ''
-      readarray -t info < <(${pkgs.mpc_cli}/bin/mpc --format '%title%\n%artist%\n%album%' current | head -n 3)
-      title=''${info[0]}
-      artist=''${info[1]}
-      album=''${info[2]}
-      ${pkgs.dunst}/bin/dunstify -a "Now Playing" "$title" "$artist\n$album" -t 4000
+        readarray -t info < <(${pkgs.mpc_cli}/bin/mpc --format '%title%\n%artist%\n%album%' current | head -n 3)
+        title=''${info[0]}
+        artist=''${info[1]}
+        album=''${info[2]}
+        ${pkgs.dunst}/bin/dunstify -a "Now Playing" "$title" "$artist\n$album" -t 4000
       '';
     in { execute_on_song_change = "${nowPlaying}"; };
   };
