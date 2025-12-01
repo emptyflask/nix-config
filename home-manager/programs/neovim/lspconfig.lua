@@ -57,9 +57,7 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-local nvim_lsp = require('lspconfig')
-
-nvim_lsp.lua_ls.setup {
+vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
       diagnostics = {
@@ -68,20 +66,9 @@ nvim_lsp.lua_ls.setup {
       },
     },
   },
-}
+})
 
--- nvim_lsp.nil_ls.setup {
---   settings = {
---     nix = {
---       flake = {
---         -- calls `nix flake archive` to put a flake and its output to store
---         autoArchive = true,
---       },
---     },
---   },
--- }
-
-nvim_lsp.nixd.setup {
+vim.lsp.config('nixd', {
   settings = {
     nixd = {
       nixpkgs = { expr = "import <nixpkgs> {}" },
@@ -96,11 +83,11 @@ nvim_lsp.nixd.setup {
       },
     },
   },
-}
+})
 
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
+  vim.lsp.config(lsp, {
     on_attach = on_attach,
     flags = lsp_flags,
-  }
+  })
 end

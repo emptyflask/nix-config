@@ -147,20 +147,12 @@ let
       config = builtins.readFile ./ruby-code-actions.lua;
     };
 
-    rust-tools = {
+    rustaceanvim = {
       plugin = pkgs.vimPlugins.rustaceanvim;
       type = "lua";
-      config = builtins.readFile ./rust-tools.lua;
-    };
-
-    supermaven = { # Supermaven copilot
-      plugin = mkPlugin "supermaven-nvim";
-      type = "lua";
-      config = ''
-        require("supermaven-nvim").setup({
-
-        })
-      '';
+      runtime = {
+        "after/ftplugin/rust.lua".source = ./after/ftplugin/rust.lua;
+      };
     };
 
     tabular = {
@@ -326,7 +318,7 @@ let
     # LANGUAGE / FILETYPE SPECIFIC
     Hoogle
     # custom.ruby-code-actions
-    custom.rust-tools
+    custom.rustaceanvim
     dhall-vim
     elm-vim
     # ghc-mod-vim
@@ -353,7 +345,6 @@ let
     custom.copilot-chat
     custom.copilot-cmp
     custom.copilot-lua
-    # custom.supermaven
   ];
 
 in if minimal then corePlugins else corePlugins ++ fullPlugins
