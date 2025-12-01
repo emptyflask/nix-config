@@ -11,6 +11,12 @@ vim.keymap.set('n', '<leader>a', function()
   })
 end, { silent = true })
 
+vim.keymap.set('n', '<leader>A', function()
+  fzflua.live_grep_native({
+    rg_opts = "--color=always --line-number --column --smart-case --no-heading --with-filename"
+  })
+end, { silent = true })
+
 vim.keymap.set('n', '<leader>f', function() fzflua.files() end, { silent = true })
 
 vim.keymap.set('n', '<leader>gf', function()
