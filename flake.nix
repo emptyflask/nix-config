@@ -3,13 +3,8 @@
 
   inputs = {
     # Core
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    lix-module = {
-      url =
-        "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
 
     # Apple
     darwin = {
@@ -31,7 +26,7 @@
 
     # Home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager-unstable = {
@@ -58,21 +53,15 @@
     ];
   };
 
-  outputs = { self, nixpkgs, home-manager, lix-module, nixos-raspberrypi, agenix
-    , ... }@inputs:
+  outputs =
+    { self, nixpkgs, home-manager, nixos-raspberrypi, agenix, ... }@inputs:
     let
       inherit (self) outputs;
-      # Supported systems for your flake packages, shell, etc.
-      systems = [
-        "aarch64-linux"
-        "i686-linux"
-        "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
-      ];
-      # This is a function that generates an attribute by calling a function you
-      # pass to it, with each system as an argument
+
+      systems =
+        [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
+
     in {
       # Your custom packages
       # Accessible through 'nix build', 'nix shell', etc
@@ -118,7 +107,6 @@
                 extraSpecialArgs = { inherit inputs self; };
               };
             }
-            lix-module.nixosModules.default
           ];
         };
 
@@ -126,10 +114,7 @@
           system = "aarch64-linux";
           specialArgs = { inherit inputs outputs; };
           pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
-          modules = [
-            ./hosts/newton
-            lix-module.nixosModules.default
-          ];
+          modules = [ ./hosts/newton ];
         };
 
         planck = nixos-raspberrypi.lib.nixosSystem {
@@ -147,7 +132,6 @@
                 extraSpecialArgs = { inherit inputs self; };
               };
             }
-            # lix-module.nixosModules.default
             outputs.nixosModules.local-ca
           ];
         };

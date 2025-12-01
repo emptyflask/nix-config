@@ -60,13 +60,13 @@
     };
 
     logind = {
-      extraConfig = ''
-        IdleAction=suspend
-        IdleActionSec=60m
-        RuntimeDirectorySize=2G
-      '';
-      powerKey = "suspend";
-      powerKeyLongPress = "poweroff";
+      settings.Login = {
+        HandlePowerKey = "suspend";
+        HandlePowerKeyLongPress = "poweroff";
+        IdleAction = "suspend";
+        IdleActionSec = "60m";
+        RuntimeDirectorySize = "2G";
+      };
     };
 
     memcached.enable = true;
@@ -88,7 +88,6 @@
     };
 
     pcscd.enable = true; # Smartcard reader
-    peroxide.enable = false;
 
     pipewire = {
       enable = false;
@@ -196,6 +195,12 @@
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  imports =
-    [ ./hoogle ./openssh.nix ./postgresql.nix ./traefik.nix ./xserver.nix ];
+  imports = [
+    ./hoogle
+    ./jellyfin.nix
+    ./openssh.nix
+    ./postgresql.nix
+    ./traefik.nix
+    ./xserver.nix
+  ];
 }

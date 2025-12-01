@@ -25,13 +25,7 @@ in {
   environment.shells = with pkgs; [ bashInteractive zsh ];
 
   environment.systemPackages = with pkgs;
-    common.packages ++ [
-      asahi-bless
-      home-manager
-      kitty
-      rxvt-unicode
-      wofi
-    ];
+    common.packages ++ [ asahi-bless home-manager kitty rxvt-unicode wofi ];
 
   fileSystems = {
     "/".options = [ "compress=zstd" ];
@@ -68,7 +62,6 @@ in {
     hostName = "newton";
     networkmanager = {
       enable = true;
-      enableStrongSwan = true;
       wifi.backend = "iwd";
     };
     wireless.iwd = {
@@ -107,7 +100,8 @@ in {
   };
 
   # nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [ outputs.overlays.additions outputs.overlays.modifications ];
+  nixpkgs.overlays =
+    [ outputs.overlays.additions outputs.overlays.modifications ];
 
   programs = {
     # _1password.enable = true;

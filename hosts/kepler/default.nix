@@ -69,7 +69,6 @@
 
     networkmanager = {
       enable = true;
-      enableStrongSwan = true;
       wifi.backend = "iwd";
     };
 
@@ -112,11 +111,11 @@
     firefox
     rxvt-unicode
     (steam.override { extraPkgs = pkgs: [ wavpack ]; }).run
+    vim-full
     xclip
     xorg.xkill
     xorg.xmessage
     xsel
-    vimHugeX
   ];
 
   fonts = {
@@ -140,10 +139,10 @@
       libre-franklin
       noto-fonts
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       roboto
-      ubuntu_font_family
-      vistafonts
+      ubuntu-classic
+      vista-fonts
     ];
     fontconfig = {
       defaultFonts = {
@@ -212,6 +211,9 @@
       # package = config.boot.kernelPackages.nvidiaPackages.production;
     };
 
+    # Use GPU inside Docker and Podman containers
+    nvidia-container-toolkit.enable = true;
+
     graphics.enable = true;
     graphics.enable32Bit = true;
     graphics.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
@@ -223,6 +225,8 @@
     docker = {
       enable = true;
       autoPrune.enable = true;
+      # For GPU support in docker containers
+      daemon.settings.features.cdi = true;
     };
     podman = {
       enable = true;

@@ -148,7 +148,7 @@ let
     };
 
     rust-tools = {
-      plugin = pkgs.vimPlugins.rust-tools-nvim;
+      plugin = pkgs.vimPlugins.rustaceanvim;
       type = "lua";
       config = builtins.readFile ./rust-tools.lua;
     };
@@ -356,7 +356,4 @@ let
     # custom.supermaven
   ];
 
-in
-  if minimal
-  then corePlugins
-  else corePlugins ++ fullPlugins
+in if minimal then corePlugins else corePlugins ++ fullPlugins

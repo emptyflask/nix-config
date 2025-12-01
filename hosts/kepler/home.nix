@@ -99,7 +99,7 @@ in {
       pandoc # document converter
       pavucontrol
       postman
-      protonvpn-cli
+      protonvpn-gui
       qalculate-gtk # calculator
       qemu
       scowl # spellchecker / dictionary
@@ -182,7 +182,7 @@ in {
       seshat
       tenderness
       vegur
-      vistafonts
+      vista-fonts
 
       # graphics / print
       imagemagick
@@ -193,7 +193,7 @@ in {
       audacious # music player
       calibre # e-book library
       evince # another PDF viewer
-      mpc_cli
+      mpc
       mplayer
       mpv
       ncmpcpp
@@ -242,7 +242,7 @@ in {
       ghc
       cabal2nix
       cabal-install
-      haskellPackages.apply-refact
+      # haskellPackages.apply-refact
       haskellPackages.ghcid
       haskellPackages.haskell-language-server
       haskellPackages.hlint
@@ -355,7 +355,7 @@ in {
     enable = true;
     settings = let
       nowPlaying = pkgs.writeShellScript "now-playing-notify" ''
-        readarray -t info < <(${pkgs.mpc_cli}/bin/mpc --format '%title%\n%artist%\n%album%' current | head -n 3)
+        readarray -t info < <(${pkgs.mpc}/bin/mpc --format '%title%\n%artist%\n%album%' current | head -n 3)
         title=''${info[0]}
         artist=''${info[1]}
         album=''${info[2]}

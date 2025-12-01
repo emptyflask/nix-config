@@ -23,7 +23,7 @@
   home.packages = with pkgs; [
     bat # cat clone with syntax highlighting and git integration
     bc # cli calculator
-    du-dust # rust modern clone of du
+    dust # rust modern clone of du
     fd # find entries in filesystem
     htop
     jq
