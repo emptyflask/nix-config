@@ -110,6 +110,8 @@
 
   system.stateVersion = 4;
 
+  system.primaryUser = "jonroberts";
+
   users = {
     users.jonroberts = {
       home = /Users/jonroberts;
