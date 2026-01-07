@@ -1,15 +1,21 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
-
-let
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
   mebibyte = 1024 * 1024;
   gibibyte = 1024 * mebibyte;
-
 in {
   # Make flakes accessible in the filesystem
-  environment.etc = lib.mapAttrs' (name: value: {
-    name = "nix/path/${name}";
-    value.source = value.flake;
-  }) config.nix.registry;
+  environment.etc =
+    lib.mapAttrs' (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    })
+    config.nix.registry;
 
   nix.extraOptions = ''
     keep-derivations = true
@@ -26,7 +32,7 @@ in {
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   nix.optimise.automatic = true;
 
@@ -34,7 +40,8 @@ in {
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+  nix.registry =
+    (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
   nix.settings = {
@@ -61,7 +68,7 @@ in {
       # })
     ];
     # Configure your nixpkgs instance
-    config = { allowUnfree = true; };
+    config = {allowUnfree = true;};
   };
 
   environment.systemPackages = with pkgs; [
@@ -76,6 +83,7 @@ in {
     htop
     hwinfo
     lsof
+    nettools
     nmap
     mkpasswd
     openssl
