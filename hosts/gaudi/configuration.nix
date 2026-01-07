@@ -1,10 +1,10 @@
 { inputs, pkgs, nix, nixpkgs, config, lib, ... }:
 {
   imports = [
-    ./skhd.nix
-    ./sketchybar.nix
+    # ./skhd.nix
+    # ./sketchybar.nix
     ./system-defaults.nix
-    ./yabai.nix
+    # ./yabai.nix
   ];
 
   environment.systemPackages = with pkgs;
