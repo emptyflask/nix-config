@@ -90,4 +90,5 @@ for _, lsp in ipairs(servers) do
     on_attach = on_attach,
     flags = lsp_flags,
   })
+  vim.lsp.enable(lsp)
 end
