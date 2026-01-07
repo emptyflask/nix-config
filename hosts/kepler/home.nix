@@ -1,10 +1,13 @@
-{ inputs, lib, pkgs, self, ... }:
-
-let
+{
+  inputs,
+  lib,
+  pkgs,
+  self,
+  ...
+}: let
   location = import "${self}/home-manager/locations/oakwood.nix";
 
   background = "$HOME/.config/wallpaper/current";
-
 in {
   imports = [
     "${self}/home-manager/common.nix"
@@ -279,7 +282,7 @@ in {
       };
     };
 
-    sessionPath = [ "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin" ];
+    sessionPath = ["$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin"];
 
     stateVersion = "21.05";
   };
@@ -302,8 +305,8 @@ in {
         comp = "Compilations/$album/$track $title";
         "albumtype:soundtrack" = "Soundtracks/$album/$track $title";
       };
-      plugins = [ "fetchart" "lastgenre" "lyrics" "web" ];
-      ui = { color = "yes"; };
+      plugins = ["fetchart" "lastgenre" "lyrics" "web"];
+      ui = {color = "yes";};
       wlg = {
         auto = "yes";
         force = "no";
@@ -333,7 +336,7 @@ in {
 
   programs.gh = {
     enable = true;
-    extensions = with pkgs; [ gh-cal gh-eco ];
+    extensions = with pkgs; [gh-cal gh-eco];
     settings = {
       aliases = {
         co = "pr checkout";
@@ -342,16 +345,16 @@ in {
       git-protocol = "https";
     };
   };
-  programs.gh-dash = { enable = true; };
+  programs.gh-dash = {enable = true;};
 
   programs.go.enable = true;
   programs.keychain = {
     enable = true;
-    keys = [ "id_rsa" "id_ed25519" ];
+    keys = ["id_rsa" "id_ed25519"];
   };
 
   programs.ncmpcpp = {
-    bindings = [ ];
+    bindings = [];
     enable = true;
     settings = let
       nowPlaying = pkgs.writeShellScript "now-playing-notify" ''
@@ -361,7 +364,7 @@ in {
         album=''${info[2]}
         ${pkgs.dunst}/bin/dunstify -a "Now Playing" "$title" "$artist\n$album" -t 4000
       '';
-    in { execute_on_song_change = "${nowPlaying}"; };
+    in {execute_on_song_change = "${nowPlaying}";};
   };
 
   qt = {
@@ -374,7 +377,7 @@ in {
 
     gpg-agent = {
       enable = true;
-      defaultCacheTtl = (60 * 60 * 4);
+      defaultCacheTtl = 60 * 60 * 4;
       enableSshSupport = true;
     };
 
@@ -384,7 +387,7 @@ in {
       enable = true;
       fade = true;
       fadeDelta = 5;
-      fadeSteps = [ 4.0e-2 4.0e-2 ];
+      fadeSteps = [4.0e-2 4.0e-2];
       shadow = false;
       backend = "xrender";
       vSync = true;
@@ -415,7 +418,7 @@ in {
 
     xscreensaver = {
       enable = true;
-      settings = { lock = true; };
+      settings = {lock = true;};
     };
   };
 
