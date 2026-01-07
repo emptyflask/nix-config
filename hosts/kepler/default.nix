@@ -1,6 +1,11 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
-
 {
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
@@ -14,19 +19,21 @@
     ../../nixos/users
     ../common.nix
     ./filesystems.nix
-    ./nfs.nix
+    # ./nfs.nix
     ./services
+
+    outputs.nixosModules.arrs
   ];
 
   nix.settings = {
-    substituters = [ "https://nix-community.cachix.org" ];
+    substituters = ["https://nix-community.cachix.org"];
     trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
 
   boot = {
-    kernel = { sysctl = { "vm.swappiness" = "20"; }; };
+    kernel = {sysctl = {"vm.swappiness" = "20";};};
     loader = {
       efi.canTouchEfiVariables = true;
       # grub = {
@@ -44,11 +51,11 @@
       };
     };
 
-    binfmt.emulatedSystems = [ "aarch64-linux" ];
+    binfmt.emulatedSystems = ["aarch64-linux"];
 
     # Kernel modules:
     # don't load module for secondary ethernet adapter
-    blacklistedKernelModules = [ "alx" ];
+    blacklistedKernelModules = ["alx"];
     # disable usb suspend so devices work after waking
     extraModprobeConfig = ''
       options usbcore       autosuspend=-1
@@ -77,16 +84,18 @@
       enable = true;
       allowedTCPPorts = let
         homeAssistant = 8123;
-        jellyfinPorts = [ 8096 8920 ];
-        plexPorts = [ 32400 3005 8324 32469 ];
-        sambaPorts = [ 139 445 ];
+        jellyfinPorts = [8096 8920];
+        plexPorts = [32400 3005 8324 32469];
+        sambaPorts = [139 445];
         ssh = 22;
-      in [ homeAssistant ssh ] ++ jellyfinPorts ++ sambaPorts ++ plexPorts;
+      in
+        [homeAssistant ssh] ++ jellyfinPorts ++ sambaPorts ++ plexPorts;
       allowedUDPPorts = let
-        jellyfinPorts = [ 7359 ];
-        netbiosPorts = [ 137 138 ];
-        plexPorts = [ 1900 5353 32410 32412 32413 32414 ];
-      in jellyfinPorts ++ netbiosPorts ++ plexPorts;
+        jellyfinPorts = [7359];
+        netbiosPorts = [137 138];
+        plexPorts = [1900 5353 32410 32412 32413 32414];
+      in
+        jellyfinPorts ++ netbiosPorts ++ plexPorts;
       allowPing = true;
 
       # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/8
@@ -102,7 +111,7 @@
 
     wireless.iwd = {
       enable = true;
-      settings = { Settings = { AutoConnect = true; }; };
+      settings = {Settings = {AutoConnect = true;};};
     };
   };
 
@@ -110,7 +119,7 @@
     feh
     firefox
     rxvt-unicode
-    (steam.override { extraPkgs = pkgs: [ wavpack ]; }).run
+    (steam.override {extraPkgs = pkgs: [wavpack];}).run
     vim-full
     xclip
     xorg.xkill
@@ -146,9 +155,9 @@
     ];
     fontconfig = {
       defaultFonts = {
-        serif = [ "DejaVu Serif" ];
-        sansSerif = [ "DejaVu Sans" ];
-        monospace = [ "Fira Mono" ];
+        serif = ["DejaVu Serif"];
+        sansSerif = ["DejaVu Sans"];
+        monospace = ["Fira Mono"];
       };
     };
   };
@@ -156,7 +165,7 @@
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
-    polkitPolicyOwners = [ "jon" ];
+    polkitPolicyOwners = ["jon"];
   };
   programs.adb.enable = true;
   programs.command-not-found.enable = true;
@@ -187,7 +196,7 @@
 
       # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
       # Enable this if you have graphical corruption issues or application crashes after waking
-      # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+      # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
       # of just the bare essentials.
       powerManagement.enable = true;
 
@@ -216,7 +225,7 @@
 
     graphics.enable = true;
     graphics.enable32Bit = true;
-    graphics.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+    graphics.extraPackages32 = with pkgs.pkgsi686Linux; [libva];
 
     # video.hidpi.enable = false;
   };
@@ -236,7 +245,7 @@
 
     oci-containers.containers = {
       homeassistant = {
-        volumes = [ "home-assistant:/config" ];
+        volumes = ["home-assistant:/config"];
         environment.TZ = config.time.timeZone;
         image = "ghcr.io/home-assistant/home-assistant:stable";
         extraOptions = [
@@ -266,7 +275,7 @@
     config.common.default = "lxqt";
     lxqt = {
       enable = true;
-      styles = [ ];
+      styles = [];
     };
   };
 
@@ -282,5 +291,4 @@
     # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
     stateVersion = "22.05";
   };
-
 }
