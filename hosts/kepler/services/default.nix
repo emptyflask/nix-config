@@ -1,10 +1,18 @@
-{ pkgs, lib, ... }:
-
 {
+  pkgs,
+  lib,
+  ...
+}: {
   services = {
     accounts-daemon.enable = true;
     acpid.enable = true; # Advanced Configuration and Power Interface
     apcupsd.enable = true; # UPS daemon
+
+    audiobookshelf = {
+      enable = true;
+      host = "0.0.0.0";
+      openFirewall = true;
+    };
 
     avahi = {
       enable = true;
@@ -23,7 +31,7 @@
     chrony.enable = true; # Time sync (replaces ntpd)
     clipmenu.enable = true;
 
-    dbus.packages = [ pkgs.dconf ];
+    dbus.packages = [pkgs.dconf];
 
     devmon.enable = true;
 
@@ -43,10 +51,12 @@
     kmscon = {
       enable = true;
       hwRender = false;
-      fonts = [{
-        name = "Fira Code Regular";
-        package = pkgs.fira-code;
-      }];
+      fonts = [
+        {
+          name = "Fira Code Regular";
+          package = pkgs.fira-code;
+        }
+      ];
       extraConfig = ''
         font-size=12
         font-dpi=110
@@ -83,8 +93,8 @@
 
     opensearch = {
       enable = false;
-      settings = { "cluster.name" = "schrödinger"; };
-      extraJavaOptions = [ "-Xms512m" "-Xmx1g" ];
+      settings = {"cluster.name" = "schrödinger";};
+      extraJavaOptions = ["-Xms512m" "-Xmx1g"];
     };
 
     pcscd.enable = true; # Smartcard reader
@@ -129,7 +139,7 @@
     resolved.enable = true;
 
     # Usenet downloader
-    nzbget = { enable = true; };
+    nzbget = {enable = true;};
 
     # Windows file sharing
     samba = {
@@ -140,8 +150,8 @@
           "server string" = "kepler";
           "netbios name" = "kepler";
           "security" = "user";
-          "hosts allow" = [ "10.9.8" "10.9.11." "localhost" ];
-          "hosts deny" = [ "0.0.0.0/0" ];
+          "hosts allow" = ["10.9.8" "10.9.11." "localhost"];
+          "hosts deny" = ["0.0.0.0/0"];
           "guest account" = "nobody";
           "map to guest" = "bad user";
         };
@@ -171,9 +181,12 @@
     tumbler.enable = true; # thumbnail generator
 
     udev = {
-      packages = [ pkgs.libu2f-host pkgs.yubikey-personalization ];
+      packages = [pkgs.libu2f-host pkgs.yubikey-personalization];
       extraRules = ''
         SUBSYSTEM=="block", ENV{UDISKS_FILESYSTEM_SHARED}="1"
+
+        ACTION=="add|change", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", \
+        ENV{ID_FS_UUID}=="c7639127-1de9-4afd-9978-f6f2fe1ac41f", ATTR{bdi/read_ahead_kb}="2048"
 
         # Generic stm32 (for flashing Preonic keyboard)
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0666"
@@ -189,7 +202,7 @@
 
     zerotierone = {
       enable = false;
-      joinNetworks = [ "8bd5124fd6f9a7e6" ];
+      joinNetworks = ["8bd5124fd6f9a7e6"];
     };
   };
 
