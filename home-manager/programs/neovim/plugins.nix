@@ -1,6 +1,10 @@
-{ inputs, pkgs, lib, minimal ? false, ... }:
-
-let
+{
+  inputs,
+  pkgs,
+  lib,
+  minimal ? false,
+  ...
+}: let
   mkPlugin = name:
     pkgs.vimUtils.buildVimPlugin {
       inherit name;
@@ -27,7 +31,7 @@ let
           telescope-nvim
           snacks-nvim
         ];
-        dependencies = with pkgs.vimPlugins; [ copilot-lua plenary-nvim ];
+        dependencies = with pkgs.vimPlugins; [copilot-lua plenary-nvim];
       };
       type = "lua";
       config = builtins.readFile ./copilot-chat.lua;
@@ -58,7 +62,8 @@ let
       config = builtins.readFile ./dashboard.lua;
     };
 
-    gruvbox = { # Lua port of gruvbox-community w/ treesitter support
+    gruvbox = {
+      # Lua port of gruvbox-community w/ treesitter support
       plugin = pkgs.vimPlugins.gruvbox-nvim;
       type = "lua";
       config = ''
@@ -70,7 +75,10 @@ let
     leap-nvim = {
       plugin = pkgs.vimPlugins.leap-nvim;
       type = "lua";
-      config = "require('leap').add_default_mappings()";
+      config = ''
+        vim.keymap.set({'n', 'x', 'o'}, 's', '<Plug>(leap)')
+        vim.keymap.set('n',             'S', '<Plug>(leap-from-window)')
+      '';
     };
 
     lspconfig = {
@@ -233,7 +241,6 @@ let
       plugin = pkgs.vimPlugins.vim-vsnip;
       config = builtins.readFile ./vsnip.vim;
     };
-
   };
 
   corePlugins = with pkgs.vimPlugins; [
@@ -327,6 +334,7 @@ let
     # neco-ghc
     hlint-refactor
     # intero-neovim
+    ron-vim
     vim-stylish-haskell
     vim-rails
     vim-terraform
@@ -346,5 +354,7 @@ let
     custom.copilot-cmp
     custom.copilot-lua
   ];
-
-in if minimal then corePlugins else corePlugins ++ fullPlugins
+in
+  if minimal
+  then corePlugins
+  else corePlugins ++ fullPlugins
