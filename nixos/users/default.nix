@@ -1,12 +1,10 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   # imports = [ <home-manager/nixos> ];
 
-  nix.settings.trusted-users = [ "root" "jon" ];
+  nix.settings.trusted-users = ["root" "jon"];
 
   environment.homeBinInPath = true;
-  environment.shells = with pkgs; [ bashInteractive zsh ];
+  environment.shells = with pkgs; [bashInteractive zsh];
 
   users = {
     users.root.initialHashedPassword = "";
@@ -22,6 +20,7 @@
         "dialout"
         "docker"
         "libvirtd"
+        "media"
         "mlocate"
         "networkmanager"
         "plex"
@@ -46,7 +45,7 @@
       group = "media";
       isSystemUser = true;
     };
-    groups.media = { };
+    groups.media = {};
   };
 
   # home-manager = {
