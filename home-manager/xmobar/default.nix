@@ -1,6 +1,9 @@
-{ pkgs, lib, config, ... }:
-
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   popupCalendar = pkgs.writeScript "popup-calendar.sh" ''
     #!/bin/sh
 
@@ -46,7 +49,6 @@ let
         ;;
     esac
   '';
-
 in {
   xdg.configFile."xmobar/resources" = {
     recursive = true;
@@ -95,7 +97,7 @@ in {
              [ "-t", "<fn=1><fc=#928374></fc></fn> <dev> <fn=1><fc=#98971a></fc></fn><rx> <fn=1><fc=#d65d0e></fc></fn><tx>"
              , "-w", "7"
              , "-S", "True"
-             , "--", "--devices", "wlan0,eno1,enp4s0"
+             , "--", "--devices", "wlan0,eno1,enp4s0,enp10s0"
              ] 20
 
           , Run Memory
