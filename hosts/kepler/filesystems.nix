@@ -1,5 +1,5 @@
-{ pkgs, ... }: {
-  environment.systemPackages = [ pkgs.btrfs-progs ];
+{pkgs, ...}: {
+  environment.systemPackages = [pkgs.btrfs-progs];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/22f15aa1-8b19-461b-bf4d-77c84af52416";
@@ -17,8 +17,12 @@
   };
 
   fileSystems."/media/repository" = {
-    device = "/dev/disk/by-uuid/c7639127-1de9-4afd-9978-f6f2fe1ac41f";
-    fsType = "btrfs";
+    device = "/dev/disk/by-uuid/7a01cf63-eeb7-4f16-8d51-8ba9b687bd87";
+    fsType = "ext4";
+    options = [
+      "noatime"
+      "nofail"
+    ];
   };
 
   fileSystems."/media/work" = {
@@ -29,11 +33,11 @@
   services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
-    fileSystems = [ "/home" "/media/repository" "/media/work" ];
+    fileSystems = ["/home" "/media/work"];
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/3e3a1f6e-6d70-43bf-9900-6f70a624b96a"; }
-    { device = "/swapfile"; }
+    {device = "/dev/disk/by-uuid/3e3a1f6e-6d70-43bf-9900-6f70a624b96a";}
+    {device = "/swapfile";}
   ];
 }
