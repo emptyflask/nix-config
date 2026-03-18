@@ -250,7 +250,6 @@ in {
       haskellPackages.haskell-language-server
       haskellPackages.hlint
       haskellPackages.stylish-haskell
-      haskellPackages.yesod
       ormolu
       stack
 
