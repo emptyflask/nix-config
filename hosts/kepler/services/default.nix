@@ -115,7 +115,6 @@
     #       package = nixUnstable.plex;
     #     };
 
-    printing.enable = true;
     protonmail-bridge.enable = true;
 
     pulseaudio = {
