@@ -21,8 +21,13 @@
     ./filesystems.nix
     # ./nfs.nix
     ./services
+    (import ./scanner.nix {
+      inherit pkgs;
+      user = "jon";
+    })
 
     outputs.nixosModules.arrs
+    outputs.nixosModules.printing
   ];
 
   nix.settings = {
@@ -226,6 +231,8 @@
     graphics.enable = true;
     graphics.enable32Bit = true;
     graphics.extraPackages32 = with pkgs.pkgsi686Linux; [libva];
+
+    sane.enable = true; # enable scanner support
 
     # video.hidpi.enable = false;
   };
