@@ -6,6 +6,14 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # Dendritic
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    import-tree.url = "github:vic/import-tree";
+    den.url = "github:vic/den";
+
     # Apple
     darwin = {
       url = "github:lnl7/nix-darwin/master";
@@ -52,5 +60,8 @@
     ];
   };
 
-  outputs = inputs: import ./outputs.nix inputs;
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [(inputs.import-tree ./modules)];
+    };
 }

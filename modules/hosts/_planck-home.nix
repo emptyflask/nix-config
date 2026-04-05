@@ -1,17 +1,5 @@
-{ inputs, lib, pkgs, self, ... }:
-
-let
-  imports = [
-    "${self}/home-manager/environment.nix"
-    "${self}/home-manager/programs/git"
-    "${self}/home-manager/programs/neovim/minimal.nix"
-    "${self}/home-manager/programs/vim"
-    "${self}/home-manager/programs/zsh"
-  ];
-
-in {
-  inherit imports;
-
+{ pkgs, ... }:
+{
   home = {
     username = "jon";
     homeDirectory = "/home/jon";
@@ -28,11 +16,10 @@ in {
     stateVersion = "25.05";
   };
 
-  programs = { };
+  programs = {};
 
   xdg = {
     enable = true;
     userDirs.enable = true;
   };
-
 }

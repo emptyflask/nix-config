@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s 'https://api.github.com/repos/mightyiam/dendritic/contents/example/modules?ref=master')",
+      "Bash(curl -s https://raw.githubusercontent.com/mightyiam/dendritic/master/example/modules/__TRACKED_VAR__.nix)",
+      "Bash(curl -s https://api.github.com/repos/vic/import-tree/contents)",
+      "Bash(curl -s 'https://api.github.com/repos/mightyiam/infra/contents?ref=main')",
+      "Bash(curl:*)",
+      "Bash(nix build:*)",
+      "Bash(tee /tmp/kepler-before.txt)",
+      "Bash(cp -r /home/jon/dev/nix-config/modules/nixos /home/jon/dev/nix-config/lib/nixos)",
+      "Bash(cp -r /home/jon/dev/nix-config/modules/home-manager /home/jon/dev/nix-config/lib/home-manager)",
+      "Bash(nix flake:*)",
+      "Bash(nix eval:*)",
+      "Bash(git add:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(gh api:*)",
+      "Bash(wait)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\([k for k in d.get\\('locks', {}\\).get\\('nodes', {}\\).get\\('nixpkgs', {}\\).get\\('inputs', {}\\) or []]\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('nodes', {}\\).get\\('nixos-raspberrypi', {}\\)\\)\")",
+      "Bash(git stash:*)",
+      "Bash(echo \"exit: $?\")"
+    ]
+  }
+}

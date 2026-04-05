@@ -1,38 +1,12 @@
-{
-  inputs,
-  lib,
-  pkgs,
-  self,
-  ...
-}: let
-  location = import "${self}/home-manager/locations/oakwood.nix";
+{ pkgs, inputs, ... }:
+
+let
+  location = import ../../home-manager/locations/oakwood.nix;
 
   background = "$HOME/.config/wallpaper/current";
-in {
-  imports = [
-    "${self}/home-manager/common.nix"
-    "${self}/home-manager/environment.nix"
-    "${self}/home-manager/accounts"
-    "${self}/home-manager/services/dunst"
-    "${self}/home-manager/services/mpd"
-    "${self}/home-manager/services/spotifyd"
-    "${self}/home-manager/services/trayer"
-    "${self}/home-manager/programs/alacritty"
-    "${self}/home-manager/programs/git"
-    "${self}/home-manager/programs/kitty"
-    "${self}/home-manager/programs/neomutt"
-    "${self}/home-manager/programs/neovim"
-    "${self}/home-manager/programs/rofi"
-    "${self}/home-manager/programs/starship"
-    "${self}/home-manager/programs/tmux"
-    "${self}/home-manager/programs/vim"
-    "${self}/home-manager/programs/yazi"
-    "${self}/home-manager/programs/zathura"
-    "${self}/home-manager/programs/zsh"
-    "${self}/home-manager/xmobar"
-    "${self}/home-manager/xresources"
-  ];
+in
 
+{
   dconf.enable = false;
 
   fonts.fontconfig.enable = true;
@@ -58,9 +32,9 @@ in {
     homeDirectory = "/home/jon";
 
     file = {
-      ".ghci".source = "${self}/home-manager/home/ghci";
-      ".psqlrc".source = "${self}/home-manager/home/psqlrc";
-      ".railsrc".source = "${self}/home-manager/home/railsrc";
+      ".ghci".source = ../../home-manager/home/ghci;
+      ".psqlrc".source = ../../home-manager/home/psqlrc;
+      ".railsrc".source = ../../home-manager/home/railsrc;
     };
 
     keyboard = {
@@ -70,8 +44,6 @@ in {
 
     packages = with pkgs; [
       cachix
-
-      # ghcide-nix.ghcide-ghc865
 
       # _1password
       # _1password-gui
@@ -380,8 +352,6 @@ in {
       enableSshSupport = true;
     };
 
-    mpd.enable = true;
-
     picom = {
       enable = true;
       fade = true;
@@ -438,7 +408,5 @@ in {
 
       ${pkgs.alsa-utils}/bin/amixer -c0 set Headphone 100%,100%
     '';
-
-    windowManager = import "${self}/home-manager/xmonad/default.nix" pkgs;
   };
 }

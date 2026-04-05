@@ -1,21 +1,5 @@
 { pkgs, ... }:
-
-let
-  imports = [
-    ../../home-manager/common.nix
-    ../../home-manager/environment.nix
-    ../../home-manager/programs/git
-    ../../home-manager/programs/kitty
-    ../../home-manager/programs/neovim
-    ../../home-manager/programs/tmux
-    ../../home-manager/programs/vim
-    ../../home-manager/programs/zathura
-    ../../home-manager/programs/zsh
-  ];
-
-in {
-  inherit imports;
-
+{
   home = {
     username = "jon";
     homeDirectory = "/home/jon";
@@ -124,7 +108,7 @@ in {
       vlc
     ];
 
-    sessionPath = [ "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin" ];
+    sessionPath = ["$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin"];
 
     stateVersion = "25.05";
   };
@@ -142,9 +126,11 @@ in {
     };
   };
 
+  # zathura not in a feature module for newton
+  imports = [ ../../home-manager/programs/zathura ];
+
   xdg = {
     enable = true;
     userDirs.enable = true;
   };
-
 }
