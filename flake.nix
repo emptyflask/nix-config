@@ -36,6 +36,7 @@
 
     # Tools
     agenix.url = "github:ryantm/agenix";
+    claude-code.url = "github:sadjow/claude-code-nix";
     nur = {
       url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";
