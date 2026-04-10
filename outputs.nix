@@ -4,6 +4,7 @@
   home-manager,
   nixos-raspberrypi,
   agenix,
+  claude-code,
   ...
 } @ inputs: let
   inherit (self) outputs;
