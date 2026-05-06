@@ -62,8 +62,7 @@ in {
     newton = inputs.nixpkgs-unstable.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs outputs;};
-      pkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
-      modules = [
+modules = [
         ./hosts/newton
         inputs.home-manager-unstable.nixosModules.home-manager
         {
