@@ -60,10 +60,21 @@ in {
     };
 
     newton = inputs.nixpkgs-unstable.lib.nixosSystem {
-      system = "aarch64-linux";
+      system = "x86_64-linux";
       specialArgs = {inherit inputs outputs;};
-      pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
-      modules = [./hosts/newton];
+      pkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
+      modules = [
+        ./hosts/newton
+        inputs.home-manager-unstable.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.jon = ./hosts/newton/home.nix;
+            extraSpecialArgs = {inherit inputs outputs;};
+          };
+        }
+      ];
     };
 
     planck = nixos-raspberrypi.lib.nixosSystem {
@@ -101,10 +112,5 @@ in {
       modules = [./hosts/kepler/home.nix];
     };
 
-    "jon@newton" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
-      extraSpecialArgs = {inherit inputs outputs;};
-      modules = [./hosts/newton/home.nix];
-    };
   };
 }
