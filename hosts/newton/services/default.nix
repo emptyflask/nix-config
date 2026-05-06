@@ -27,7 +27,7 @@
     pihole-web = {
       enable = true;
       # Listen on 8080 so Traefik can own port 80
-      settings.webserver.port = "8080";
+      ports = [ 8080 ];
     };
 
     home-assistant = {
