@@ -49,11 +49,6 @@
     };
   };
 
-  nixpkgs = {
-    overlays = [ outputs.overlays.additions outputs.overlays.modifications ];
-    config.allowUnfree = true;
-  };
-
   programs = {
     gnupg.agent = {
       enable = true;
