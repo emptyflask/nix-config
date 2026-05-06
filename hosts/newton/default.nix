@@ -63,4 +63,9 @@
   };
 
   system.stateVersion = "25.11";
+
+  # nixpkgs-flake.nix auto-registers the build nixpkgs (unstable) as nix.registry.nixpkgs.
+  # common.nix also registers all flake inputs including the stable nixpkgs input.
+  # Use mkForce to let the auto-registration win for this host.
+  nix.registry.nixpkgs = lib.mkForce {flake = inputs.nixpkgs-unstable;};
 }
