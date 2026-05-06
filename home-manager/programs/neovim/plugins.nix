@@ -271,7 +271,7 @@
     # vim-commentary
     vim-dispatch
     vim-grepper
-    vim-gutentags
+    # vim-gutentags
     vim-sandwich
     vim-test
     # vim-unimpaired
