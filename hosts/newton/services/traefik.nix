@@ -4,7 +4,7 @@
   services.traefik = {
     enable = true;
 
-    staticConfigOptions = {
+    static.settings = {
       api = {
         dashboard = false;
         insecure = false;
@@ -12,7 +12,9 @@
       entryPoints.web = { address = ":80"; };
     };
 
-    dynamicConfigOptions = {
+    dynamic.dir = "${config.services.traefik.dataDir}/dynamic";
+
+    dynamic.files.proxies.settings = {
       http = let
         proxy = host: port: {
           routers."${host}" = {
