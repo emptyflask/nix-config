@@ -224,7 +224,7 @@ in {
       strace # system call trace
       tig # git tui frontend
       uncrustify # format c/c++/c#/java/etc
-      universal-ctags
+      # universal-ctags
       vscode
 
       # programming - nix
