@@ -62,6 +62,11 @@
     zsh.enable = true;
   };
 
+  services.logind = {
+    lidSwitch = "ignore";
+    lidSwitchExternalPower = "ignore";
+  };
+
   system.stateVersion = "25.11";
 
   # nixpkgs-flake.nix auto-registers the build nixpkgs (unstable) as nix.registry.nixpkgs.
