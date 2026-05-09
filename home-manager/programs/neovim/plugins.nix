@@ -164,7 +164,7 @@
     };
 
     tabular = {
-      plugin = pkgs.vimPlugins.Tabular;
+      plugin = pkgs.vimPlugins.tabular;
       runtime = {
         "after/plugin/tabular.vim".source = ./after/plugin/tabular.vim;
       };
@@ -245,7 +245,7 @@
 
   corePlugins = with pkgs.vimPlugins; [
     Rename
-    Tagbar
+    tagbar
     custom.conform
     custom.dashboard
     custom.leap-nvim
@@ -256,16 +256,16 @@
     custom.tabular
     custom.treesitter
     editorconfig-vim
-    fugitive
+    vim-fugitive
     gitsigns-nvim
     neoformat
     none-ls-nvim
     nvim-nio
     nvim-ufo
     plenary-nvim
-    repeat
-    sensible
-    tlib
+    vim-repeat
+    vim-sensible
+    tlib_vim
     undotree
     vim-abolish
     # vim-commentary
@@ -275,7 +275,7 @@
     vim-sandwich
     vim-test
     # vim-unimpaired
-    vimproc
+    vimproc-vim
 
     # THEME / VISUAL
     custom.gruvbox
@@ -332,7 +332,7 @@
     # haskell-vim
     haskell-tools-nvim
     # neco-ghc
-    hlint-refactor
+    hlint-refactor-vim
     # intero-neovim
     ron-vim
     vim-stylish-haskell

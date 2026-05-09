@@ -1,6 +1,11 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
-
 {
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ../../nixos/users
@@ -32,20 +37,22 @@
     useDHCP = false;
 
     # TODO: confirm interface name on machine with `ip link`
-    interfaces.enp1s0.ipv4.addresses = [{
-      address = "10.9.8.10";
-      prefixLength = 24;
-    }];
+    interfaces.enp2s0f0.ipv4.addresses = [
+      {
+        address = "10.9.8.10";
+        prefixLength = 24;
+      }
+    ];
     defaultGateway = "10.9.8.1";
 
     # Point at ourselves first (Pi-hole), fallback to Cloudflare
-    nameservers = [ "127.0.0.1" "1.1.1.1" ];
+    nameservers = ["127.0.0.1" "1.1.1.1"];
 
     firewall = {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [ 22 53 80 2283 8123 ];
-      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [22 53 80 2283 8123];
+      allowedUDPPorts = [53];
     };
   };
 
@@ -62,9 +69,9 @@
     zsh.enable = true;
   };
 
-  services.logind = {
-    lidSwitch = "ignore";
-    lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
   };
 
   system.stateVersion = "25.11";
