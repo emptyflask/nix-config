@@ -20,24 +20,24 @@ with pkgs; {
 
     plugins = with pkgs.vimPlugins; [
       Rename
-      Tabular
-      Tagbar
+      tabular
+      tagbar
       ale
       fastfold
-      fugitive
+      vim-fugitive
       fzf-vim
-      fzfWrapper
-      gitgutter
+      fzf-wrapper
+      vim-gitgutter
       gruvbox-community
-      hlint-refactor
+      hlint-refactor-vim
       lightline-vim
       neco-ghc
-      neosnippet
+      neosnippet-vim
       neosnippet-snippets
-      repeat
-      sensible
-      surround
-      tlib
+      vim-repeat
+      vim-sensible
+      vim-surround
+      tlib_vim
       undotree
       vim-commentary
       vim-dispatch
@@ -50,7 +50,7 @@ with pkgs; {
       vim-startify
       vim-test
       vim-unimpaired
-      vimproc
+      vimproc-vim
       vimwiki
     ];
   };

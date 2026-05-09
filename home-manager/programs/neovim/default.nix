@@ -21,7 +21,7 @@ in with pkgs;
       endfunction
     '';
 
-    extraLuaConfig = (concatFiles [
+    initLua = (concatFiles [
       ./config.lua
       ./haskell.lua
       ./keymap.lua
