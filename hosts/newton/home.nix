@@ -28,6 +28,12 @@
     stateVersion = "25.11";
   };
 
+  programs.eza = {
+    enable = true;
+    git = true;
+    icons = "auto";
+  };
+
   services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 60 * 60 * 4;
