@@ -11,6 +11,7 @@
     ../../nixos/users
     ../common.nix
     ./services
+    ./power.nix
   ];
 
   boot = {
@@ -51,8 +52,8 @@
     firewall = {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [22 53 80 2283 8123];
-      allowedUDPPorts = [53];
+      allowedTCPPorts = [22 53 80 2049];
+      allowedUDPPorts = [53 2049];
     };
   };
 
@@ -67,11 +68,6 @@
     };
     ssh.startAgent = false;
     zsh.enable = true;
-  };
-
-  services.logind.settings.Login = {
-    HandleLidSwitch = "ignore";
-    HandleLidSwitchExternalPower = "ignore";
   };
 
   system.stateVersion = "25.11";

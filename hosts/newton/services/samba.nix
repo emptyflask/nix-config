@@ -45,4 +45,11 @@
     publish.enable = true;
     publish.userServices = true;
   };
+
+  services.nfs.server = {
+    enable = true;
+    exports = ''
+      /media 10.9.8.0/24(rw,sync,no_subtree_check,root_squash)
+    '';
+  };
 }
