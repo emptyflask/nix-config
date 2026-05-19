@@ -10,6 +10,7 @@
         "map to guest" = "Bad User";
         "server min protocol" = "SMB2";
         "vfs objects" = "catia fruit streams_xattr";
+        "fruit:aapl" = "yes";
         "fruit:metadata" = "stream";
         "fruit:model" = "MacSamba";
         "fruit:posix_rename" = "yes";
@@ -33,6 +34,8 @@
       };
     };
   };
+
+  services.samba.nmbd.enable = false;
 
   services.samba-wsdd.enable = true;
 
