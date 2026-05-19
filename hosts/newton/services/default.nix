@@ -1,7 +1,10 @@
-{ config, pkgs, lib, ... }:
-
 {
-  imports = [ ./traefik.nix ];
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
+  imports = [./traefik.nix ./samba.nix];
 
   services = {
     openssh = {
@@ -13,26 +16,30 @@
       };
     };
 
+    audiobookshelf = {
+      enable = true;
+    };
+
     immich = {
       enable = true;
       mediaLocation = "/media/immich";
-      openFirewall = false; # handled in networking.firewall in default.nix
+      openFirewall = true;
     };
 
     pihole-ftl = {
       enable = true;
-      settings.dns.upstreams = [ "9.9.9.9" "1.1.1.1" ];
+      settings.dns.upstreams = ["1.1.1.2" "1.0.0.2"];
     };
 
     pihole-web = {
       enable = true;
       # Listen on 8080 so Traefik can own port 80
-      ports = [ 8080 ];
+      ports = [8080];
     };
 
     home-assistant = {
       enable = true;
-      openFirewall = false; # handled in networking.firewall in default.nix
+      openFirewall = true;
       config = {
         homeassistant = {
           name = "Home";
