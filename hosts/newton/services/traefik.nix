@@ -1,35 +1,36 @@
-{ config, lib, ... }:
-
 {
+  config,
+  lib,
+  ...
+}: {
   services.traefik = {
     enable = true;
 
-    static.settings = {
+    staticConfigOptions = {
       api = {
         dashboard = false;
         insecure = false;
       };
-      entryPoints.web = { address = ":80"; };
+      entryPoints.web = {address = ":80";};
     };
 
-    dynamic.dir = "${config.services.traefik.dataDir}/dynamic";
-
-    dynamic.files.proxies.settings = {
+    dynamicConfigOptions = {
       http = let
         proxy = host: port: {
           routers."${host}" = {
             rule = "Host(`${host}`)";
-            entryPoints = [ "web" ];
+            entryPoints = ["web"];
             service = host;
           };
           services."${host}".loadBalancer.servers = [
-            { url = "http://localhost:${toString port}/"; }
+            {url = "http://localhost:${toString port}/";}
           ];
         };
       in
         lib.mkMerge [
-          (proxy "immich.newton.lan"        2283)
-          (proxy "pihole.newton.lan"        8080)
+          (proxy "audiobookshelf.newton.lan" 8000)
+          (proxy "immich.newton.lan" 2283)
+          (proxy "pihole.newton.lan" 8080)
           (proxy "homeassistant.newton.lan" 8123)
         ];
     };

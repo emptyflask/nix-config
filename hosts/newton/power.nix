@@ -1,4 +1,4 @@
-{}: {
+{...}: {
   boot.blacklistedKernelModules = ["nouveau"];
 
   hardware.bluetooth.enable = false;
