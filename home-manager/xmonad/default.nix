@@ -43,7 +43,7 @@ in {
         qalculate   = "${pkgs.qalculate-gtk}/bin/qalculate-gtk"
         signal      = "${pkgs.signal-desktop}/bin/signal-desktop"
         slack       = "${pkgs.slack}/bin/slack"
-        sone        = "${pkgs.flatpak}/bin/flatpak run io.github.lullabyX.sone"
+        sone        = "${pkgs.sone}/bin/sone"
         thunderbird = "${pkgs.thunderbird-bin}/bin/thunderbird"
         xmobar      = "${pkgs.xmobar}/bin/xmobar"
         yazi        = "${pkgs.yazi}/bin/yazi"

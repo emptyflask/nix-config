@@ -41,6 +41,8 @@
       ];
     };
 
+    users.jellyfin.extraGroups = ["media"];
+
     users.plex = {
       group = "media";
       isSystemUser = true;

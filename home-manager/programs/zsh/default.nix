@@ -1,21 +1,26 @@
-{ inputs, pkgs, config, ... }:
-
-let
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}: let
   # Define ls aliases only if eza is not enabled
-  lsAliases = if (!config.programs.eza.enable) then {
-    l = "ls -alh";
-    ll = "ls -l";
-    ls = "ls --color -F";
-  } else
-    { };
+  lsAliases =
+    if (!config.programs.eza.enable)
+    then {
+      l = "ls -alh";
+      ll = "ls -l";
+      ls = "ls --color -F";
+    }
+    else {};
 
   unstable =
     inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-
 in {
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
+    dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
     defaultKeymap = "viins";
     history = {
@@ -23,44 +28,47 @@ in {
       size = 50000;
     };
 
-    initContent = (builtins.readFile ./zshrc) + ''
-      eval "$(${pkgs.fasd}/bin/fasd --init auto)"
-    '';
+    initContent =
+      (builtins.readFile ./zshrc)
+      + ''
+        eval "$(${pkgs.fasd}/bin/fasd --init auto)"
+      '';
 
-    shellAliases = lsAliases // {
-      be = "bundle exec";
-      bi = "bundle install";
-      bu = "bundle update";
+    shellAliases =
+      lsAliases
+      // {
+        be = "bundle exec";
+        bi = "bundle install";
+        bu = "bundle update";
 
-      # pngcrush with default settings
-      crush =
-        "${pkgs.pngcrush}/bin/pngcrush -d crushed -rem gAMA -rem cHRM -rem iCCP -rem sRGB";
+        # pngcrush with default settings
+        crush = "${pkgs.pngcrush}/bin/pngcrush -d crushed -rem gAMA -rem cHRM -rem iCCP -rem sRGB";
 
-      curl_json = ''curl -v -H "Content-Type: application/json"'';
-      duh = "du -csh";
-      gg = "${pkgs.gitui}/bin/gitui";
-      grep = "grep --color=auto";
+        curl_json = ''curl -v -H "Content-Type: application/json"'';
+        duh = "du -csh";
+        gg = "${pkgs.gitui}/bin/gitui";
+        grep = "grep --color=auto";
 
-      # image output in kitty terminal
-      icat = "${pkgs.kitty}/bin/kitty +kitten icat";
+        # image output in kitty terminal
+        icat = "${pkgs.kitty}/bin/kitty +kitten icat";
 
-      j = ''
-        ${unstable.jira-cli-go}/bin/jira issue list -sopen -s"In Review" -a"jon@sxsw.com"'';
-      json = "jq '.' -C | less";
+        j = ''
+          ${unstable.jira-cli-go}/bin/jira issue list -sopen -s"In Review" -a"jon@sxsw.com"'';
+        json = "jq '.' -C | less";
 
-      m = "ncmpcpp";
+        m = "ncmpcpp";
 
-      nixgc = "nix-collect-garbage -d";
-      nixq = "nix-env -qaP";
-      nixrm = "nix-env -q | fzf | xargs -I{} nix-env -e {}";
-      nixup = "nix-env -u";
-      nixupgrade = ''nix-channel --update && nix-env -u \"*\"'';
+        nixgc = "nix-collect-garbage -d";
+        nixq = "nix-env -qaP";
+        nixrm = "nix-env -q | fzf | xargs -I{} nix-env -e {}";
+        nixup = "nix-env -u";
+        nixupgrade = ''nix-channel --update && nix-env -u \"*\"'';
 
-      # open = "xdg-open";
+        # open = "xdg-open";
 
-      tailf = "tail -f";
-      trs = "touch tmp/restart.txt";
-    };
+        tailf = "tail -f";
+        trs = "touch tmp/restart.txt";
+      };
 
     sessionVariables = {
       FZF_DEFAULT_COMMAND = "${pkgs.ripgrep}/bin/rg --files";
@@ -102,6 +110,5 @@ in {
         file = "${pkgs.zsh-nix-shell}/nix-shell.plugin.zsh";
       }
     ];
-
   };
 }

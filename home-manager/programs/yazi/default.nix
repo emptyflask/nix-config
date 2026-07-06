@@ -1,8 +1,7 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.yazi = {
     enable = true;
+    shellWrapperName = "y";
     # plugins = {
     #   hexyl = builtins.fetchGit {
     #     url = "https://github.com/Reledia/hexyl.yazi";
@@ -26,14 +25,18 @@
         show_symlink = true;
       };
       opener = {
-        audio = [{
-          run = ''${pkgs.audacious}/bin/audacious "$@"'';
-          orphan = true;
-        }];
-        video = [{
-          run = ''${pkgs.mplayer}/bin/mplayer "$@"'';
-          orphan = true;
-        }];
+        audio = [
+          {
+            run = ''${pkgs.audacious}/bin/audacious "$@"'';
+            orphan = true;
+          }
+        ];
+        video = [
+          {
+            run = ''${pkgs.mplayer}/bin/mplayer "$@"'';
+            orphan = true;
+          }
+        ];
       };
       open = {
         prepend_rules = [
@@ -58,10 +61,12 @@
             run = "miller";
           }
         ];
-        append_previewers = [{
-          name = "*";
-          run = "hexyl";
-        }];
+        append_previewers = [
+          {
+            name = "*";
+            run = "hexyl";
+          }
+        ];
       };
     };
   };

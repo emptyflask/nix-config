@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   imports = [
     ../../home-manager/common.nix
     ../../home-manager/environment.nix
@@ -12,7 +10,6 @@ let
     ../../home-manager/programs/zathura
     ../../home-manager/programs/zsh
   ];
-
 in {
   inherit imports;
 
@@ -124,7 +121,7 @@ in {
       vlc
     ];
 
-    sessionPath = [ "$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin" ];
+    sessionPath = ["$HOME/.gem/ruby/${pkgs.ruby.version.libDir}/bin"];
 
     stateVersion = "25.05";
   };
@@ -137,7 +134,7 @@ in {
   services = {
     gpg-agent = {
       enable = true;
-      defaultCacheTtl = (60 * 60 * 4);
+      defaultCacheTtl = 60 * 60 * 4;
       enableSshSupport = true;
     };
   };
@@ -146,5 +143,4 @@ in {
     enable = true;
     userDirs.enable = true;
   };
-
 }

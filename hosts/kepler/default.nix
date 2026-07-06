@@ -32,8 +32,8 @@
 
   nix.settings = {
     extra-platforms = ["i686-linux"];
-    substituters = ["https://nix-community.cachix.org"];
-    trusted-public-keys = [
+    extra-substituters = ["https://nix-community.cachix.org"];
+    extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
@@ -128,8 +128,8 @@
     (steam.override {extraPkgs = pkgs: [wavpack];}).run
     vim-full
     xclip
-    xorg.xkill
-    xorg.xmessage
+    xkill
+    xmessage
     xsel
   ];
 
@@ -173,7 +173,6 @@
     enable = true;
     polkitPolicyOwners = ["jon"];
   };
-  programs.adb.enable = true;
   programs.command-not-found.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -231,7 +230,7 @@
 
     graphics.enable = true;
     graphics.enable32Bit = true;
-    graphics.extraPackages32 = with pkgs.pkgsi686Linux; [libva];
+    # graphics.extraPackages32 = with pkgs.pkgsi686Linux; [libva];
 
     sane.enable = true; # enable scanner support
 

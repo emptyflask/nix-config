@@ -1,6 +1,6 @@
 {
+  config,
   inputs,
-  lib,
   pkgs,
   self,
   ...
@@ -8,6 +8,9 @@
   location = import "${self}/home-manager/locations/oakwood.nix";
 
   background = "$HOME/.config/wallpaper/current";
+
+  unstable =
+    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in {
   imports = [
     "${self}/home-manager/common.nix"
@@ -45,6 +48,10 @@ in {
     font = {
       name = "Noto Sans 10";
       package = pkgs.noto-fonts;
+    };
+    gtk4.theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
     };
     theme = {
       name = "Adwaita-dark";
@@ -101,21 +108,22 @@ in {
       pandoc # document converter
       pavucontrol
       postman
-      protonvpn-gui
+      proton-vpn
       qalculate-gtk # calculator
       qemu
       scowl # spellchecker / dictionary
+      unstable.sone # tidal gui
       st
-      xdg-utils
-      whois
-      (xfce.thunar.override {
+      (thunar.override {
         thunarPlugins = with pkgs; [
-          xfce.thunar-volman
-          xfce.thunar-archive-plugin
+          thunar-volman
+          thunar-archive-plugin
         ];
       })
-      xfce.xfconf
-      xfce.exo
+      whois
+      xdg-utils
+      xfconf
+      xfce4-exo
       yubioath-flutter
       yubikey-personalization
       zeal # docs (like dash)
@@ -216,7 +224,7 @@ in {
       lazydocker
       ltrace # lib trace
       niv # nix channel config
-      nixfmt-classic # format nix
+      nixfmt # format nix
       shellcheck # shell script analyzer
       sourceHighlight
       strace # system call trace
@@ -233,11 +241,11 @@ in {
 
       # programming - javascript
       biome
+      diagnostic-languageserver
+      eslint_d
       nodejs
-      nodePackages.diagnostic-languageserver
-      nodePackages.eslint_d
-      nodePackages.typescript
-      nodePackages.typescript-language-server
+      typescript
+      typescript-language-server
 
       # programming - haskell
       ghc
@@ -319,7 +327,10 @@ in {
     icons = "auto";
   };
 
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
+  };
 
   programs.ncspot = {
     enable = true;
@@ -386,15 +397,10 @@ in {
       fadeDelta = 5;
       fadeSteps = [4.0e-2 4.0e-2];
       shadow = false;
-      backend = "xrender";
-      vSync = true;
-      # vSync        = "opengl";
+      backend = "glx";
+      vSync = false;
       settings = {
-        glx-no-rebind-pixmap = true;
-        glx-no-stencil = true;
-        # glx-copy-from-front   = false;
         use-damage = true;
-        xrender-sync-fence = true;
       };
     };
 
@@ -425,6 +431,7 @@ in {
   xdg = {
     enable = true;
     userDirs.enable = true;
+    userDirs.setSessionVariables = false;
   };
 
   xsession = {

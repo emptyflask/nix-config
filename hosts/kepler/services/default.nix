@@ -50,7 +50,7 @@
         "flathub-beta" = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
       };
       packages = [
-        "flathub:app/io.github.lullabyX.sone//stable"
+        # "flathub:app/io.github.lullabyX.sone//stable"
       ];
     };
 
@@ -97,8 +97,8 @@
     };
 
     ollama = {
-      enable = true;
-      acceleration = "cuda";
+      enable = false;
+      package = pkgs.ollama-cuda;
     };
 
     opensearch = {

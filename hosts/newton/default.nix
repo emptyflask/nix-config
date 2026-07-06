@@ -1,18 +1,21 @@
-{ inputs, outputs, lib, pkgs, ... }:
-
-let
-  common = import ../common.nix { inherit pkgs; };
+{
+  inputs,
+  outputs,
+  lib,
+  pkgs,
+  ...
+}: let
+  common = import ../common.nix {inherit pkgs;};
 
   imports = [
     inputs.nixos-apple-silicon.nixosModules.default
     ./hardware-configuration.nix
   ];
-
 in {
   inherit imports;
 
   boot = {
-    initrd.availableKernelModules = [ "xhci_pci" "usb_storage" "usbhid" ];
+    initrd.availableKernelModules = ["xhci_pci" "usb_storage" "usbhid"];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = false;
   };
@@ -22,15 +25,15 @@ in {
     keyMap = "us";
   };
 
-  environment.shells = with pkgs; [ bashInteractive zsh ];
+  environment.shells = with pkgs; [bashInteractive zsh];
 
   environment.systemPackages = with pkgs;
-    common.packages ++ [ asahi-bless home-manager kitty rxvt-unicode wofi ];
+    common.packages ++ [asahi-bless home-manager kitty rxvt-unicode wofi];
 
   fileSystems = {
-    "/".options = [ "compress=zstd" ];
-    "/home".options = [ "compress=zstd" ];
-    "/nix".options = [ "compress=zstd" "noatime" ];
+    "/".options = ["compress=zstd"];
+    "/home".options = ["compress=zstd"];
+    "/nix".options = ["compress=zstd" "noatime"];
   };
 
   hardware.asahi = {
@@ -45,8 +48,8 @@ in {
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 139 445 5000 8080 ];
-      allowedUDPPorts = [ 137 138 ];
+      allowedTCPPorts = [22 139 445 5000 8080];
+      allowedUDPPorts = [137 138];
       allowPing = true;
 
       # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/8
@@ -77,7 +80,7 @@ in {
       options = "--delete-older-than 30d";
     };
 
-    nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" ];
+    nixPath = ["nixpkgs=${inputs.nixpkgs-unstable}"];
 
     optimise.automatic = true;
 
@@ -90,18 +93,17 @@ in {
 
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
-      trusted-users = [ "root" "jon" ];
-      substituters = [ "https://nix-community.cachix.org" ];
-      trusted-public-keys = [
+      experimental-features = ["nix-command" "flakes"];
+      trusted-users = ["root" "jon"];
+      extra-substituters = ["https://nix-community.cachix.org"];
+      extra-trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
   };
 
   # nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays =
-    [ outputs.overlays.additions outputs.overlays.modifications ];
+  nixpkgs.overlays = [outputs.overlays.additions outputs.overlays.modifications];
 
   programs = {
     # _1password.enable = true;
@@ -144,7 +146,7 @@ in {
   users.users.jon = {
     initialPassword = "changeme";
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = ["wheel"];
     shell = pkgs.zsh;
   };
 
