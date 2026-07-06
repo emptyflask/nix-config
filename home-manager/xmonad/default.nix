@@ -1,12 +1,9 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   # xmobarSrc = pkgs.fetchgit {
   #   url = "https://codeberg.org/xmobar/xmobar.git";
   #   rev = "26726e092beb0851743c3fb046e82ce323d818e6";
   #   sha256 = "sha256-VT54ZrUazWG6fPNVRLhfXhjdBWgtZyQ8y/i9TIv1RZw=";
   # };
-
   # myHaskellPackages = pkgs.haskellPackages.override {
   #   overrides = self: super: {
   #     xmobar = pkgs.haskell.lib.overrideCabal super.xmobar {
@@ -14,10 +11,7 @@ let
   #     };
   #   };
   # };
-
-in
-
-{
+in {
   xmonad = {
     enable = true;
     enableContribAndExtras = true;
@@ -31,12 +25,12 @@ in
     config = ./lib/xmonad.hs;
 
     libFiles = {
-      "Colors.hs"           = ./lib/Colors.hs;
-      "Keys.hs"             = ./lib/Keys.hs;
-      "Layout.hs"           = ./lib/Layout.hs;
-      "Logging.hs"          = ./lib/Logging.hs;
-      "Managers.hs"         = ./lib/Managers.hs;
-      "Workspaces.hs"       = ./lib/Workspaces.hs;
+      "Colors.hs" = ./lib/Colors.hs;
+      "Keys.hs" = ./lib/Keys.hs;
+      "Layout.hs" = ./lib/Layout.hs;
+      "Logging.hs" = ./lib/Logging.hs;
+      "Managers.hs" = ./lib/Managers.hs;
+      "Workspaces.hs" = ./lib/Workspaces.hs;
 
       "Paths.hs" = pkgs.writeText "Paths.hs" ''
         module Paths where
@@ -49,7 +43,7 @@ in
         qalculate   = "${pkgs.qalculate-gtk}/bin/qalculate-gtk"
         signal      = "${pkgs.signal-desktop}/bin/signal-desktop"
         slack       = "${pkgs.slack}/bin/slack"
-        spotify     = "${pkgs.spotify}/bin/spotify"
+        sone        = "${pkgs.flatpak}/bin/flatpak run io.github.lullabyX.sone"
         thunderbird = "${pkgs.thunderbird-bin}/bin/thunderbird"
         xmobar      = "${pkgs.xmobar}/bin/xmobar"
         yazi        = "${pkgs.yazi}/bin/yazi"
@@ -57,5 +51,4 @@ in
       '';
     };
   };
-
 }

@@ -4,6 +4,7 @@
   home-manager,
   nixos-raspberrypi,
   agenix,
+  flatpaks,
   claude-code,
   ...
 } @ inputs: let
@@ -47,6 +48,7 @@ in {
       modules = [
         ./hosts/kepler
         agenix.nixosModules.default
+        flatpaks.nixosModules.default
         home-manager.nixosModules.home-manager
         {
           home-manager = {

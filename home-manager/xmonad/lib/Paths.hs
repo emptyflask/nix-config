@@ -21,7 +21,7 @@ signal = "signal-desktop"
 
 slack = "slack"
 
-spotify = "spotify"
+sone = "sone"
 
 thunderbird = "thunderbird"
 

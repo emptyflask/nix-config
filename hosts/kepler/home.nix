@@ -15,7 +15,6 @@ in {
     "${self}/home-manager/accounts"
     "${self}/home-manager/services/dunst"
     "${self}/home-manager/services/mpd"
-    "${self}/home-manager/services/spotifyd"
     "${self}/home-manager/services/trayer"
     "${self}/home-manager/programs/alacritty"
     "${self}/home-manager/programs/git"
@@ -201,7 +200,6 @@ in {
       mpv
       ncmpcpp
       smplayer
-      spotify
       vlc
 
       # programming - general
