@@ -110,7 +110,7 @@
     pcscd.enable = true; # Smartcard reader
 
     pipewire = {
-      enable = false;
+      enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
@@ -128,7 +128,7 @@
     protonmail-bridge.enable = true;
 
     pulseaudio = {
-      enable = true;
+      enable = false;
       support32Bit = true;
     };
 
