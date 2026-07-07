@@ -15,6 +15,8 @@ kitty = "kitty"
 
 obsidian = "obsidian"
 
+pulsemixer = "pulsemixer"
+
 qalculate = "qalculate-gtk"
 
 signal = "signal-desktop"
@@ -24,6 +26,10 @@ slack = "slack"
 sone = "sone"
 
 thunderbird = "thunderbird"
+
+wezterm = "wezterm"
+
+wpctl = "wpctl"
 
 xmobar = "xmobar"
 
