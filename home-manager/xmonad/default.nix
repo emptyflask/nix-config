@@ -45,6 +45,7 @@ in {
         slack       = "${pkgs.slack}/bin/slack"
         sone        = "${pkgs.sone}/bin/sone"
         thunderbird = "${pkgs.thunderbird-bin}/bin/thunderbird"
+        wezterm     = "${pkgs.wezterm}/bin/wezterm"
         xmobar      = "${pkgs.xmobar}/bin/xmobar"
         yazi        = "${pkgs.yazi}/bin/yazi"
         zeal        = "${pkgs.zeal}/bin/zeal"

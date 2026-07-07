@@ -22,6 +22,7 @@ in {
     "${self}/home-manager/programs/alacritty"
     "${self}/home-manager/programs/git"
     "${self}/home-manager/programs/kitty"
+    "${self}/home-manager/programs/wezterm"
     "${self}/home-manager/programs/neomutt"
     "${self}/home-manager/programs/neovim"
     "${self}/home-manager/programs/rofi"
