@@ -43,7 +43,7 @@
     };
     yazi.url = "github:sxyazi/yazi";
 
-    neovim-plugins.url = "path:inputs/neovim-plugins";
+    # neovim-plugins.url = "path:inputs/neovim-plugins";
   };
   nixConfig = {
     extra-substituters = ["https://nixos-raspberrypi.cachix.org" "https://yazi.cachix.org"];

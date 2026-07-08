@@ -7,6 +7,8 @@
     # ./yabai.nix
   ];
 
+  # config.stylix.autoEnable = true;
+
   environment.systemPackages = with pkgs;
     [
       alacritty
@@ -26,13 +28,11 @@
       p7zip
       reattach-to-user-namespace
       ripgrep
-      skhd
       sqlite
       tree
       vim
       w3m
       wget
-      yabai
       yarn
       zip
     ];
@@ -56,7 +56,6 @@
       # "karabiner-elements"
       "protonvpn"
     ];
-    whalebrews = [];
   };
 
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
