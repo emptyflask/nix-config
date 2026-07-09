@@ -12,7 +12,7 @@ in
       viAlias = true;
       vimAlias = false;
 
-      extraLuaConfig =
+      initLua =
         concatFiles [./config.lua ./keymap.lua ./netrw.lua ./rename.lua];
 
       extraPackages = [lua-language-server nixd shfmt tree-sitter];
