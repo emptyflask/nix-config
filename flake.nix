@@ -37,6 +37,10 @@
     # Tools
     agenix.url = "github:ryantm/agenix";
     claude-code.url = "github:sadjow/claude-code-nix";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nur = {
       url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,8 +50,13 @@
     neovim-plugins.url = "path:inputs/neovim-plugins";
   };
   nixConfig = {
-    extra-substituters = ["https://nixos-raspberrypi.cachix.org" "https://yazi.cachix.org"];
+    extra-substituters = [
+      "https://claude-code.cachix.org"
+      "https://nixos-raspberrypi.cachix.org"
+      "https://yazi.cachix.org"
+    ];
     extra-trusted-public-keys = [
+      "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
       "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
     ];
