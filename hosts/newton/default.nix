@@ -35,9 +35,11 @@
 
   networking = {
     hostName = "newton";
+    extraHosts = ''
+      127.0.0.1 newton.lan newton
+    '';
     useDHCP = false;
 
-    # TODO: confirm interface name on machine with `ip link`
     interfaces.enp2s0f0.ipv4.addresses = [
       {
         address = "10.9.8.10";
