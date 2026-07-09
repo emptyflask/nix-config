@@ -41,7 +41,12 @@
       ];
     };
 
-    users.jellyfin.extraGroups = ["media"];
+    users.jellyfin = {
+      group = "jellyfin";
+      isSystemUser = true;
+      extraGroups = ["media"];
+    };
+    groups.jellyfin = {};
 
     users.plex = {
       group = "media";
