@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  imports = [./traefik.nix ./samba.nix];
+  imports = [./caddy.nix ./samba.nix];
 
   services = {
     openssh = {
@@ -24,6 +24,12 @@
       enable = true;
       mediaLocation = "/media/immich";
       openFirewall = true;
+    };
+
+    navidrome = {
+      enable = true;
+      openFirewall = true;
+      settings.MusicFolder = "/media/music";
     };
 
     pihole-ftl = {

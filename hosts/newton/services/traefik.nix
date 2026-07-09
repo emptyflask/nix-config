@@ -30,6 +30,7 @@
         lib.mkMerge [
           (proxy "audiobookshelf.newton.lan" 8000)
           (proxy "immich.newton.lan" 2283)
+          (proxy "navidrome.newton.lan" 4533)
           (proxy "pihole.newton.lan" 8080)
           (proxy "homeassistant.newton.lan" 8123)
         ];
