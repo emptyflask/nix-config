@@ -286,6 +286,8 @@ in {
     stateVersion = "21.05";
   };
 
+  programs.nix-index.enableZshIntegration = true;
+
   programs.beets = {
     enable = true;
     mpdIntegration.enableStats = true;

@@ -28,6 +28,8 @@
     stateVersion = "25.11";
   };
 
+  programs.nix-index.enableZshIntegration = true;
+
   programs.eza = {
     enable = true;
     git = true;

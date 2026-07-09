@@ -54,6 +54,9 @@ in {
             useUserPackages = true;
             users.jon = ./hosts/kepler/home.nix;
             extraSpecialArgs = {inherit inputs self;};
+            sharedModules = [
+              inputs.nix-index-database.homeModules.nix-index
+            ];
           };
         }
       ];
@@ -62,7 +65,7 @@ in {
     newton = inputs.nixpkgs-unstable.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs outputs;};
-modules = [
+      modules = [
         ./hosts/newton
         inputs.home-manager-unstable.nixosModules.home-manager
         {
@@ -71,6 +74,9 @@ modules = [
             useUserPackages = true;
             users.jon = ./hosts/newton/home.nix;
             extraSpecialArgs = {inherit inputs outputs;};
+            sharedModules = [
+              inputs.nix-index-database.homeModules.nix-index
+            ];
           };
         }
       ];
