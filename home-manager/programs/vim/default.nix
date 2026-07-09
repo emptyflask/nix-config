@@ -19,35 +19,35 @@ with pkgs; {
       '';
 
     plugins = with pkgs.vimPlugins; [
+      # vim-gutentags
       Rename
-      tabular
-      tagbar
       ale
       fastfold
-      vim-fugitive
       fzf-vim
       fzf-wrapper
-      vim-gitgutter
       gruvbox-community
       hlint-refactor-vim
       lightline-vim
       neco-ghc
-      neosnippet-vim
       neosnippet-snippets
-      vim-repeat
-      vim-sensible
-      vim-surround
+      neosnippet-vim
+      tabular
+      tagbar
       tlib_vim
       undotree
       vim-commentary
       vim-dispatch
+      vim-fugitive
+      vim-gitgutter
       vim-grepper
-      # vim-gutentags
       vim-hindent
       vim-polyglot
+      vim-repeat
+      vim-sensible
       vim-snippets
       vim-speeddating
       vim-startify
+      vim-surround
       vim-test
       vim-unimpaired
       vimproc-vim

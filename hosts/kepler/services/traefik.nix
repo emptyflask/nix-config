@@ -85,12 +85,14 @@
 
           (proxy "audiobookshelf.localhost" config.services.audiobookshelf.port) # 8000
           (proxy "bazarr.localhost" config.services.bazarr.listenPort) # 6767
+          (proxy "immich.kepler.lan" 2283)
           (proxy "immich.localhost" 2283)
+          (proxy "jellyfin.kepler.lan" 8096)
           (proxy "jellyfin.localhost" 8096)
-          (proxy "jellyseerr.localhost" config.services.jellyseerr.port) # 5055
           (proxy "lidarr.localhost" config.services.lidarr.settings.server.port) # 8686
           (proxy "prowlarr.localhost" config.services.prowlarr.settings.server.port) # 9696
           (proxy "radarr.localhost" config.services.radarr.settings.server.port) # 7878
+          (proxy "seerr.localhost" config.services.seerr.port) # 5055
           (proxy "sonarr.localhost" config.services.sonarr.settings.server.port) # 8989
           (proxy "usenet.localhost" 6789)
 

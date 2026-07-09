@@ -165,6 +165,7 @@
 
     tabular = {
       plugin = pkgs.vimPlugins.tabular;
+      type = "viml";
       runtime = {
         "after/plugin/tabular.vim".source = ./after/plugin/tabular.vim;
       };
@@ -239,6 +240,7 @@
 
     vsnip = {
       plugin = pkgs.vimPlugins.vim-vsnip;
+      type = "viml";
       config = builtins.readFile ./vsnip.vim;
     };
   };
@@ -256,23 +258,23 @@
     custom.tabular
     custom.treesitter
     editorconfig-vim
-    vim-fugitive
     gitsigns-nvim
     neoformat
     none-ls-nvim
     nvim-nio
     nvim-ufo
     plenary-nvim
-    vim-repeat
-    vim-sensible
     tlib_vim
     undotree
     vim-abolish
     # vim-commentary
     vim-dispatch
+    vim-fugitive
     vim-grepper
     # vim-gutentags
+    vim-repeat
     vim-sandwich
+    vim-sensible
     vim-test
     # vim-unimpaired
     vimproc-vim
@@ -323,7 +325,7 @@
     tokyonight-nvim
 
     # LANGUAGE / FILETYPE SPECIFIC
-    Hoogle
+    vim-hoogle
     # custom.ruby-code-actions
     custom.rustaceanvim
     dhall-vim

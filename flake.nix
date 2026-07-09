@@ -3,7 +3,7 @@
 
   inputs = {
     # Core
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Apple
@@ -26,7 +26,7 @@
 
     # Home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager-unstable = {
@@ -37,6 +37,7 @@
     # Tools
     agenix.url = "github:ryantm/agenix";
     claude-code.url = "github:sadjow/claude-code-nix";
+    flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
