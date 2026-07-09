@@ -29,7 +29,6 @@
     jq
     killall
     magic-wormhole # simple secure file transfer
-    nix-index
     nix-prefetch-git
     parallel # run commands in parallel
     ripgrep

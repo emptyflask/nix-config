@@ -174,7 +174,7 @@
     polkitPolicyOwners = ["jon"];
   };
   programs.adb.enable = true;
-  programs.command-not-found.enable = true;
+  programs.command-not-found.enable = false;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
