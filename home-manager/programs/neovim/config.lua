@@ -28,8 +28,18 @@ vim.opt.wildignore = {
 
 -- Folding
 vim.opt.foldlevel = 10
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+-- Treesitter folding only in buffers with a parser: a global foldmethod=expr
+-- re-runs the foldexpr on every buffer change, which cripples huge buffers
+-- (e.g. the configuration.nix man page) before any ftplugin can override it.
+vim.api.nvim_create_autocmd('FileType', {
+  callback = function(args)
+    local ok, parser = pcall(vim.treesitter.get_parser, args.buf)
+    if ok and parser then
+      vim.opt_local.foldmethod = 'expr'
+      vim.opt_local.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    end
+  end,
+})
 
 -- Leader and clipboard
 vim.g.mapleader = ','
@@ -100,6 +110,33 @@ vim.opt.autoread = true
 vim.g.LargeFile = 64
 vim.opt.synmaxcol = 512
 vim.opt.lazyredraw = true
+
+-- Disable heavy features for large files (by disk size before read, or line count after)
+local function disable_heavy_features(buf)
+  vim.opt_local.foldmethod = 'manual'
+  vim.opt_local.foldexpr = ''
+  vim.opt_local.syntax = 'off'
+  vim.opt_local.swapfile = false
+  vim.opt_local.undofile = false
+  pcall(vim.treesitter.stop, buf)
+end
+
+vim.api.nvim_create_autocmd('BufReadPre', {
+  callback = function(args)
+    local ok, stat = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(args.buf))
+    if ok and stat and stat.size > 512 * 1024 then
+      disable_heavy_features(args.buf)
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  callback = function(args)
+    if vim.api.nvim_buf_line_count(args.buf) > 10000 then
+      disable_heavy_features(args.buf)
+    end
+  end,
+})
 
 -- Enable filetype detection and plugins
 vim.cmd('filetype plugin indent on')
