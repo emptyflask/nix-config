@@ -218,11 +218,11 @@
   systemd.services.NetworkManager-wait-online.enable = false;
 
   imports = [
+    ./caddy.nix
     ./hoogle
     ./jellyfin.nix
     ./openssh.nix
     ./postgresql.nix
-    ./traefik.nix
     ./xserver.nix
   ];
 }
