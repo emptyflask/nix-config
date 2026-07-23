@@ -23,13 +23,27 @@
       reverse_proxy localhost:${toString port}
     '';
   };
+
+  viteSslProxy = host: port: vitePort: {
+    "${host}".extraConfig = ''
+      tls ${certFile} ${keyFile}
+      handle /vite-dev/* {
+        reverse_proxy localhost:${toString vitePort} {
+          transport http {
+            tls_insecure_skip_verify # works with vite basicSsl plugin
+          }
+        }
+      }
+      reverse_proxy localhost:${toString port}
+    '';
+  };
 in {
   services.caddy = {
     enable = true;
     virtualHosts = lib.mkMerge [
       (viteProxy "id.sxsw.localhost" 5000 3036)
       (viteProxy "id.sxswedu.localhost" 5000 3036)
-      (viteProxy "cart.sxsw.localhost" 5001 3038)
+      (viteSslProxy "cart.sxsw.localhost" 5001 3038)
       (viteProxy "chronos.sxsw.localhost" 5005 3037)
 
       (proxy "panelpicker.sxsw.localhost" 5003)
