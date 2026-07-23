@@ -19,6 +19,7 @@
       "navidrome.newton.lan:80".extraConfig = "reverse_proxy http://localhost:4533";
       "pihole.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
       "homeassistant.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8123";
+      "couchdb.newton.lan:80".extraConfig = "reverse_proxy http://localhost:5984";
     };
   };
 }
