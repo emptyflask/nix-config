@@ -4,8 +4,8 @@
   ...
 }: let
   # mkcert kepler.lan "*.kepler.lan" "*.sxsw.localhost" "*.sxswedu.localhost" "*.kepler.localhost" localhost 127.0.0.1 ::1
-  certFile = "/etc/nixos/security/ssl/certs/kepler.lan+7.pem";
-  keyFile = "/etc/nixos/security/ssl/private/kepler.lan+7-key.pem";
+  certFile = ../../../nixos/security/ssl/certs/kepler.lan+7.pem;
+  keyFile = ../../../nixos/security/ssl/private/kepler.lan+7-key.pem;
 
   proxy = host: port: {
     "${host}".extraConfig = ''
