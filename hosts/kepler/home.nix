@@ -15,7 +15,6 @@ in {
   imports = [
     "${self}/home-manager/common.nix"
     "${self}/home-manager/environment.nix"
-    "${self}/home-manager/accounts"
     "${self}/home-manager/services/dunst"
     "${self}/home-manager/services/mpd"
     "${self}/home-manager/services/trayer"
