@@ -9,6 +9,10 @@
 
   # config.stylix.autoEnable = true;
 
+  # Match the Lix pin used on every other host (hosts/common.nix) instead of
+  # nix-darwin's default of plain upstream Nix.
+  nix.package = pkgs.lixPackageSets.stable.lix;
+
   environment.systemPackages = with pkgs;
     [
       alacritty
@@ -20,7 +24,6 @@
       gnupg
       home-manager
       karabiner-elements
-      lix
       neovim
       nmap
       nodejs
