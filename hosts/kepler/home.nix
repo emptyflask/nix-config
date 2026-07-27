@@ -37,9 +37,13 @@ in {
 
   age.identityPaths = ["/home/jon/.ssh/id_agenix"];
   age.secrets.ghi-token.file = "${self}/secrets/ghi-token.age";
+  age.secrets.jira-token.file = "${self}/secrets/jira-token.age";
 
   programs.git.settings.ghi.token =
     "!${pkgs.coreutils}/bin/cat ${config.age.secrets.ghi-token.path}";
+
+  home.sessionVariables.JIRA_API_TOKEN =
+    "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.jira-token.path})";
 
   dconf.enable = false;
 

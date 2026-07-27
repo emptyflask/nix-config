@@ -15,4 +15,5 @@ in {
 
   # personal
   "secrets/ghi-token.age".publicKeys = [jonAgenix];
+  "secrets/jira-token.age".publicKeys = [jonAgenix];
 }
