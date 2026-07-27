@@ -56,6 +56,39 @@
         "type": "github"
       }
     },
+    "conform-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1739657764,
+        "narHash": "sha256-H9JLiRtixDKDN50SH6gkqgjlhLzHMAaOT1pc69ZFdco=",
+        "owner": "stevearc",
+        "repo": "conform.nvim",
+        "rev": "a6f5bdb78caa305496357d17e962bbc4c0b392e2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stevearc",
+        "ref": "v9.0.0",
+        "repo": "conform.nvim",
+        "type": "github"
+      }
+    },
+    "copilot-chat-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781737943,
+        "narHash": "sha256-jBxtWF4GNSXB+/xUnUWs0RzSXAkQKa5cd3mljTHuarw=",
+        "owner": "CopilotC-Nvim",
+        "repo": "CopilotChat.nvim",
+        "rev": "f0c2a23ab79dc295f5e0eef0d8b587a39020c852",
+        "type": "github"
+      },
+      "original": {
+        "owner": "CopilotC-Nvim",
+        "repo": "CopilotChat.nvim",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -285,6 +318,26 @@
         "ref": "release-26.05",
         "repo": "home-manager",
         "type": "github"
+      }
+    },
+    "neovim-plugins": {
+      "inputs": {
+        "conform-nvim": "conform-nvim",
+        "copilot-chat-nvim": "copilot-chat-nvim",
+        "nvim-lsp-selection-range": "nvim-lsp-selection-range",
+        "ruby-code-actions": "ruby-code-actions",
+        "supermaven-nvim": "supermaven-nvim",
+        "ts-node-action": "ts-node-action"
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-RNCmg3p4nBUuUC1F82YrEYCmAx+zzh4EzqpLcnWHk1g=",
+        "path": "inputs/neovim-plugins",
+        "type": "path"
+      },
+      "original": {
+        "path": "inputs/neovim-plugins",
+        "type": "path"
       }
     },
     "nix-index-database": {
@@ -612,6 +665,22 @@
         "type": "github"
       }
     },
+    "nvim-lsp-selection-range": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666531967,
+        "narHash": "sha256-58OpTcuZf6liiWU5TA35sN8dIbHNyQ+y9oD42nxx0OU=",
+        "owner": "camilledejoye",
+        "repo": "nvim-lsp-selection-range",
+        "rev": "7fd411a1df5c9a219fcd9d0914da55fe0e584c7b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "camilledejoye",
+        "repo": "nvim-lsp-selection-range",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -620,6 +689,7 @@
         "flatpaks": "flatpaks",
         "home-manager": "home-manager_2",
         "home-manager-unstable": "home-manager-unstable",
+        "neovim-plugins": "neovim-plugins",
         "nix-index-database": "nix-index-database",
         "nixos-anywhere": "nixos-anywhere",
         "nixos-apple-silicon": "nixos-apple-silicon",
@@ -629,6 +699,22 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "yazi": "yazi"
+      }
+    },
+    "ruby-code-actions": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666978753,
+        "narHash": "sha256-YHW8aIDV/KYAzidsFk0ridXs7WsHhY3eqtOLBjzApnA=",
+        "owner": "semanticart",
+        "repo": "ruby-code-actions.nvim",
+        "rev": "a6f4c95063e2034f85913821475f8761bb4aff0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "semanticart",
+        "repo": "ruby-code-actions.nvim",
+        "type": "github"
       }
     },
     "rust-overlay": {
@@ -649,6 +735,22 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "supermaven-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728314930,
+        "narHash": "sha256-1z3WKIiikQqoweReUyK5O8MWSRN5y95qcxM6qzlKMME=",
+        "owner": "supermaven-inc",
+        "repo": "supermaven-nvim",
+        "rev": "07d20fce48a5629686aefb0a7cd4b25e33947d50",
+        "type": "github"
+      },
+      "original": {
+        "owner": "supermaven-inc",
+        "repo": "supermaven-nvim",
         "type": "github"
       }
     },
@@ -715,6 +817,22 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "ts-node-action": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768548749,
+        "narHash": "sha256-ilTbewYu3JiZ9peM/h+U5ZTjs589WnV3v7jIcEEny6Q=",
+        "owner": "ckolkey",
+        "repo": "ts-node-action",
+        "rev": "dda34b5b440a4f1137f8e815756a19cf655b516f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ckolkey",
+        "repo": "ts-node-action",
         "type": "github"
       }
     },

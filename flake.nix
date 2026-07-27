@@ -48,7 +48,7 @@
     };
     yazi.url = "github:sxyazi/yazi";
 
-    # neovim-plugins.url = "path:inputs/neovim-plugins";
+    neovim-plugins.url = "path:inputs/neovim-plugins";
   };
   nixConfig = {
     extra-substituters = [
