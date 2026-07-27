@@ -13,13 +13,11 @@
     ../../nixos/users
     ../common.nix
     ./samba.nix
-    inputs.nixos-hardware.nixosModules.raspberry-pi-4
   ];
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
   boot.tmp.useTmpfs = true;
-  boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_rpi4;
   boot.supportedFilesystems = lib.mkForce ["vfat" "btrfs" "tmpfs"];
 
   nixpkgs = {
@@ -40,6 +38,13 @@
   nix.settings.trusted-public-keys = [
     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
   ];
+
+  # nixpkgs-flake.nix auto-registers the nixpkgs used to build this system
+  # (nixos-raspberrypi's own pinned nixpkgs input, since planck is built via
+  # nixos-raspberrypi.lib.nixosSystem) as nix.registry.nixpkgs.
+  # common.nix also registers all flake inputs including the top-level nixpkgs input.
+  # Use mkForce to let the auto-registration win for this host.
+  nix.registry.nixpkgs = lib.mkForce {flake = inputs.nixos-raspberrypi.inputs.nixpkgs;};
 
   networking = {
     hostName = "planck";
@@ -180,13 +185,13 @@
     dynamicConfigOptions = {
       http.routers = {
         pihole = {
-          rule = "Host(`pi.hole`) || Host(`pihole.lan`)";
+          rule = "Host(`pi.hole`) || Host(`pihole.lan`) || Host(`pihole.planck.lan`)";
           entryPoints = ["websecure"];
           service = "pihole";
           tls.certResolver = "myresolver";
         };
         nodeRed = {
-          rule = "Host(`node-red.lan`)";
+          rule = "Host(`node-red.planck.lan`)";
           entryPoints = ["websecure"];
           service = "nodeRed";
           tls.certResolver = "myresolver";
@@ -209,6 +214,8 @@
 
   time.timeZone = "America/Chicago";
 
+  age.secrets.pihole-env.file = ../../secrets/pihole.env.age;
+
   virtualisation = {
     oci-containers = {
       backend = "podman";
@@ -219,11 +226,11 @@
           ports = ["53:53/tcp" "53:53/udp" "8080:80/tcp"];
           environment = {
             TZ = "America/Chicago";
-            FTLCONF_webserver_api_password = "piholio";
             FTLCONF_dns_listeningMode = "all";
             FTLCONF_dns_reply_host_force4 = "true";
             FTLCONF_dns_reply_host_IPv4 = "10.9.8.6";
           };
+          environmentFiles = [config.age.secrets.pihole-env.path];
           volumes = [
             "/var/lib/pihole/etc-pihole:/etc/pihole"
             "/var/lib/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
