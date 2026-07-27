@@ -149,59 +149,14 @@
 
   services.rpcbind.enable = true;
 
-  services.traefik = {
+  services.caddy = {
     enable = true;
-    staticConfigOptions = {
-      entryPoints = {
-        web = {
-          address = ":80";
-          asDefault = true;
-          # http.redirections.entrypoint = {
-          #   to = "websecure";
-          #   scheme = "https";
-          # };
-        };
-        websecure = {
-          address = ":443";
-          asDefault = true;
-          http.tls.certResolver = "letsencrypt";
-        };
-      };
-      providers.docker = {
-        endpoint = "unix:///run/podman/podman.sock";
-        exposedByDefault = false;
-      };
-      certificatesResolvers.myresolver.acme = {
-        email = "jon@emptyflask.net";
-        storage = "${config.services.traefik.dataDir}/acme.json";
-        httpChallenge.entryPoint = "web";
-      };
-      # tls.stores.default.defaultCertificate = {
-      #   certFile = config.services.localCA.certFilePath;
-      #   keyFile  = config.services.localCA.keyFilePath;
-      # };
-    };
-
-    dynamicConfigOptions = {
-      http.routers = {
-        pihole = {
-          rule = "Host(`pi.hole`) || Host(`pihole.lan`) || Host(`pihole.planck.lan`)";
-          entryPoints = ["websecure"];
-          service = "pihole";
-          tls.certResolver = "myresolver";
-        };
-        nodeRed = {
-          rule = "Host(`node-red.planck.lan`)";
-          entryPoints = ["websecure"];
-          service = "nodeRed";
-          tls.certResolver = "myresolver";
-        };
-      };
-
-      http.services = {
-        pihole.loadBalancer.servers = [{url = "http://127.0.0.1:8080";}];
-        nodeRed.loadBalancer.servers = [{url = "http://127.0.0.1:1880";}];
-      };
+    virtualHosts = {
+      "pi.hole:80".extraConfig = "reverse_proxy http://localhost:8080";
+      "pihole.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
+      "pihole.planck.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
+      # nodeRed: container is currently disabled, see virtualisation.oci-containers below
+      # "node-red.planck.lan:80".extraConfig = "reverse_proxy http://localhost:1880";
     };
   };
 
@@ -209,7 +164,6 @@
     "d /var/lib/nodered 0755 root root -"
     "d /var/lib/pihole/etc-pihole 0755 root root -"
     "d /var/lib/pihole/etc-dnsmasq.d 0755 root root -"
-    "d /var/lib/traefik 0700 traefik traefik -"
   ];
 
   time.timeZone = "America/Chicago";
