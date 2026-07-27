@@ -18,6 +18,12 @@ let
 in {
   inherit imports;
 
+  age.identityPaths = [ "/Users/jonroberts/.ssh/id_agenix" ];
+  age.secrets.ghi-token.file = ../../secrets/ghi-token.age;
+
+  programs.git.settings.ghi.token =
+    "!${pkgs.coreutils}/bin/cat ${config.age.secrets.ghi-token.path}";
+
   home = {
     username = "jonroberts";
     homeDirectory = "/Users/jonroberts";

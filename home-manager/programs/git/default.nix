@@ -110,8 +110,6 @@
 
       credential.helper = "${pkgs.pass-git-helper}/bin/pass-git-helper";
       github.user = "emptyflask";
-      ghi.token =
-        "!${pkgs.pass}/bin/pass api.github.com | ${pkgs.coreutils}/bin/head -1";
 
       pull.ff = "only";
       push = {

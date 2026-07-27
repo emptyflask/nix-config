@@ -57,6 +57,7 @@ in {
             users.jon = ./hosts/kepler/home.nix;
             extraSpecialArgs = {inherit inputs self;};
             sharedModules = [
+              agenix.homeManagerModules.default
               inputs.nix-index-database.homeModules.nix-index
             ];
           };
@@ -89,6 +90,7 @@ in {
       system = "aarch64-linux";
       specialArgs = {inherit inputs outputs nixos-raspberrypi;};
       modules = [
+        agenix.nixosModules.default
         nixos-raspberrypi.nixosModules.raspberry-pi-4.base
         ./hosts/planck
         home-manager.nixosModules.home-manager
@@ -111,14 +113,13 @@ in {
     "jon@gaudi" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-darwin;
       extraSpecialArgs = {inherit inputs outputs;};
-      modules = [./hosts/gaudi/home.nix];
+      modules = [agenix.homeManagerModules.default ./hosts/gaudi/home.nix];
     };
 
     "jon@kepler" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = {inherit inputs outputs;};
-      modules = [./hosts/kepler/home.nix];
+      extraSpecialArgs = {inherit inputs outputs self;};
+      modules = [agenix.homeManagerModules.default ./hosts/kepler/home.nix];
     };
-
   };
 }
