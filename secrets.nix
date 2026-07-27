@@ -11,6 +11,7 @@ in {
   # services
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jonAgenix];
   "secrets/pihole.env.age".publicKeys = [hosts.newton hosts.planck jonAgenix];
+  "secrets/couchdb-admin-pass.age".publicKeys = [hosts.newton jonAgenix];
 
   # personal
   "secrets/ghi-token.age".publicKeys = [jonAgenix];

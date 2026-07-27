@@ -4,7 +4,13 @@
   lib,
   ...
 }: {
-  imports = [./caddy.nix ./samba.nix];
+  imports = [./caddy.nix ./pihole.nix ./samba.nix];
+
+  age.secrets.couchdb-admin-pass = {
+    file = ../../../secrets/couchdb-admin-pass.age;
+    owner = "couchdb";
+    group = "couchdb";
+  };
 
   services = {
     audiobookshelf = {
@@ -13,7 +19,7 @@
 
     couchdb = {
       enable = true;
-      adminPass = "couchdb";
+      extraConfigFiles = [config.age.secrets.couchdb-admin-pass.path];
     };
 
     home-assistant = {
@@ -54,16 +60,6 @@
       };
     };
 
-    pihole-ftl = {
-      enable = true;
-      settings.dns.upstreams = ["1.1.1.2" "1.0.0.2"];
-    };
-
-    pihole-web = {
-      enable = true;
-      # Listen on 8080 so Traefik can own port 80
-      ports = [8080];
-    };
   };
 
   systemd.tmpfiles.rules = [
