@@ -69,6 +69,7 @@ in {
       specialArgs = {inherit inputs outputs;};
       modules = [
         ./hosts/newton
+        agenix.nixosModules.default
         inputs.home-manager-unstable.nixosModules.home-manager
         {
           home-manager = {
