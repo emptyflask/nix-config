@@ -342,6 +342,9 @@ in {
   programs.firefox = {
     enable = true;
     configPath = "${config.xdg.configHome}/mozilla/firefox";
+    # Trust the OS cert store (incl. mkcert's rootCA.pem, wired in via
+    # security.pki.certificateFiles) instead of Firefox's own NSS store.
+    policies.Certificates.ImportEnterpriseRoots = true;
   };
 
   programs.ncspot = {
