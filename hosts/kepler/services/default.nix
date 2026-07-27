@@ -43,7 +43,17 @@
       gnome-keyring.enable = true;
     };
 
-    flatpak.enable = true;
+    flatpak = {
+      enable = true;
+      remotes = {
+        "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+        "flathub-beta" = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
+      };
+      packages = [
+        # "flathub:app/io.github.lullabyX.sone//stable"
+      ];
+    };
+
     gvfs.enable = true; # automount
     kbfs.enable = true; # $HOME/keybase
     keybase.enable = true;
@@ -87,8 +97,8 @@
     };
 
     ollama = {
-      enable = true;
-      acceleration = "cuda";
+      enable = false;
+      package = pkgs.ollama-cuda;
     };
 
     opensearch = {
@@ -100,7 +110,7 @@
     pcscd.enable = true; # Smartcard reader
 
     pipewire = {
-      enable = false;
+      enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
@@ -118,7 +128,7 @@
     protonmail-bridge.enable = true;
 
     pulseaudio = {
-      enable = true;
+      enable = false;
       support32Bit = true;
     };
 
@@ -208,11 +218,11 @@
   systemd.services.NetworkManager-wait-online.enable = false;
 
   imports = [
+    ./caddy.nix
     ./hoogle
     ./jellyfin.nix
     ./openssh.nix
     ./postgresql.nix
-    ./traefik.nix
     ./xserver.nix
   ];
 }

@@ -4,6 +4,7 @@
   home-manager,
   nixos-raspberrypi,
   agenix,
+  flatpaks,
   claude-code,
   ...
 } @ inputs: let
@@ -47,6 +48,7 @@ in {
       modules = [
         ./hosts/kepler
         agenix.nixosModules.default
+        flatpaks.nixosModules.default
         home-manager.nixosModules.home-manager
         {
           home-manager = {
@@ -54,22 +56,41 @@ in {
             useUserPackages = true;
             users.jon = ./hosts/kepler/home.nix;
             extraSpecialArgs = {inherit inputs self;};
+            sharedModules = [
+              agenix.homeManagerModules.default
+              inputs.nix-index-database.homeModules.nix-index
+            ];
           };
         }
       ];
     };
 
     newton = inputs.nixpkgs-unstable.lib.nixosSystem {
-      system = "aarch64-linux";
+      system = "x86_64-linux";
       specialArgs = {inherit inputs outputs;};
-      pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
-      modules = [./hosts/newton];
+      modules = [
+        ./hosts/newton
+        agenix.nixosModules.default
+        inputs.home-manager-unstable.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.jon = ./hosts/newton/home.nix;
+            extraSpecialArgs = {inherit inputs outputs;};
+            sharedModules = [
+              inputs.nix-index-database.homeModules.nix-index
+            ];
+          };
+        }
+      ];
     };
 
     planck = nixos-raspberrypi.lib.nixosSystem {
       system = "aarch64-linux";
       specialArgs = {inherit inputs outputs nixos-raspberrypi;};
       modules = [
+        agenix.nixosModules.default
         nixos-raspberrypi.nixosModules.raspberry-pi-4.base
         ./hosts/planck
         home-manager.nixosModules.home-manager
@@ -92,19 +113,13 @@ in {
     "jon@gaudi" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-darwin;
       extraSpecialArgs = {inherit inputs outputs;};
-      modules = [./hosts/gaudi/home.nix];
+      modules = [agenix.homeManagerModules.default ./hosts/gaudi/home.nix];
     };
 
     "jon@kepler" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = {inherit inputs outputs;};
-      modules = [./hosts/kepler/home.nix];
-    };
-
-    "jon@newton" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-linux;
-      extraSpecialArgs = {inherit inputs outputs;};
-      modules = [./hosts/newton/home.nix];
+      extraSpecialArgs = {inherit inputs outputs self;};
+      modules = [agenix.homeManagerModules.default ./hosts/kepler/home.nix];
     };
   };
 }

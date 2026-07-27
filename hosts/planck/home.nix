@@ -1,6 +1,10 @@
-{ inputs, lib, pkgs, self, ... }:
-
-let
+{
+  inputs,
+  lib,
+  pkgs,
+  self,
+  ...
+}: let
   imports = [
     "${self}/home-manager/environment.nix"
     "${self}/home-manager/programs/git"
@@ -8,7 +12,6 @@ let
     "${self}/home-manager/programs/vim"
     "${self}/home-manager/programs/zsh"
   ];
-
 in {
   inherit imports;
 
@@ -22,17 +25,16 @@ in {
       ltrace # lib trace
       strace # system call trace
       alejandra # format nix
-      nixfmt-classic # format nix
+      nixfmt # format nix
     ];
 
     stateVersion = "25.05";
   };
 
-  programs = { };
+  programs = {};
 
   xdg = {
     enable = true;
     userDirs.enable = true;
   };
-
 }

@@ -64,5 +64,5 @@ main = do
       spawnOnOnce "3" Paths.slack
       spawnOnOnce "4" Paths.kitty
       spawnOnOnce "3" Paths.signal
-      spawnOnOnce "9" Paths.spotify
+      spawnOnOnce "9" Paths.sone
       setWMName "LG3D" -- Java app focus fix

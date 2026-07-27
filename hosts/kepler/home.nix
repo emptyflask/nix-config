@@ -1,6 +1,6 @@
 {
+  config,
   inputs,
-  lib,
   pkgs,
   self,
   ...
@@ -8,18 +8,20 @@
   location = import "${self}/home-manager/locations/oakwood.nix";
 
   background = "$HOME/.config/wallpaper/current";
+
+  unstable =
+    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in {
   imports = [
     "${self}/home-manager/common.nix"
     "${self}/home-manager/environment.nix"
-    "${self}/home-manager/accounts"
     "${self}/home-manager/services/dunst"
     "${self}/home-manager/services/mpd"
-    "${self}/home-manager/services/spotifyd"
     "${self}/home-manager/services/trayer"
     "${self}/home-manager/programs/alacritty"
     "${self}/home-manager/programs/git"
     "${self}/home-manager/programs/kitty"
+    "${self}/home-manager/programs/wezterm"
     "${self}/home-manager/programs/neomutt"
     "${self}/home-manager/programs/neovim"
     "${self}/home-manager/programs/rofi"
@@ -32,6 +34,16 @@ in {
     "${self}/home-manager/xmobar"
     "${self}/home-manager/xresources"
   ];
+
+  age.identityPaths = ["/home/jon/.ssh/id_agenix"];
+  age.secrets.ghi-token.file = "${self}/secrets/ghi-token.age";
+  age.secrets.jira-token.file = "${self}/secrets/jira-token.age";
+
+  programs.git.settings.ghi.token =
+    "!${pkgs.coreutils}/bin/cat ${config.age.secrets.ghi-token.path}";
+
+  home.sessionVariables.JIRA_API_TOKEN =
+    "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.jira-token.path})";
 
   dconf.enable = false;
 
@@ -46,6 +58,10 @@ in {
     font = {
       name = "Noto Sans 10";
       package = pkgs.noto-fonts;
+    };
+    gtk4.theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
     };
     theme = {
       name = "Adwaita-dark";
@@ -102,21 +118,22 @@ in {
       pandoc # document converter
       pavucontrol
       postman
-      protonvpn-gui
+      proton-vpn
       qalculate-gtk # calculator
       qemu
       scowl # spellchecker / dictionary
+      unstable.sone # tidal gui
       st
-      xdg-utils
-      whois
-      (xfce.thunar.override {
+      (thunar.override {
         thunarPlugins = with pkgs; [
-          xfce.thunar-volman
-          xfce.thunar-archive-plugin
+          thunar-volman
+          thunar-archive-plugin
         ];
       })
-      xfce.xfconf
-      xfce.exo
+      whois
+      xdg-utils
+      xfconf
+      xfce4-exo
       yubioath-flutter
       yubikey-personalization
       zeal # docs (like dash)
@@ -201,7 +218,6 @@ in {
       mpv
       ncmpcpp
       smplayer
-      spotify
       vlc
 
       # programming - general
@@ -218,13 +234,13 @@ in {
       lazydocker
       ltrace # lib trace
       niv # nix channel config
-      nixfmt-classic # format nix
+      nixfmt # format nix
       shellcheck # shell script analyzer
       sourceHighlight
       strace # system call trace
       tig # git tui frontend
       uncrustify # format c/c++/c#/java/etc
-      universal-ctags
+      # universal-ctags
       vscode
 
       # programming - nix
@@ -235,11 +251,11 @@ in {
 
       # programming - javascript
       biome
+      diagnostic-languageserver
+      eslint_d
       nodejs
-      nodePackages.diagnostic-languageserver
-      nodePackages.eslint_d
-      nodePackages.typescript
-      nodePackages.typescript-language-server
+      typescript
+      typescript-language-server
 
       # programming - haskell
       ghc
@@ -286,6 +302,8 @@ in {
     stateVersion = "21.05";
   };
 
+  programs.nix-index.enableZshIntegration = true;
+
   programs.beets = {
     enable = true;
     mpdIntegration.enableStats = true;
@@ -321,7 +339,13 @@ in {
     icons = "auto";
   };
 
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
+    # Trust the OS cert store (incl. mkcert's rootCA.pem, wired in via
+    # security.pki.certificateFiles) instead of Firefox's own NSS store.
+    policies.Certificates.ImportEnterpriseRoots = true;
+  };
 
   programs.ncspot = {
     enable = true;
@@ -388,15 +412,10 @@ in {
       fadeDelta = 5;
       fadeSteps = [4.0e-2 4.0e-2];
       shadow = false;
-      backend = "xrender";
-      vSync = true;
-      # vSync        = "opengl";
+      backend = "glx";
+      vSync = false;
       settings = {
-        glx-no-rebind-pixmap = true;
-        glx-no-stencil = true;
-        # glx-copy-from-front   = false;
         use-damage = true;
-        xrender-sync-fence = true;
       };
     };
 
@@ -427,6 +446,7 @@ in {
   xdg = {
     enable = true;
     userDirs.enable = true;
+    userDirs.setSessionVariables = false;
   };
 
   xsession = {

@@ -25,6 +25,12 @@
     ];
   };
 
+  fileSystems."/mnt/newton/media" = {
+    device = "10.9.8.10:/media";
+    fsType = "nfs";
+    options = ["nfsvers=4" "nofail" "x-systemd.automount"];
+  };
+
   fileSystems."/media/work" = {
     device = "/dev/disk/by-uuid/9c11d22f-1bf9-44b8-b60b-ddcd592bc011";
     fsType = "btrfs";

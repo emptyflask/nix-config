@@ -5,11 +5,6 @@
     openFirewall = true;
   };
 
-  services.jellyseerr = {
-    enable = true;
-    openFirewall = true;
-  };
-
   services.lidarr = {
     enable = true;
     group = "media";
@@ -24,6 +19,11 @@
   services.radarr = {
     enable = true;
     group = "media";
+    openFirewall = true;
+  };
+
+  services.seerr = {
+    enable = true;
     openFirewall = true;
   };
 

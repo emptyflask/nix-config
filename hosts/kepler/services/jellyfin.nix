@@ -1,6 +1,9 @@
-{ pkgs, lib, config, ... }:
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   services.jellyfin = {
     enable = true;
     openFirewall = true;
@@ -19,7 +22,7 @@
   # };
 
   systemd.services.jellyfin.environment.LIBVA_DRIVER_NAME = "iHD";
-  environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; };
+  environment.sessionVariables = {LIBVA_DRIVER_NAME = "iHD";};
 
   hardware.graphics = {
     enable = true;

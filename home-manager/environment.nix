@@ -6,8 +6,6 @@
 
     ACK_COLOR_MATCH = "red";
     EDITOR = "nvim";
-    JIRA_API_TOKEN =
-      "***REDACTED***";
     LESS = "-F -R -M -i";
     LESSOPEN = "| ${pkgs.sourceHighlight}/bin/src-hilite-lesspipe.sh %s";
     MANPAGER = "nvim +Man!";
