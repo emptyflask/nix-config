@@ -26,7 +26,7 @@ with pkgs; {
       fzf-vim
       fzf-wrapper
       gruvbox-community
-      hlint-refactor-vim
+      # hlint-refactor-vim
       lightline-vim
       neco-ghc
       neosnippet-snippets

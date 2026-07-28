@@ -9,6 +9,6 @@ vim.g.haskell_backpack = 1                -- enable highlighting of backpack key
 -- vim.g.haskell_classic_highlighting = 1   -- classic highlighting (commented out)
 
 -- HLint refactor settings
-vim.g.hlintRefactor = {
-  disableDefaultKeybindings = 1
-}
+-- vim.g.hlintRefactor = {
+--   disableDefaultKeybindings = 1
+-- }

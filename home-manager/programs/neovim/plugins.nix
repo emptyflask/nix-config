@@ -334,7 +334,7 @@
     # haskell-vim
     haskell-tools-nvim
     # neco-ghc
-    hlint-refactor-vim
+    # hlint-refactor-vim
     # intero-neovim
     ron-vim
     vim-stylish-haskell
