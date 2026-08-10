@@ -34,6 +34,7 @@
     agenix.url = "github:ryantm/agenix";
     claude-code.url = "github:sadjow/claude-code-nix";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
+    hermes-agent.url = "github:NousResearch/hermes-agent";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";

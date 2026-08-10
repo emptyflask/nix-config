@@ -44,13 +44,14 @@ in {
       (viteProxy "id.sxsw.localhost" 5000 3036)
       (viteProxy "id.sxswedu.localhost" 5000 3036)
       (viteSslProxy "cart.sxsw.localhost" 5001 3038)
-      (viteProxy "chronos.sxsw.localhost" 5005 3037)
-
       (proxy "panelpicker.sxsw.localhost" 5003)
       (proxy "distro.sxsw.localhost" 5004)
+      (viteProxy "chronos.sxsw.localhost" 5005 3037)
       (proxy "sales.sxsw.localhost" 5006)
-      (proxy "image-manager.sxsw.localhost" 5010)
-      (proxy "logger.sxsw.localhost" 5011)
+      (viteProxy "image-manager.sxsw.localhost" 5010 3040)
+      (proxy "imgproxy.sxsw.localhost" 8080)
+      (proxy "minio.sxsw.localhost" 9000)
+      (proxy "test.sxsw.localhost" 8999)
 
       (proxy "audiobookshelf.kepler.lan" config.services.audiobookshelf.port)
       (proxy "bazarr.kepler.lan" config.services.bazarr.listenPort)

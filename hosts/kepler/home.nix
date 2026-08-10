@@ -39,11 +39,9 @@ in {
   age.secrets.ghi-token.file = "${self}/secrets/ghi-token.age";
   age.secrets.jira-token.file = "${self}/secrets/jira-token.age";
 
-  programs.git.settings.ghi.token =
-    "!${pkgs.coreutils}/bin/cat ${config.age.secrets.ghi-token.path}";
+  programs.git.settings.ghi.token = "!${pkgs.coreutils}/bin/cat ${config.age.secrets.ghi-token.path}";
 
-  home.sessionVariables.JIRA_API_TOKEN =
-    "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.jira-token.path})";
+  home.sessionVariables.JIRA_API_TOKEN = "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.jira-token.path})";
 
   dconf.enable = false;
 
@@ -92,6 +90,7 @@ in {
       # _1password
       # _1password-gui
       alsa-utils
+      awscli2
       bmon # network monitor
       # burpsuite  # network security tool
       bruno # api tool
@@ -106,7 +105,6 @@ in {
       google-chrome
       httpie
       jmtpfs # Media Transfer Protocol (usb device filesystems)
-      joplin-desktop # notes
       keybase
       keybase-gui
       kitty # terminal
@@ -118,6 +116,7 @@ in {
       pandoc # document converter
       pavucontrol
       postman
+      proton-pass
       proton-vpn
       qalculate-gtk # calculator
       qemu
@@ -130,7 +129,9 @@ in {
           thunar-archive-plugin
         ];
       })
+      vbindiff # Visual Binary Diff
       whois
+      wireguard-tools
       xdg-utils
       xfconf
       xfce4-exo
@@ -205,18 +206,22 @@ in {
       vista-fonts
 
       # graphics / print
+      gimp
       imagemagick
       inkscape
+      krita
 
       # media
       # handbrake           # dvd ripper
       audacious # music player
       calibre # e-book library
       evince # another PDF viewer
+      filebot # media renamer
       mpc
       mplayer
       mpv
       ncmpcpp
+      rmpc # rusty music player client
       smplayer
       vlc
 
@@ -233,7 +238,6 @@ in {
       html-tidy # format html
       lazydocker
       ltrace # lib trace
-      niv # nix channel config
       nixfmt # format nix
       shellcheck # shell script analyzer
       sourceHighlight
@@ -252,29 +256,27 @@ in {
       # programming - javascript
       biome
       diagnostic-languageserver
-      eslint_d
       nodejs
       typescript
       typescript-language-server
 
       # programming - haskell
-      ghc
-      cabal2nix
-      cabal-install
-      # haskellPackages.apply-refact
+      # ghc
+      # cabal2nix
+      # cabal-install
       haskellPackages.ghcid
       haskellPackages.haskell-language-server
       haskellPackages.hlint
       haskellPackages.stylish-haskell
-      ormolu
-      stack
+      # ormolu
+      # stack
 
       # programming - python
       python3Packages.pynvim # for neovim
 
       # programming - ruby
       bundix
-      jekyll
+      # jekyll
       ruby
       ruby.gems.pry
 
@@ -282,9 +284,6 @@ in {
       cargo
       rustc
       rustfmt
-
-      # chat / email
-      neomutt # CLI mail
     ];
 
     pointerCursor = {

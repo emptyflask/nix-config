@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  imports = [./caddy.nix ./pihole.nix ./samba.nix];
+  imports = [./caddy.nix ./hermes.nix ./pihole.nix ./samba.nix];
 
   age.secrets.couchdb-admin-pass = {
     file = ../../../secrets/couchdb-admin-pass.age;
@@ -59,7 +59,6 @@
         X11Forwarding = false;
       };
     };
-
   };
 
   systemd.tmpfiles.rules = [

@@ -1,11 +1,11 @@
 {
-  self,
-  nixpkgs,
-  home-manager,
-  nixos-raspberrypi,
   agenix,
   flatpaks,
-  claude-code,
+  hermes-agent,
+  home-manager,
+  nixos-raspberrypi,
+  nixpkgs,
+  self,
   ...
 } @ inputs: let
   inherit (self) outputs;
@@ -71,6 +71,7 @@ in {
       modules = [
         ./hosts/newton
         agenix.nixosModules.default
+        hermes-agent.nixosModules.default
         inputs.home-manager-unstable.nixosModules.home-manager
         {
           home-manager = {

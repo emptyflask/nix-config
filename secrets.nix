@@ -9,9 +9,10 @@ let
   jonAgenix = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHVg6SqixEZUfr6qNNWL58yo8WT/Lz1Io+1xxh6MCHiK";
 in {
   # services
+  "secrets/couchdb-admin-pass.age".publicKeys = [hosts.newton jonAgenix];
+  "secrets/hermes.env.age".publicKeys = [hosts.newton jonAgenix];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jonAgenix];
   "secrets/pihole.env.age".publicKeys = [hosts.newton hosts.planck jonAgenix];
-  "secrets/couchdb-admin-pass.age".publicKeys = [hosts.newton jonAgenix];
 
   # personal
   "secrets/ghi-token.age".publicKeys = [jonAgenix];

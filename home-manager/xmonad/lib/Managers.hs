@@ -109,6 +109,7 @@ myManageHook =
         ("screenshot", doFloat),
         ("unit-editor", doFloat),
         ("yad-calendar", doFloat),
+        ("annotate_toolbar", doIgnore),
         ("zoom_linux_float_video_window", doIgnore)
       ]
 
