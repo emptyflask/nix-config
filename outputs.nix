@@ -2,6 +2,7 @@
   agenix,
   flatpaks,
   hermes-agent,
+  hermes-webui,
   home-manager,
   nixos-raspberrypi,
   nixpkgs,
@@ -72,6 +73,7 @@ in {
         ./hosts/newton
         agenix.nixosModules.default
         hermes-agent.nixosModules.default
+        hermes-webui.nixosModules.default
         inputs.home-manager-unstable.nixosModules.home-manager
         {
           home-manager = {

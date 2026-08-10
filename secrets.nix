@@ -11,6 +11,7 @@ in {
   # services
   "secrets/couchdb-admin-pass.age".publicKeys = [hosts.newton jonAgenix];
   "secrets/hermes.env.age".publicKeys = [hosts.newton jonAgenix];
+  "secrets/hermes-webui.env.age".publicKeys = [hosts.newton jonAgenix];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jonAgenix];
   "secrets/pihole.env.age".publicKeys = [hosts.newton hosts.planck jonAgenix];
 

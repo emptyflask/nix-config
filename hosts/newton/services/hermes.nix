@@ -1,29 +1,105 @@
-{config, ...}: {
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}: let
+  system = pkgs.stdenv.hostPlatform.system;
+
+  # Dependency groups the agent's venv is built with. The hermes-agent module
+  # bakes these into the package it runs. The webui runs the agent host-native
+  # from its own package reference (HERMES_WEBUI_PYTHON = the venv's python3), so
+  # it must be built with the SAME groups — honcho in particular, since
+  # settings.memory.provider = "honcho" fails at runtime without it.
+  dependencyGroups = ["firecrawl" "hindsight" "honcho" "messaging"];
+
+  # Pinned Python libraries baked into the sealed venv (reproducible). Add
+  # nixpkgs libs here for anything you want guaranteed/offline-buildable;
+  # arbitrary PyPI libs the agent grabs on the fly go to the lazy-install vendor
+  # dir instead (HERMES_LAZY_INSTALL_TARGET, set below). Skips libs hermes already
+  # bundles as core deps (requests, httpx, rich, Pillow, markdown, pydantic, …).
+  extraPythonPackages = with pkgs.python3Packages; [
+    numpy
+    pandas # numbers + tabular data; compiled, so Nix avoids fragile wheels on this CPU
+    beautifulsoup4
+    lxml # HTML/XML scraping + parsing (lxml is compiled)
+    pypdf
+    openpyxl # PDF text extraction + Excel .xlsx read/write
+    python-dateutil
+    tabulate # flexible date parsing + text/markdown table formatting
+  ];
+
+  # Reproduces exactly the package the hermes-agent module builds internally
+  # (default.override { inherit extraDependencyGroups extraPythonPackages; }), so
+  # the agent service, webui, and dashboard all share ONE venv in the store
+  # instead of drifting — the webui/dashboard run the agent host-native from this
+  # same reference, so they must be built with identical groups + python libs.
+  hermesAgentPkg = inputs.hermes-agent.packages.${system}.default.override {
+    extraDependencyGroups = dependencyGroups;
+    inherit extraPythonPackages;
+  };
+in {
   age.secrets.hermes-env.file = ../../../secrets/hermes.env.age;
+  age.secrets.hermes-webui-env.file = ../../../secrets/hermes-webui.env.age;
 
   services.hermes-agent = {
     enable = true;
     addToSystemPackages = true;
-    container = {
-      enable = true;
-      hostUsers = ["jon"];
-    };
     environmentFiles = [config.age.secrets.hermes-env.path];
+    mcpServers = {
+      atlassian = {
+        url = "https://mcp.atlassian.com/v1/mcp/authv2";
+        auth = "oauth";
+      };
+    };
+    extraDependencyGroups = dependencyGroups;
+    # CLI tools on the agent's PATH. uv is here so hermes's lazy-install ladder
+    # (resolve_uv() or shutil.which("uv")) can find it; the nixpkgs uv is
+    # patchelf'd for NixOS, unlike hermes's download-a-standalone-binary
+    # fallback. python3 here is a general-purpose interpreter; Python *libraries*
+    # come from extraPythonPackages (pinned) or the lazy-install vendor dir below.
+    extraPackages = with pkgs; [imagemagick jq nodejs pandoc poppler-utils python3 ruby uv];
+
+    # Pinned Python libraries (defined in the let above so hermesAgentPkg — the
+    # webui/dashboard's package — stays in sync with the agent's venv).
+    inherit extraPythonPackages;
+
+    # Runtime "vendor directory" for arbitrary PyPI libs the agent installs on
+    # the fly. hermes runs `uv pip install --target $HERMES_LAZY_INSTALL_TARGET`
+    # here (writable, persistent), then appends it to sys.path — the sealed venv
+    # still wins collisions. Sidesteps the read-only /nix/store venv. The dir is
+    # ABI-stamped, so a Python bump on rebuild auto-invalidates and repopulates.
+    environment.HERMES_LAZY_INSTALL_TARGET = "/var/lib/hermes/lazy-deps";
+
     settings = {
-      memory.provider = "honcho";
+      memory.provider = "hindsight";
       model.default = "deepseek/deepseek-v4-flash-0731";
     };
-    extraDependencyGroups = ["firecrawl" "honcho" "messaging"];
   };
 
-  # Hermes reads its persona from $HERMES_HOME/SOUL.md. In the container
-  # HERMES_HOME=/data/.hermes, and /data is bind-mounted from /var/lib/hermes,
-  # so the file must live at /var/lib/hermes/.hermes/SOUL.md. Symlink it to the
-  # store copy — /nix/store is mounted read-only in the container, so the link
-  # resolves there and the persona updates on every rebuild.
+  services.hermes-webui = {
+    enable = true;
+    host = "127.0.0.1";
+    port = 8787;
+    stateDir = "/var/lib/hermes-webui";
+    user = "hermes";
+    group = "hermes";
+    hermesHome = "/var/lib/hermes/.hermes";
+    agent.package = hermesAgentPkg;
+    environmentFiles = [config.age.secrets.hermes-webui-env.path];
+  };
+
+  users.users.jon.extraGroups = ["hermes"];
+
+  # Hermes reads its persona from $HERMES_HOME/SOUL.md. In native mode
+  # HERMES_HOME = /var/lib/hermes/.hermes (created by the hermes-agent module's
+  # tmpfiles rules). Symlink the persona to the store copy — /nix/store is
+  # readable, so the link resolves and the persona updates on every rebuild.
   systemd.tmpfiles.rules = [
-    "d /var/lib/hermes 0750 hermes hermes -"
-    "d /var/lib/hermes/.hermes 0750 hermes hermes -"
     "L+ /var/lib/hermes/.hermes/SOUL.md - - - - ${./hermes/SOUL.md}"
+    # Vendor dir for HERMES_LAZY_INSTALL_TARGET (runtime uv pip installs). setgid
+    # + group-writable so the gateway, webui, and dashboard (all run as hermes)
+    # share one target. The plugin also mkdirs it, but seed it with correct perms.
+    "d /var/lib/hermes/lazy-deps 2770 hermes hermes - -"
   ];
 }

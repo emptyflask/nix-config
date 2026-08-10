@@ -11,6 +11,7 @@
             <li><a href='http://navidrome.newton.lan'>navidrome</a></li>
             <li><a href='http://pihole.newton.lan'>pihole</a></li>
             <li><a href='http://homeassistant.newton.lan'>homeassistant</a></li>
+            <li><a href='http://hermes-webui.newton.lan'>hermes-webui</a></li>
           </ul></body></html>" 200
         }
       '';
@@ -20,6 +21,7 @@
       "pihole.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
       "homeassistant.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8123";
       "couchdb.newton.lan:80".extraConfig = "reverse_proxy http://localhost:5984";
+      "hermes-webui.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8787";
     };
   };
 }

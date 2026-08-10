@@ -35,6 +35,7 @@
     claude-code.url = "github:sadjow/claude-code-nix";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
     hermes-agent.url = "github:NousResearch/hermes-agent";
+    hermes-webui.url = "github:nesquena/hermes-webui";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
