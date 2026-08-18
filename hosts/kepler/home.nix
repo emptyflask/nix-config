@@ -118,6 +118,7 @@ in {
       postman
       proton-pass
       proton-vpn
+      pv # pipe viewer
       qalculate-gtk # calculator
       qemu
       scowl # spellchecker / dictionary

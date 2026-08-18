@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  imports = [./caddy.nix ./hermes.nix ./pihole.nix ./samba.nix];
+  imports = [./caddy.nix ./hermes.nix ./livesync.nix ./pihole.nix ./samba.nix];
 
   age.secrets.couchdb-admin-pass = {
     file = ../../../secrets/couchdb-admin-pass.age;
@@ -34,6 +34,7 @@
         http = {
           use_x_forwarded_for = true;
           trusted_proxies = ["127.0.0.1" "::1"];
+          server_port = 8123;
         };
         default_config = {};
       };
@@ -58,6 +59,13 @@
         PermitRootLogin = "no";
         X11Forwarding = false;
       };
+    };
+  };
+
+  systemd.oomd = {
+    enable = true;
+    settings.OOM = {
+      SwapUsedLimit = "90%";
     };
   };
 

@@ -11,6 +11,9 @@ in
       enable = true;
       viAlias = true;
       vimAlias = false;
+      withNodeJs = false;
+      withPython3 = false;
+      withRuby = false;
 
       initLua =
         concatFiles [./config.lua ./keymap.lua ./netrw.lua ./rename.lua];

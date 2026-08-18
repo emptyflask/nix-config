@@ -215,6 +215,13 @@
     };
   };
 
+  systemd.oomd = {
+    enable = true;
+    settings.OOM = {
+      SwapUsedLimit = "95%";
+    };
+  };
+
   systemd.services.NetworkManager-wait-online.enable = false;
 
   imports = [

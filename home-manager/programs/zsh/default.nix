@@ -49,6 +49,9 @@ in {
         gg = "${pkgs.gitui}/bin/gitui";
         grep = "grep --color=auto";
 
+        # quickly highlight text: cat ./haystack | hl needle
+        hl = "${pkgs.ripgrep}/bin/rg --passthru --";
+
         # image output in kitty terminal
         icat = "${pkgs.kitty}/bin/kitty +kitten icat";
 

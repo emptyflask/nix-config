@@ -51,6 +51,11 @@
     yazi.url = "github:sxyazi/yazi";
 
     neovim-plugins.url = "path:inputs/neovim-plugins";
+
+    livesync-cli = {
+      url = "path:inputs/livesync-cli";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
   nixConfig = {
     extra-substituters = [

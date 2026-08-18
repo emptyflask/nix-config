@@ -74,6 +74,7 @@ in {
         agenix.nixosModules.default
         hermes-agent.nixosModules.default
         hermes-webui.nixosModules.default
+        inputs.livesync-cli.nixosModules.default
         inputs.home-manager-unstable.nixosModules.home-manager
         {
           home-manager = {
