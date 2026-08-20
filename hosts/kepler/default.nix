@@ -70,8 +70,6 @@
     extraModprobeConfig = ''
       options usbcore       autosuspend=-1
     '';
-
-    zswap.enable = true;
   };
 
   console = {

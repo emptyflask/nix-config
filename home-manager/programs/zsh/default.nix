@@ -29,10 +29,7 @@ in {
     };
 
     initContent =
-      (builtins.readFile ./zshrc)
-      + ''
-        eval "$(${pkgs.fasd}/bin/fasd --init auto)"
-      '';
+      builtins.readFile ./zshrc;
 
     shellAliases =
       lsAliases

@@ -19,12 +19,12 @@
   # dir instead (HERMES_LAZY_INSTALL_TARGET, set below). Skips libs hermes already
   # bundles as core deps (requests, httpx, rich, Pillow, markdown, pydantic, …).
   extraPythonPackages = with pkgs.python3Packages; [
-    numpy
-    pandas # numbers + tabular data; compiled, so Nix avoids fragile wheels on this CPU
     beautifulsoup4
     lxml # HTML/XML scraping + parsing (lxml is compiled)
-    pypdf
+    numpy
     openpyxl # PDF text extraction + Excel .xlsx read/write
+    pandas # numbers + tabular data; compiled, so Nix avoids fragile wheels on this CPU
+    pypdf
     python-dateutil
     tabulate # flexible date parsing + text/markdown table formatting
   ];
@@ -50,6 +50,10 @@ in {
       atlassian = {
         url = "https://mcp.atlassian.com/v1/mcp/authv2";
         auth = "oauth";
+      };
+      mcpVault = {
+        command = "npx";
+        args = ["@bitbonsai/mcpvault@latest" config.services.livesync-cli.vaultPath];
       };
     };
     extraDependencyGroups = dependencyGroups;

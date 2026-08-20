@@ -54,7 +54,7 @@
     firewall = {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [22 53 80 2049];
+      allowedTCPPorts = [22 53 80 2049 config.services.home-assistant.config.http.server_port];
       allowedUDPPorts = [53 2049];
     };
   };
