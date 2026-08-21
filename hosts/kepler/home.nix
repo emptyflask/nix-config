@@ -8,11 +8,9 @@
   location = import "${self}/home-manager/locations/oakwood.nix";
 
   background = "$HOME/.config/wallpaper/current";
-
-  unstable =
-    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in {
   imports = [
+    "${self}/home-manager/claude.nix"
     "${self}/home-manager/common.nix"
     "${self}/home-manager/environment.nix"
     "${self}/home-manager/services/dunst"
@@ -83,6 +81,8 @@ in {
     };
 
     packages = with pkgs; [
+      inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default # agenix cli tool
+
       cachix
 
       # ghcide-nix.ghcide-ghc865
@@ -104,7 +104,6 @@ in {
       glow # markdown viewer
       google-chrome
       httpie
-      jmtpfs # Media Transfer Protocol (usb device filesystems)
       keybase
       keybase-gui
       kitty # terminal
@@ -122,7 +121,7 @@ in {
       qalculate-gtk # calculator
       qemu
       scowl # spellchecker / dictionary
-      unstable.sone # tidal gui
+      sone # tidal gui
       st
       (thunar.override {
         thunarPlugins = with pkgs; [
@@ -165,6 +164,7 @@ in {
       protonmail-bridge
       signal-desktop
       slack
+      telegram-desktop
       thunderbird-bin
       zoom-us
 
@@ -252,7 +252,7 @@ in {
       alejandra # format nix
 
       # programming - elixir / erlang
-      elixir
+      beamPackages.elixir
 
       # programming - javascript
       biome
@@ -288,6 +288,7 @@ in {
     ];
 
     pointerCursor = {
+      enable = true;
       package = pkgs.gnome-themes-extra;
       size = 16; # default = 32; example = 64;
       name = "Adwaita";
@@ -392,7 +393,7 @@ in {
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk"; # gnome or gtk
+    platformTheme.name = "gtk3";
   };
 
   services = {

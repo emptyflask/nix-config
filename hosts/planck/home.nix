@@ -36,5 +36,6 @@ in {
   xdg = {
     enable = true;
     userDirs.enable = true;
+    userDirs.setSessionVariables = false;
   };
 }

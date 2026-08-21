@@ -47,6 +47,7 @@ in {
   nix.settings = {
     auto-optimise-store = true;
     experimental-features = "nix-command flakes";
+    extra-deprecated-features = "broken-string-escape";
     sandbox = true;
   };
 

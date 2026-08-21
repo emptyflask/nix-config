@@ -60,17 +60,11 @@
 
     kmscon = {
       enable = true;
-      hwRender = false;
-      fonts = [
-        {
-          name = "Fira Code Regular";
-          package = pkgs.fira-code;
-        }
-      ];
-      extraConfig = ''
-        font-size=12
-        font-dpi=110
-      '';
+      config = {
+        font-name = "Fira Code";
+        font-size = 12;
+        font-dpi = 110;
+      };
     };
 
     locate = {
@@ -90,11 +84,6 @@
     };
 
     memcached.enable = true;
-
-    mpd = {
-      enable = false;
-      musicDirectory = "/media/repository/music";
-    };
 
     ollama = {
       enable = false;

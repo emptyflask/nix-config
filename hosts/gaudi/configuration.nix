@@ -79,6 +79,7 @@
   '';
   nix.settings = {
     experimental-features = "nix-command flakes";
+    extra-deprecated-features = "broken-string-escape";
     sandbox = true;
 
     substituters = [

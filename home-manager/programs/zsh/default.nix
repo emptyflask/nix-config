@@ -13,9 +13,6 @@
       ls = "ls --color -F";
     }
     else {};
-
-  unstable =
-    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in {
   programs.zsh = {
     enable = true;
@@ -53,7 +50,7 @@ in {
         icat = "${pkgs.kitty}/bin/kitty +kitten icat";
 
         j = ''
-          ${unstable.jira-cli-go}/bin/jira issue list -sopen -s"In Review" -a"jon@sxsw.com"'';
+          ${pkgs.jira-cli-go}/bin/jira issue list -sopen -s"In Review" -a"jon@sxsw.com"'';
         json = "jq '.' -C | less";
 
         m = "ncmpcpp";
@@ -79,13 +76,21 @@ in {
         --color=marker:#8ec07c,fg+:#ebdbb2,prompt:#fabd2f,hl+:#83a598
       '';
 
-      FZF_ALT_C_OPTS = "--preview '${pkgs.tree}/bin/tree -C {} | head -100'";
+      FZF_ALT_C_OPTS = ''
+        --walker-skip .git,node_modules,target
+        --preview '${pkgs.tree}/bin/tree -C {} | head -100'
+      '';
+
+      FZF_CTRL_R_OPTS = ''
+        --bind 'ctrl-y:execute-silent(echo -n {2..} | ${pkgs.xsel}/bin/xsel --clipboard --input)+abort'
+        --color header:italic
+        --header 'Press CTRL-Y to copy command into clipboard'
+      '';
 
       FZF_CTRL_T_OPTS = ''
-        --preview '[[ \$(${pkgs.file}/bin/file --mime {}) =~ binary ]] &&
-          echo {} is a binary file ||
-          (bat --style=numbers --color=always {} ||
-          cat {}) 2> /dev/null | head -100'
+        --walker-skip .git,node_modules,target
+        --preview '${pkgs.bat}/bin/bat -n --color=always {}'
+        --bind 'ctrl-/:change-preview-window(down|hidden|)'
       '';
 
       WORDCHARS = "*?[]~&;!$%^<>";

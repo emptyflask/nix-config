@@ -28,7 +28,7 @@
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+  nix.nixPath = ["nixpkgs=${inputs.nixos-raspberrypi.inputs.nixpkgs}"];
 
   nix.settings.substituters = [
     "https://nix-community.cachix.org"

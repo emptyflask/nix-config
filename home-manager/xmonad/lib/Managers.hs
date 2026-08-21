@@ -26,7 +26,7 @@ scratchpads =
     manageHtop = customFloating $ W.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3)
 
     spawnObsidian = Paths.obsidian
-    findObsidian = className =? "obsidian"
+    findObsidian = className =? "md.Obsidian"
     manageObsidian = customFloating $ W.RationalRect (1 / 6) (1 / 12) (2 / 3) (5 / 6)
 
     spawnZeal = Paths.zeal

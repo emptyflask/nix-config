@@ -66,7 +66,7 @@ in {
       ];
     };
 
-    newton = inputs.nixpkgs-unstable.lib.nixosSystem {
+    newton = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs outputs;};
       modules = [
@@ -75,7 +75,7 @@ in {
         hermes-agent.nixosModules.default
         hermes-webui.nixosModules.default
         inputs.livesync-cli.nixosModules.default
-        inputs.home-manager-unstable.nixosModules.home-manager
+        home-manager.nixosModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -97,7 +97,7 @@ in {
         agenix.nixosModules.default
         nixos-raspberrypi.nixosModules.raspberry-pi-4.base
         ./hosts/planck
-        home-manager.nixosModules.home-manager
+        inputs.home-manager-stable.nixosModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -114,16 +114,10 @@ in {
   # Standalone home-manager configuration entrypoint
   # Available through 'home-manager --flake .#jon@kepler'
   homeConfigurations = {
-    "jon@gaudi" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs-unstable.legacyPackages.aarch64-darwin;
+    "jon@gaudi" = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.aarch64-darwin;
       extraSpecialArgs = {inherit inputs outputs;};
       modules = [agenix.homeManagerModules.default ./hosts/gaudi/home.nix];
-    };
-
-    "jon@kepler" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = {inherit inputs outputs self;};
-      modules = [agenix.homeManagerModules.default ./hosts/kepler/home.nix];
     };
   };
 }

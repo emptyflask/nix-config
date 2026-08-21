@@ -1,15 +1,8 @@
-{ outputs, pkgs, ... }:
-
 {
-  # nixpkgs = {
-  #   overlays = [ outputs.overlays.additions outputs.overlays.modifications ];
-  #   config = {
-  #     allowUnfree = true;
-  #     # Workaround for https://github.com/nix-community/home-manager/issues/2942
-  #     allowUnfreePredicate = _: true;
-  #   };
-  # };
-
+  outputs,
+  pkgs,
+  ...
+}: {
   programs = {
     direnv = {
       enable = true;
@@ -37,5 +30,4 @@
     tealdeer # tldr for various shell tools
     units
   ];
-
 }
