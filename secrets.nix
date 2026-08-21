@@ -15,6 +15,7 @@ in {
   "secrets/livesync-settings.age".publicKeys = [hosts.newton jon];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jon];
   "secrets/pihole.env.age".publicKeys = [hosts.newton hosts.planck jon];
+  "secrets/kepler-tls-key.age".publicKeys = [hosts.kepler jon];
 
   # personal
   "secrets/ghi-token.age".publicKeys = [jon];

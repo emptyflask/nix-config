@@ -5,7 +5,7 @@
 }: let
   # mkcert kepler.lan "*.kepler.lan" "*.sxsw.localhost" "*.sxswedu.localhost" "*.kepler.localhost" localhost 127.0.0.1 ::1
   certFile = ../../../nixos/security/ssl/certs/kepler.lan+7.pem;
-  keyFile = ../../../nixos/security/ssl/private/kepler.lan+7-key.pem;
+  keyFile = config.age.secrets.kepler-tls-key.path;
 
   proxy = host: port: {
     "${host}".extraConfig = ''
@@ -38,6 +38,12 @@
     '';
   };
 in {
+  age.secrets.kepler-tls-key = {
+    file = ../../../secrets/kepler-tls-key.age;
+    owner = "caddy";
+    group = "caddy";
+  };
+
   services.caddy = {
     enable = true;
     virtualHosts = lib.mkMerge [
