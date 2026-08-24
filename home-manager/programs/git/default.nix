@@ -1,9 +1,4 @@
-{ config, lib, pkgs, ... }:
-
-{
-  xdg.configFile."git/gitattributes".source = ./gitattributes;
-  xdg.configFile."git/ignore".source = ./ignore;
-
+{pkgs, ...}: {
   xdg.configFile."pass-git-helper/git-pass-mapping.ini".text = ''
     [github.com*]
     target=dev/github
@@ -12,10 +7,76 @@
   programs.git = {
     enable = true;
 
+    attributes = [
+      "*.bin binary diff=hex"
+      "*.c          diff=cpp"
+      "*.c++        diff=cpp"
+      "*.cc         diff=cpp"
+      "*.cpp        diff=cpp"
+      "*.cs         diff=csharp"
+      "*.css        diff=css"
+      "*.el         diff=lisp"
+      "*.erb        diff=html"
+      "*.ex         diff=elixir"
+      "*.exs        diff=elixir"
+      "*.go         diff=golang"
+      "*.h          diff=cpp"
+      "*.h++        diff=cpp"
+      "*.hh         diff=cpp"
+      "*.hpp        diff=cpp"
+      "*.html       diff=html"
+      "*.jar        diff=hex"
+      "*.lisp       diff=lisp"
+      "*.m          diff=objc"
+      "*.md         diff=markdown"
+      "*.mm         diff=objc"
+      "*.php        diff=php"
+      "*.pl         diff=perl"
+      "*.py         diff=python"
+      "*.rake       diff=ruby"
+      "*.rb         diff=ruby"
+      "*.rs         diff=rust"
+      "*.xhtml      diff=html"
+    ];
+
+    ignores = [
+      "*.swp"
+      ".DS_Store"
+      ".bin"
+      ".capistrano/metrics"
+      ".claude/"
+      ".direnv/"
+      ".env"
+      ".env.production"
+      ".env.staging"
+      ".envrc"
+      ".notags"
+      ".nvimrc"
+      ".nvimlog"
+      ".powenv"
+      ".rbenv-version"
+      ".ruby-version"
+      ".rvmrc"
+      ".serena/"
+      ".solargraph.yml"
+      ".vimrc"
+      ".vscode/"
+      "GPATH"
+      "GRTAGS"
+      "GTAGS"
+      "Gemfile.local"
+      "Gemfile.local.lock"
+      "node_modules/"
+      "result"
+      "tags"
+      "tags.lock"
+      "tags.temp"
+      ".nix-gems/"
+    ];
+
     settings = {
       alias = {
-        aliases =
-          "!git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | sort";
+        aliases = "!git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | sort";
         st = "status";
         ci = "commit";
         co = "checkout";
@@ -30,13 +91,11 @@
         oneline = "log --pretty=oneline";
         staged = "diff --cached";
         unstaged = "diff";
-        recent =
-          "log --pretty=format:'%Cred%h %Creset- %Cgreen%an (%cd)%Creset: %s' --since='2 weeks ago' --date=short --author=Jon --all";
+        recent = "log --pretty=format:'%Cred%h %Creset- %Cgreen%an (%cd)%Creset: %s' --since='2 weeks ago' --date=short --author=Jon --all";
         tree = "log --graph --pretty=oneline --abbrev-commit";
         ignore = "update-index --assume-unchanged";
         parent = "name-rev --refs='refs/remotes/*' HEAD";
-        l =
-          "log --graph --abbrev-commit --date=relative --pretty=format:'%C(yellow)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'";
+        l = "log --graph --abbrev-commit --date=relative --pretty=format:'%C(yellow)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'";
         la = "!git l --all";
         head = "!git l -1";
         h = "!git head";
@@ -46,7 +105,7 @@
         delete-merged = ''
           !f() { git branch --merged ''${1-master} | grep -v " ''${1-master}$" | xargs -r git branch -d; }; f'';
         # delete-squashed = ''!git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done'';
-        delete-squashed = builtins.replaceStrings [ "\n" ] [ " " ] ''
+        delete-squashed = builtins.replaceStrings ["\n"] [" "] ''
           !f() {
             git checkout -q "''${1-master}" && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch;
             do
@@ -67,7 +126,7 @@
         };
       };
 
-      column = { ui = "auto"; };
+      column = {ui = "auto";};
 
       core = {
         editor = "nvim";
@@ -99,7 +158,7 @@
       # Delta themes
       include.path = "${./themes.gitconfig}";
 
-      interactive = { diffFilter = "${pkgs.delta}/bin/delta --color-only"; };
+      interactive = {diffFilter = "${pkgs.delta}/bin/delta --color-only";};
 
       merge = {
         tool = "nvim";
@@ -128,6 +187,5 @@
 
     # Large File Storage
     lfs.enable = true;
-
   };
 }
