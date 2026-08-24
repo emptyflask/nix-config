@@ -78,6 +78,10 @@ in {
     settings = {
       memory.provider = "hindsight";
       model.default = "deepseek/deepseek-v4-flash-0731";
+      auxiliary.vision = {
+        model = "google/gemini-2.5-flash-lite";
+        provider = "openrouter";
+      };
     };
   };
 
