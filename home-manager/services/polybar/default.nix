@@ -1,7 +1,5 @@
-{ pkgs, ... }:
-
-with pkgs;
-{
+{pkgs, ...}:
+with pkgs; {
   services.polybar = {
     enable = false;
     package = polybar.override {
@@ -11,50 +9,50 @@ with pkgs;
     };
     config = {
       "colors" = {
-        background     = "#282828";
+        background = "#282828";
         background-alt = "#1d2021";
-        foreground     = "#ebdbb2";
+        foreground = "#ebdbb2";
         foreground-alt = "#a89984";
 
-        primary        = "#fe8019";
-        secondary      = "#b16286";
-        alert          = "#fb4934";
+        primary = "#fe8019";
+        secondary = "#b16286";
+        alert = "#fb4934";
 
-        fg        = "#f9f7dd";
-        bg        = "#cc282828";
+        fg = "#f9f7dd";
+        bg = "#cc282828";
         lightGray = "#888888";
-        darkGray  = "#474747";
-        red       = "#ff5a5f";
-        green     = "#86cb92";
-        yellow    = "#f1f0cc";
-        blue      = "#07a0c3";
-        purple    = "#a761c2";
-        cyan      = "#6e98a4";
-        black     = "#000000";
+        darkGray = "#474747";
+        red = "#ff5a5f";
+        green = "#86cb92";
+        yellow = "#f1f0cc";
+        blue = "#07a0c3";
+        purple = "#a761c2";
+        cyan = "#6e98a4";
+        black = "#000000";
       };
 
       "commonbar" = {
-        width        = "100%";
-        height       = 27;
-        offset-x     = 0;
-        offset-y     = 0;
-        top          = true;
-        radius       = 0;
+        width = "100%";
+        height = 27;
+        offset-x = 0;
+        offset-y = 0;
+        top = true;
+        radius = 0;
         fixed-center = true;
 
         background = "\${colors.bg}";
         foreground = "\${colors.foreground}";
 
-        line-size  = 3;
+        line-size = 3;
         line-color = "\${colors.primary}";
 
-        border-size  = 0;
+        border-size = 0;
         border-color = "#00000000";
 
-        padding-left  = 2;
+        padding-left = 2;
         padding-right = 2;
 
-        module-margin-left  = 1;
+        module-margin-left = 1;
         module-margin-right = 2;
 
         font-0 = "IBM Plex Sans:size=10;0";
@@ -66,25 +64,25 @@ with pkgs;
         font-6 = "Noto Color Emoji:style=Regular:scale=12:antialias=false:size=1;2";
 
         tray-position = "right";
-        tray-padding  = 4;
+        tray-padding = 4;
         tray-detached = false;
-        tray-scale    = "1.0";
+        tray-scale = "1.0";
 
-        enable-ipc    = false;
+        enable-ipc = false;
       };
 
       "bar/laptop" = {
-        "inherit"      = "commonbar";
-        modules-left   = "xmonad-workspaces";
+        "inherit" = "commonbar";
+        modules-left = "xmonad-workspaces";
         modules-center = "cpu temperature memory swap";
-        modules-right  = "battery backlight volume date openvpn-status";
+        modules-right = "battery backlight volume date openvpn-status";
       };
 
       "bar/desktop" = {
-        "inherit"      = "commonbar";
-        modules-left   = "xmonad-workspaces xmonad-title ewmh";
+        "inherit" = "commonbar";
+        modules-left = "xmonad-workspaces xmonad-title ewmh";
         modules-center = "cpu memory swap filesystem";
-        modules-right  = "mpd volume popup-calendar openvpn-status";
+        modules-right = "mpd volume popup-calendar openvpn-status";
       };
 
       "module/ewmh" = {
@@ -101,34 +99,34 @@ with pkgs;
       };
 
       "module/xmonad-workspaces" = {
-        type        = "custom/script";
-        exec        = "${pkgs.coreutils}/bin/tail -F /tmp/.xmonad-workspace-log";
-        exec-if     = "[ -p /tmp/.xmonad-workspace-log ]";
-        tail        = true;
-        label-font  = 2;
+        type = "custom/script";
+        exec = "${pkgs.coreutils}/bin/tail -F /tmp/.xmonad-workspace-log";
+        exec-if = "[ -p /tmp/.xmonad-workspace-log ]";
+        tail = true;
+        label-font = 2;
       };
 
       "module/xmonad-title" = {
-        type    = "custom/script";
-        exec    = "${pkgs.coreutils}/bin/tail -F /tmp/.xmonad-title-log";
+        type = "custom/script";
+        exec = "${pkgs.coreutils}/bin/tail -F /tmp/.xmonad-title-log";
         exec-if = "[ -p /tmp/.xmonad-title-log ]";
-        tail    = true;
+        tail = true;
       };
 
       "module/xwindow" = {
-        type             = "internal/xwindow";
-        label            = "%title:0:60:...%";
-        format-padding   = 4;
+        type = "internal/xwindow";
+        label = "%title:0:60:...%";
+        format-padding = 4;
         format-underline = "\${colors.lightGray}";
       };
 
       "module/cpu" = {
-        type             = "internal/cpu";
-        interval         = 1;
-        label            = "%percentage-cores%";
-        format           = "<ramp-coreload>";
+        type = "internal/cpu";
+        interval = 1;
+        label = "%percentage-cores%";
+        format = "<ramp-coreload>";
         format-underline = "\${colors.cyan}";
-        format-padding   = 1;
+        format-padding = 1;
 
         ramp-coreload-0 = "▁";
         ramp-coreload-1 = "▂";
@@ -191,19 +189,6 @@ with pkgs;
         click-left = "~/.config/polybar/popup-calendar.sh --popup &";
         format-padding = 2;
         format-underline = "\${colors.blue}";
-      };
-
-      "module/openvpn-status" = {
-        type = "custom/script";
-        exec = "printf 'VPN: ' && (pgrep -a openvpn$ | ${pkgs.coreutils}/bin/head -n 1 | awk '{path=$NF;n=split(path,A,\"-\");print A[n]}' | ${pkgs.coreutils}/bin/cut -f 1 && echo down) | ${pkgs.coreutils}/bin/head -n 1";
-        interval = 5;
-        label = "%output:0:15:...%";
-        format = "<label>";
-        format-underline = "#268bd2";
-        format-prefix = "🖧 ";
-        format-prefix-foreground = "#5b";
-        click-left = "sudo systemctl start openvpn-sxsw";
-        click-right = "sudo systemctl stop openvpn-sxsw";
       };
 
       "module/backlight" = {
@@ -319,7 +304,7 @@ with pkgs;
     };
 
     script = ''
-      export PATH=${lib.makeBinPath [ gawk gnugrep gnused procps-ng ]}:$PATH
+      export PATH=${lib.makeBinPath [gawk gnugrep gnused procps-ng]}:$PATH
       polybar desktop &
     '';
   };
@@ -371,5 +356,4 @@ with pkgs;
     '';
     executable = true;
   };
-
 }
