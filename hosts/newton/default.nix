@@ -74,6 +74,10 @@
     zsh.enable = true;
   };
 
+  # Key-only SSH box deployed from kepler; lets `nh --target-host` activate
+  # without an interactive sudo prompt.
+  security.sudo.wheelNeedsPassword = false;
+
   system.stateVersion = "25.11";
 
   # nixpkgs-flake.nix auto-registers the build nixpkgs (unstable) as nix.registry.nixpkgs.

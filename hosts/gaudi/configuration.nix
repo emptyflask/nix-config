@@ -79,7 +79,6 @@
   '';
   nix.settings = {
     experimental-features = "nix-command flakes";
-    extra-deprecated-features = "broken-string-escape";
     sandbox = true;
 
     substituters = [
@@ -101,6 +100,10 @@
 
     trusted-users = [ "root" "jonroberts" ];
   };
+
+  # broken-string-escape only exists as a deprecated feature since Lix 2.95.
+  nix.settings.extra-deprecated-features =
+    lib.mkIf (lib.versionAtLeast config.nix.package.version "2.95") "broken-string-escape";
 
   programs.gnupg.agent = {
     enable = true;

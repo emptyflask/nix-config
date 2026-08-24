@@ -41,7 +41,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
-    nur.url = "github:nix-community/nur";
     yazi.url = "github:sxyazi/yazi";
 
     mcp = {

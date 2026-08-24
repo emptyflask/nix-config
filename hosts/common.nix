@@ -44,12 +44,17 @@ in {
     (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
-  nix.settings = {
-    auto-optimise-store = true;
-    experimental-features = "nix-command flakes";
-    extra-deprecated-features = "broken-string-escape";
-    sandbox = true;
-  };
+  nix.settings =
+    {
+      auto-optimise-store = true;
+      experimental-features = "nix-command flakes";
+      sandbox = true;
+    }
+    # broken-string-escape only exists as a deprecated feature since Lix 2.95;
+    # planck is on stable nixpkgs (Lix 2.94) and rejects the unknown name.
+    // lib.optionalAttrs (lib.versionAtLeast config.nix.package.version "2.95") {
+      extra-deprecated-features = "broken-string-escape";
+    };
 
   nixpkgs = {
     # You can add overlays here

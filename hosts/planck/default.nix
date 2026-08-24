@@ -201,6 +201,10 @@
     };
   };
 
+  # Key-only SSH box deployed from kepler; lets `nh --target-host` activate
+  # without an interactive sudo prompt.
+  security.sudo.wheelNeedsPassword = false;
+
   system.autoUpgrade.enable = false;
   system.stateVersion = "25.05";
 }

@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   self,
   ...
@@ -34,12 +35,24 @@ in {
   ];
 
   age.identityPaths = ["/home/jon/.ssh/id_agenix"];
+  age.secretsDir = "/run/user/1000/agenix";
   age.secrets.ghi-token.file = "${self}/secrets/ghi-token.age";
   age.secrets.jira-token.file = "${self}/secrets/jira-token.age";
+  age.secrets.nix-access-tokens.file = "${self}/secrets/nix-access-tokens.age";
 
   programs.git.settings.ghi.token = "!${pkgs.coreutils}/bin/cat ${config.age.secrets.ghi-token.path}";
 
-  home.sessionVariables.JIRA_API_TOKEN = "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.jira-token.path})";
+  programs.zsh.initContent = lib.mkAfter ''
+    export JIRA_API_TOKEN="$(${pkgs.coreutils}/bin/cat ${config.age.secrets.jira-token.path} 2>/dev/null)"
+  '';
+
+  nix.extraOptions = "!include ${config.age.secrets.nix-access-tokens.path}\n";
+
+  programs.zsh.shellAliases = {
+    deploy-kepler = "nh os switch";
+    deploy-newton = "nh os switch -H newton --target-host jon@newton.lan -e passwordless";
+    deploy-planck = "nh os switch -H planck --target-host jon@planck.lan -e passwordless";
+  };
 
   dconf.enable = false;
 
