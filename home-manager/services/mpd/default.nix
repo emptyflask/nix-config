@@ -4,9 +4,8 @@
     musicDirectory = "/media/repository/music";
     extraConfig = ''
       audio_output {
-          type "alsa"
-          name "My ALSA Device"
-          device "default"  # or specify another device
+          type "pipewire"
+          name "PipeWire"
       }
       audio_output {
           type                    "fifo"
