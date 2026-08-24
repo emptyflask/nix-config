@@ -78,6 +78,13 @@
       config = ''
         vim.keymap.set({'n', 'x', 'o'}, 's', '<Plug>(leap)')
         vim.keymap.set('n',             'S', '<Plug>(leap-from-window)')
+
+        -- Visit (jump - operate - jump back)
+        vim.keymap.set({ 'n', 'x', 'o' }, 'gs', '<Plug>(leap-visit)')
+        vim.keymap.set({ 'n', 'x', 'o' }, 'gS', '<Plug>(leap-visit-linewise)')
+        vim.keymap.set({ 'x', 'o' },      'ar', '<Plug>(leap-visit-text-object)')
+        vim.keymap.set({ 'x', 'o' },      'ir', '<Plug>(leap-visit-inner-text-object)')
+        vim.keymap.set({ 'o' },           'rr', '<Plug>(leap-visit-line)')
       '';
     };
 
