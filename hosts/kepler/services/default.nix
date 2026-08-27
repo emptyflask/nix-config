@@ -206,6 +206,8 @@
 
   systemd.oomd = {
     enable = true;
+    enableRootSlice = true;
+    enableUserSlices = true;
     settings.OOM = {
       SwapUsedLimit = "95%";
     };
