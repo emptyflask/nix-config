@@ -461,6 +461,58 @@ in {
     enable = true;
     userDirs.enable = true;
     userDirs.setSessionVariables = false;
+
+    # xdg-desktop-portal-lxqt doesn't implement the Screenshot portal, so
+    # flameshot (since v14) hangs 30s trying it before failing. Skip the
+    # portal and use Qt's native X11 capture directly.
+    configFile."flameshot/flameshot.ini" = {
+      force = true; # flameshot rewrites this file itself; don't fight it
+      text = ''
+        [General]
+        contrastOpacity=188
+        disabledTrayIcon=false
+        drawColor=#ff0000
+        drawThickness=6
+        fontFamily=Fira Sans Medium
+        savePath=/home/jon/Downloads/images
+        savePathFixed=false
+        showStartupLaunchMessage=true
+        startupLaunch=false
+        useX11LegacyScreenshot=true
+
+        [Shortcuts]
+        TYPE_ARROW=A
+        TYPE_CIRCLE=C
+        TYPE_CIRCLECOUNT=
+        TYPE_COMMIT_CURRENT_TOOL=Ctrl+Return
+        TYPE_COPY=Ctrl+C
+        TYPE_DELETE_CURRENT_TOOL=Del
+        TYPE_DRAWER=D
+        TYPE_EXIT=Ctrl+Q
+        TYPE_MARKER=M
+        TYPE_MOVESELECTION=Ctrl+M
+        TYPE_MOVE_DOWN=Down
+        TYPE_MOVE_LEFT=Left
+        TYPE_MOVE_RIGHT=Right
+        TYPE_MOVE_UP=Up
+        TYPE_OPEN_APP=Ctrl+O
+        TYPE_PENCIL=P
+        TYPE_PIN=
+        TYPE_PIXELATE=B
+        TYPE_RECTANGLE=R
+        TYPE_REDO=Ctrl+Shift+Z
+        TYPE_RESIZE_DOWN=Shift+Down
+        TYPE_RESIZE_LEFT=Shift+Left
+        TYPE_RESIZE_RIGHT=Shift+Right
+        TYPE_RESIZE_UP=Shift+Up
+        TYPE_SAVE=Ctrl+S
+        TYPE_SELECTION=S
+        TYPE_SELECT_ALL=Ctrl+A
+        TYPE_TEXT=T
+        TYPE_TOGGLE_PANEL=Space
+        TYPE_UNDO=Ctrl+Z
+      '';
+    };
   };
 
   xsession = {
