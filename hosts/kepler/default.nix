@@ -43,7 +43,12 @@
   };
 
   boot = {
-    kernel = {sysctl = {"vm.swappiness" = "20";};};
+    kernel = {
+      sysctl = {
+        "kernel.sysrq" = 1;
+        "vm.swappiness" = 20;
+      };
+    };
     loader = {
       efi.canTouchEfiVariables = true;
       # grub = {
