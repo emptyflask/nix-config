@@ -288,11 +288,8 @@
 
   xdg.portal = {
     enable = true;
-    config.common.default = "lxqt";
-    lxqt = {
-      enable = true;
-      styles = [];
-    };
+    config.common.default = "gtk";
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
   zramSwap = {
