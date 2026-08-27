@@ -1,10 +1,5 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
-  imports = [./caddy.nix ./hermes.nix ./livesync.nix ./pihole.nix ./samba.nix];
+{config, ...}: {
+  imports = [./caddy.nix ./hermes.nix ./hister.nix ./livesync.nix ./pihole.nix ./samba.nix];
 
   age.secrets.couchdb-admin-pass = {
     file = ../../../secrets/couchdb-admin-pass.age;

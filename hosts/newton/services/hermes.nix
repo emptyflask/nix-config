@@ -51,6 +51,11 @@ in {
         url = "https://mcp.atlassian.com/v1/mcp/authv2";
         auth = "oauth";
       };
+      hister = {
+        url = "http://127.0.0.1:4433/mcp";
+        headers.Authorization = "Bearer \${HISTER_ACCESS_TOKEN}";
+        timeout = 180;
+      };
       mcpVault = {
         command = "npx";
         args = ["@bitbonsai/mcpvault@latest" config.services.livesync-cli.vaultPath];

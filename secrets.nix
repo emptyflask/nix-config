@@ -12,6 +12,7 @@ in {
   "secrets/couchdb-admin-pass.age".publicKeys = [hosts.newton jon];
   "secrets/hermes-webui.env.age".publicKeys = [hosts.newton jon];
   "secrets/hermes.env.age".publicKeys = [hosts.newton jon];
+  "secrets/hister.env.age".publicKeys = [hosts.newton jon];
   "secrets/kepler-tls-key.age".publicKeys = [hosts.kepler jon];
   "secrets/livesync-settings.age".publicKeys = [hosts.newton jon];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jon];
