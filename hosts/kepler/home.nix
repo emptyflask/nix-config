@@ -179,7 +179,6 @@ in {
       slack
       telegram-desktop
       thunderbird-bin
-      zoom-us
 
       # fonts
       aileron
@@ -411,6 +410,16 @@ in {
 
   services = {
     blueman-applet.enable = true;
+
+    flatpak = {
+      enable = true;
+      remotes = {
+        "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+      };
+      packages = [
+        "flathub:app/us.zoom.Zoom/x86_64/stable" # zoom-us from nixpkgs uses all memory and crashes
+      ];
+    };
 
     gpg-agent = {
       enable = true;

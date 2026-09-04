@@ -59,6 +59,7 @@ in {
             extraSpecialArgs = {inherit inputs self;};
             sharedModules = [
               agenix.homeManagerModules.default
+              flatpaks.homeModules.default
               inputs.nix-index-database.homeModules.nix-index
             ];
           };
