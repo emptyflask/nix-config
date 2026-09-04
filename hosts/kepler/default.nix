@@ -183,6 +183,7 @@
     polkitPolicyOwners = ["jon"];
   };
   programs.command-not-found.enable = false;
+  programs.dconf.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

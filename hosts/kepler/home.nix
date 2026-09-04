@@ -54,7 +54,11 @@ in {
     deploy-planck = "nh os switch -H planck --target-host jon@planck.lan -e passwordless";
   };
 
-  dconf.enable = false;
+  dconf.enable = true;
+  dconf.settings."org/gnome/desktop/interface" = {
+    color-scheme = "prefer-dark";
+    gtk-theme = "Adwaita-dark";
+  };
 
   fonts.fontconfig.enable = true;
 
