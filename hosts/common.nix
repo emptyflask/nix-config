@@ -47,7 +47,7 @@ in {
   nix.settings =
     {
       auto-optimise-store = true;
-      experimental-features = "nix-command flakes";
+      experimental-features = ["nix-command" "flakes"];
       sandbox = true;
     }
     # broken-string-escape only exists as a deprecated feature since Lix 2.95;

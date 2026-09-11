@@ -12,6 +12,7 @@
             <li><a href='http://homeassistant.newton.lan'>Home Assistant</a></li>
             <li><a href='http://immich.newton.lan'>Immich</a></li>
             <li><a href='http://navidrome.newton.lan'>Navidrome</a></li>
+            <li><a href='http://paperless.newton.lan'>Paperless-ngx</a></li>
             <li><a href='http://pihole.newton.lan'>PiHole</a></li>
           </ul></body></html>" 200
         }
@@ -23,6 +24,7 @@
       "homeassistant.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8123";
       "immich.newton.lan:80".extraConfig = "reverse_proxy http://localhost:2283";
       "navidrome.newton.lan:80".extraConfig = "reverse_proxy http://localhost:4533";
+      "paperless.newton.lan:80".extraConfig = "reverse_proxy http://localhost:28981";
       "pihole.newton.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
     };
   };

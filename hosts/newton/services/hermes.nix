@@ -102,7 +102,24 @@ in {
     environmentFiles = [config.age.secrets.hermes-webui-env.path];
   };
 
-  users.users.jon.extraGroups = ["hermes"];
+  users.users = {
+    hermes.linger = true;
+    jon.extraGroups = ["hermes"];
+  };
+
+  # hermes's cron worker needs a reachable user D-Bus session
+  # (systemd-run --user --scope) for restart-safe scoping. `linger` above
+  # makes that session exist, but user@<uid>.service starts in parallel with
+  # multi-user.target, so on a fresh boot/restart hermes-agent can win the
+  # race and log one failed cron dispatch before its own 60s retry recovers.
+  # Wait for the bus socket first so the race never happens.
+  systemd.services.hermes-agent.preStart = ''
+    for i in $(seq 1 30); do
+      [ -S "/run/user/$(id -u)/bus" ] && exit 0
+      sleep 1
+    done
+    echo "warning: hermes user D-Bus session not ready after 30s" >&2
+  '';
 
   # Hermes reads its persona from $HERMES_HOME/SOUL.md. In native mode
   # HERMES_HOME = /var/lib/hermes/.hermes (created by the hermes-agent module's

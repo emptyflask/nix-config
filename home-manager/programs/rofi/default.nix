@@ -1,13 +1,11 @@
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.rofi = {
     enable = true;
-    pass = {
-      enable = true;
-      extraConfig = "";
-      stores = [];
-    };
     plugins = with pkgs; [
       rofi-calc
       rofimoji

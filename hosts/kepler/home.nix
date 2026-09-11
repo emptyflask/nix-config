@@ -121,8 +121,6 @@ in {
       glow # markdown viewer
       google-chrome
       httpie
-      keybase
-      keybase-gui
       kitty # terminal
       libreoffice
       lxmenu-data # installed apps

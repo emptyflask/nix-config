@@ -24,6 +24,15 @@
       };
     });
 
+    paperless-ngx = prev.paperless-ngx.overrideAttrs (old: {
+      # flaky test: compares timezone.now() against a document's created
+      # date derived from file mtime: fails whenever the build straddles
+      # local midnight in the test's hardcoded America/Chicago timezone.
+      disabledTestPaths =
+        (old.disabledTestPaths or [])
+        ++ ["src/documents/tests/test_consumer.py::TestConsumer::testNormalOperation"];
+    });
+
     postman = prev.postman.overrideAttrs (old: rec {
       version = "20230716100528";
       src = final.fetchurl {

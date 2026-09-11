@@ -1,5 +1,12 @@
-{ inputs, pkgs, nix, nixpkgs, config, lib, ... }:
 {
+  inputs,
+  pkgs,
+  nix,
+  nixpkgs,
+  config,
+  lib,
+  ...
+}: {
   imports = [
     # ./skhd.nix
     # ./sketchybar.nix
@@ -13,32 +20,31 @@
   # nix-darwin's default of plain upstream Nix.
   nix.package = pkgs.lixPackageSets.stable.lix;
 
-  environment.systemPackages = with pkgs;
-    [
-      alacritty
-      cabal-install
-      coreutils
-      ffmpeg
-      fswatch
-      fzf
-      gnupg
-      home-manager
-      karabiner-elements
-      neovim
-      nmap
-      nodejs
-      openssl
-      p7zip
-      reattach-to-user-namespace
-      ripgrep
-      sqlite
-      tree
-      vim
-      w3m
-      wget
-      yarn
-      zip
-    ];
+  environment.systemPackages = with pkgs; [
+    alacritty
+    cabal-install
+    coreutils
+    ffmpeg
+    fswatch
+    fzf
+    gnupg
+    home-manager
+    karabiner-elements
+    neovim
+    nmap
+    nodejs
+    openssl
+    p7zip
+    reattach-to-user-namespace
+    ripgrep
+    sqlite
+    tree
+    vim
+    w3m
+    wget
+    yarn
+    zip
+  ];
 
   fonts = {
     packages = with pkgs; [
@@ -61,7 +67,7 @@
     ];
   };
 
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   nix.gc = {
     automatic = true;
@@ -78,7 +84,7 @@
     max-free = ${toString (1024 * 1024 * 1024)} # 1GiB
   '';
   nix.settings = {
-    experimental-features = "nix-command flakes";
+    experimental-features = ["nix-command" "flakes"];
     sandbox = true;
 
     substituters = [
@@ -98,7 +104,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
 
-    trusted-users = [ "root" "jonroberts" ];
+    trusted-users = ["root" "jonroberts"];
   };
 
   # broken-string-escape only exists as a deprecated feature since Lix 2.95.
@@ -123,5 +129,4 @@
       home = /Users/jonroberts;
     };
   };
-
 }

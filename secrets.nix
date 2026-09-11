@@ -16,7 +16,12 @@ in {
   "secrets/kepler-tls-key.age".publicKeys = [hosts.kepler jon];
   "secrets/livesync-settings.age".publicKeys = [hosts.newton jon];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jon];
+  "secrets/paperless-admin-pass.age".publicKeys = [hosts.newton jon];
   "secrets/pihole.env.age".publicKeys = [hosts.newton hosts.planck jon];
+  "secrets/restic-password.age".publicKeys = [hosts.kepler jon];
+  "secrets/restic-b2-env.age".publicKeys = [hosts.kepler jon];
+  "secrets/newton-restic-password.age".publicKeys = [hosts.newton jon];
+  "secrets/newton-restic-b2-env.age".publicKeys = [hosts.newton jon];
 
   # personal
   "secrets/ghi-token.age".publicKeys = [jon];

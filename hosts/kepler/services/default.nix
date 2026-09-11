@@ -221,6 +221,7 @@
     ./jellyfin.nix
     ./openssh.nix
     ./postgresql.nix
+    ./restic.nix
     ./xserver.nix
   ];
 }
