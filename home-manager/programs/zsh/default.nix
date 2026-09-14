@@ -19,6 +19,15 @@ in {
     autosuggestion.enable = true;
     dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
+    # Only run compinit's security audit once/day instead of every shell start
+    completionInit = ''
+      autoload -Uz compinit
+      if [[ -n ''${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+        compinit
+      else
+        compinit -C
+      fi
+    '';
     defaultKeymap = "viins";
     history = {
       extended = true;

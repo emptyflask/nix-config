@@ -94,7 +94,11 @@
   ];
 
   programs.ssh.startAgent = false;
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    # home-manager's zsh module already runs (cached) compinit
+    enableCompletion = false;
+  };
 
   # power.ups.enable = true;
 

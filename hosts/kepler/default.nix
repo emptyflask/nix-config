@@ -199,6 +199,9 @@
   programs.zsh = {
     enable = true;
     enableLsColors = true;
+    # home-manager's zsh module already runs (cached) compinit; the system
+    # /etc/zshrc's own uncached compinit was doubling shell startup time.
+    enableCompletion = false;
   };
 
   hardware = {
