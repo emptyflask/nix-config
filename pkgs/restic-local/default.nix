@@ -3,6 +3,7 @@
 # Usage:
 #   restic-local snapshots
 #   restic-local restore latest --target /tmp/restore-out
+#   restic-local restore latest:/home/jon/notes --include /Cookbook --target ~/notes
 {
   writeShellScriptBin,
   restic,

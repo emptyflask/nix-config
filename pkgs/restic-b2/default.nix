@@ -2,6 +2,7 @@
 # agenix secrets in-memory (never to disk). Usage:
 #   restic-b2 newton snapshots
 #   restic-b2 kepler restore latest --target /tmp/restore-out
+#   restic-b2 kepler restore latest:/home/jon/notes --include /Cookbook --target ~/notes
 {
   writeShellScriptBin,
   restic,
