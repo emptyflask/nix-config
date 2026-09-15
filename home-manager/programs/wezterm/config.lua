@@ -36,10 +36,41 @@ config.audible_bell = "Disabled"
 -- Tab bar
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
+config.tab_max_width = 32
+
+-- Powerline-style tabs, matching kitty's tab_bar_style = "powerline"
+local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
 
 wezterm.on("format-tab-title", function(tab)
-  return " " .. (tab.tab_index + 1) .. ": " .. tab.active_pane.title .. " "
+  local edge_background = "#272822" -- tab bar background
+  local background = "#272822"
+  local foreground = "#75715e"
+
+  if tab.is_active then
+    background = "#75715e"
+    foreground = "#272822"
+  end
+
+  local edge_foreground = background
+  local title = " " .. (tab.tab_index + 1) .. ": " .. tab.active_pane.title .. " "
+
+  return {
+    { Background = { Color = edge_background } },
+    { Foreground = { Color = edge_foreground } },
+    { Text = SOLID_LEFT_ARROW },
+    { Background = { Color = background } },
+    { Foreground = { Color = foreground } },
+    { Text = title },
+    { Background = { Color = edge_background } },
+    { Foreground = { Color = edge_foreground } },
+    { Text = SOLID_RIGHT_ARROW },
+  }
 end)
+
+-- Match kitty: bold text keeps its literal ANSI color, just rendered in a bold
+-- font weight, instead of WezTerm's default of swapping to the bright variant.
+config.bold_brightens_ansi_colors = false
 
 -- Colors (Gruvbox dark)
 config.colors = {

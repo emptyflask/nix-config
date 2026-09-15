@@ -32,7 +32,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
   M.fromList $
     -- launching and killing programs
     [ ((modm, xK_Return), spawn $ XMonad.terminal conf),
-      ((modm .|. alt, xK_Return), spawn Paths.wezterm),
+      ((modm .|. alt, xK_Return), spawn $ Paths.wezterm ++ " cli spawn --new-window || " ++ Paths.wezterm ++ " start"),
       ((modm .|. shift, xK_f), spawn "thunar"),
       ((modm, xK_f), runInTerm "" $ Paths.yazi),
       ((modm .|. shift, xK_c), kill),
