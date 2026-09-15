@@ -1,6 +1,9 @@
 # setopt extendedglob
 unsetopt correct
 
+# Disable ctrl-s/ctrl-q terminal flow control so they're free to rebind
+[[ -t 0 ]] && stty -ixon -ixoff
+
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
 bindkey '^[[H'  beginning-of-line                   # HOME
