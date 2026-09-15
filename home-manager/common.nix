@@ -24,6 +24,8 @@
     magic-wormhole # simple secure file transfer
     nix-prefetch-git
     parallel # run commands in parallel
+    restic
+    restic-b2 # wraps restic with b2 backup credentials decrypted via agenix
     ripgrep
     ripgrep-all
     shared-mime-info # recognize file types

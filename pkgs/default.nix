@@ -3,4 +3,6 @@
 pkgs:
 {
   # example = pkgs.callPackage ./example { };
+  restic-b2 = pkgs.callPackage ./restic-b2 { };
+  restic-local = pkgs.callPackage ./restic-local { };
 }

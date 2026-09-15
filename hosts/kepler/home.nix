@@ -135,6 +135,7 @@ in {
       pv # pipe viewer
       qalculate-gtk # calculator
       qemu
+      restic-local # restic against the /media/green local backup repo
       scowl # spellchecker / dictionary
       sone # tidal gui
       st
