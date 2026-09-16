@@ -9,6 +9,8 @@ let
   jon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHVg6SqixEZUfr6qNNWL58yo8WT/Lz1Io+1xxh6MCHiK";
 in {
   # services
+  "secrets/brscan-ftp-jon-pass.age".publicKeys = [hosts.newton jon];
+  "secrets/brscan-ftp-dana-pass.age".publicKeys = [hosts.newton jon];
   "secrets/couchdb-admin-pass.age".publicKeys = [hosts.newton jon];
   "secrets/hermes-webui.env.age".publicKeys = [hosts.newton jon];
   "secrets/hermes.env.age".publicKeys = [hosts.newton jon];

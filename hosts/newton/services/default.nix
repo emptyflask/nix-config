@@ -8,6 +8,7 @@
     ./pihole.nix
     ./restic.nix
     ./samba.nix
+    ./scan-ftp.nix
   ];
 
   age.secrets.couchdb-admin-pass = {
