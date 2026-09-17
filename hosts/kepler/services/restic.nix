@@ -49,12 +49,12 @@
   ];
 
   localTimerConfig = {
-    OnCalendar = "03:00";
+    OnCalendar = "03:30";
     Persistent = true;
   };
 
   b2TimerConfig = {
-    OnCalendar = "04:00";
+    OnCalendar = "04:30";
     Persistent = true;
   };
 
