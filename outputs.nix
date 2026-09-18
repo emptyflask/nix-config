@@ -107,7 +107,6 @@ in {
             extraSpecialArgs = {inherit inputs self;};
           };
         }
-        outputs.nixosModules.local-ca
       ];
     };
   };

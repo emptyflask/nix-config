@@ -13,6 +13,10 @@
     ./power.nix
   ];
 
+  # trust step-ca's root so Caddy's ACME client (and this host) trusts
+  # https://ca.planck.lan:8443 when requesting certs for *.newton.lan
+  security.pki.certificateFiles = [../../nixos/security/ssl/certs/step-ca-root.pem];
+
   boot = {
     loader = {
       efi.canTouchEfiVariables = true;
@@ -40,6 +44,10 @@
     hostName = "newton";
     extraHosts = ''
       127.0.0.1 newton.lan newton
+      # newton's own pihole answers NXDOMAIN for other hosts' *.lan zones
+      # (doesn't fall through to the router), so pin step-ca's hostname here
+      # for ACME to resolve it reliably
+      10.9.8.6 ca.planck.lan
     '';
     useDHCP = false;
 
@@ -57,7 +65,7 @@
     firewall = {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [22 53 80 2049 config.services.home-assistant.config.http.server_port];
+      allowedTCPPorts = [22 53 80 443 2049 config.services.home-assistant.config.http.server_port];
       allowedUDPPorts = [53 2049];
     };
   };

@@ -7,9 +7,17 @@
   certFile = ../../../nixos/security/ssl/certs/kepler.lan+7.pem;
   keyFile = config.age.secrets.kepler-tls-key.path;
 
+  # mkcert-signed static cert, for the *.sxsw*.localhost dev domains
   proxy = host: port: {
     "${host}".extraConfig = ''
       tls ${certFile} ${keyFile}
+      reverse_proxy localhost:${toString port}
+    '';
+  };
+
+  # step-ca via ACME (see acmeCA below), for the real *.kepler.lan domains
+  acmeProxy = host: port: {
+    "${host}".extraConfig = ''
       reverse_proxy localhost:${toString port}
     '';
   };
@@ -46,6 +54,7 @@ in {
 
   services.caddy = {
     enable = true;
+    acmeCA = "https://ca.planck.lan:8443/acme/acme/directory";
     virtualHosts = lib.mkMerge [
       (viteProxy "id.sxsw.localhost" 5000 3036)
       (viteProxy "id.sxswedu.localhost" 5000 3036)
@@ -59,18 +68,18 @@ in {
       (proxy "minio.sxsw.localhost" 9000)
       (proxy "test.sxsw.localhost" 8999)
 
-      (proxy "audiobookshelf.kepler.lan" config.services.audiobookshelf.port)
-      (proxy "bazarr.kepler.lan" config.services.bazarr.listenPort)
-      (proxy "dockhand.kepler.lan" 3300)
-      (proxy "immich.kepler.lan" 2283)
-      (proxy "jellyfin.kepler.lan" 8096)
-      (proxy "lidarr.kepler.lan" config.services.lidarr.settings.server.port)
-      (proxy "prowlarr.kepler.lan" config.services.prowlarr.settings.server.port)
-      (proxy "radarr.kepler.lan" config.services.radarr.settings.server.port)
-      (proxy "seerr.kepler.lan" config.services.seerr.port)
-      (proxy "sonarr.kepler.lan" config.services.sonarr.settings.server.port)
-      (proxy "usenet.kepler.lan" 6789)
-      (proxy "hoogle.kepler.lan" config.services.hoogle.port)
+      (acmeProxy "audiobookshelf.kepler.lan" config.services.audiobookshelf.port)
+      (acmeProxy "bazarr.kepler.lan" config.services.bazarr.listenPort)
+      (acmeProxy "dockhand.kepler.lan" 3300)
+      (acmeProxy "immich.kepler.lan" 2283)
+      (acmeProxy "jellyfin.kepler.lan" 8096)
+      (acmeProxy "lidarr.kepler.lan" config.services.lidarr.settings.server.port)
+      (acmeProxy "prowlarr.kepler.lan" config.services.prowlarr.settings.server.port)
+      (acmeProxy "radarr.kepler.lan" config.services.radarr.settings.server.port)
+      (acmeProxy "seerr.kepler.lan" config.services.seerr.port)
+      (acmeProxy "sonarr.kepler.lan" config.services.sonarr.settings.server.port)
+      (acmeProxy "usenet.kepler.lan" 6789)
+      (acmeProxy "hoogle.kepler.lan" config.services.hoogle.port)
     ];
   };
 }

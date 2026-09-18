@@ -3,7 +3,6 @@
 {
   # List your module files here
   # my-module = import ./my-module.nix;
-  local-ca = import ./local-ca.nix;
   arrs = import ./arrs.nix;
   printing = import ./printing.nix;
 }

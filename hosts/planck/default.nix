@@ -16,6 +16,10 @@
     ./services
   ];
 
+  # trust step-ca's own root so Caddy's ACME client trusts
+  # https://ca.planck.lan:8443 when requesting certs for *.planck.lan
+  security.pki.certificateFiles = [../../nixos/security/ssl/certs/step-ca-root.pem];
+
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
   boot.tmp.useTmpfs = true;
@@ -53,6 +57,7 @@
     firewall = let
       dns = 53;
       http = 80;
+      https = 443;
       mountd = 20048;
       rpcbind = 111;
       nfs = 2049;
@@ -63,7 +68,7 @@
     in {
       enable = true;
       allowPing = true;
-      allowedTCPPorts = [dns http lockd mountd nfs rpcbind ssh statd];
+      allowedTCPPorts = [dns http https lockd mountd nfs rpcbind ssh statd];
       allowedUDPPorts = [dns lockd mountd nfs ntp rpcbind statd];
     };
     nameservers = ["1.1.1.1" "1.0.0.1"];

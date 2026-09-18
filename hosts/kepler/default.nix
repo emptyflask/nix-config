@@ -103,8 +103,9 @@
         plexPorts = [32400 3005 8324 32469];
         sambaPorts = [139 445];
         ssh = 22;
+        caddyPorts = [80 443]; # also needed so planck's step-ca can complete ACME HTTP-01 validation
       in
-        [homeAssistant ssh] ++ jellyfinPorts ++ sambaPorts ++ plexPorts;
+        [homeAssistant ssh] ++ jellyfinPorts ++ sambaPorts ++ plexPorts ++ caddyPorts;
       allowedUDPPorts = let
         jellyfinPorts = [7359];
         netbiosPorts = [137 138];
@@ -256,6 +257,7 @@
       autoPrune.enable = true;
       # For GPU support in docker containers
       daemon.settings.features.cdi = true;
+      rootless.daemon.settings.features.cdi = true;
     };
     podman = {
       enable = true;

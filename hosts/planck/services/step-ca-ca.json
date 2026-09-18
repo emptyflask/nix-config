@@ -1,0 +1,54 @@
+{
+	"root": "/var/lib/step-ca/certs/root_ca.crt",
+	"federatedRoots": null,
+	"crt": "/var/lib/step-ca/certs/intermediate_ca.crt",
+	"key": "/var/lib/step-ca/secrets/intermediate_ca_key",
+	"insecureAddress": "",
+	"dnsNames": [
+		"ca.planck.lan",
+		"planck.lan",
+		"planck",
+		"localhost",
+		"127.0.0.1",
+		"10.9.8.6"
+	],
+	"logger": {
+		"format": "text"
+	},
+	"db": {
+		"type": "badgerv2",
+		"dataSource": "/var/lib/step-ca/db",
+		"badgerFileLoadingMode": ""
+	},
+	"authority": {
+		"provisioners": [
+			{
+				"type": "JWK",
+				"name": "jon@planck.lan",
+				"key": {
+					"use": "sig",
+					"kty": "EC",
+					"kid": "MZKnsNpNmmOaZulSQitin5rJx94_ZROn-kqt-SQ5n_Y",
+					"crv": "P-256",
+					"alg": "ES256",
+					"x": "E6GNHzxd-QU22yiaePEqOhYn53L2SqIOyXUzYvHfYi8",
+					"y": "9abO2u4rC6H7QkYZIc1SwFwx5IoAkw0xRGBeHAVJcvQ"
+				},
+				"encryptedKey": "eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJjdHkiOiJqd2sranNvbiIsImVuYyI6IkEyNTZHQ00iLCJwMmMiOjYwMDAwMCwicDJzIjoiM2syTlcwdVg3OGlTWF94QV9tNU1GQSJ9.8112eAQNnVn1Lze2uyXOKnD6a3iyEXuKx4SoVa0yVwLUuESFXrDBOA.EdroDwYy9YTFedzH.F2bm2H4PAEzAEe5Hz3CvWHnYosDJJI7OiIYzYewSsRRS0KYQ59Dp0tYPFisao6bZ9EWC2F3_MxHH_FCcBm7hho5kHTt1CrxwZPSVbxzqix9tCNQNXYT4hT-eBc0Vp_zRyuicW9RH2MCr4yIaZF6npbac8ze5IXrmMd_oeIiPQY4sGBn_nSRq8HwyyWnolqkvIX7tqyP9KSclfR1zUWmmNt2ihL9rgaFuVJYTs95dwxmfA5GyoL5cd-5sEiUTHTYAnB4JC088URsJ9pD7oOhUOnCeVL3st3tfEeDHSfoeSXYNxKt5AcgbdujXnSjLbS1Yh8PHHYtUYOZanaOmLWA.9B9nMKdD6-Qw_lZJKd_gug"
+			},
+			{
+				"type": "ACME",
+				"name": "acme"
+			}
+		]
+	},
+	"tls": {
+		"cipherSuites": [
+			"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+			"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
+		],
+		"minVersion": 1.2,
+		"maxVersion": 1.3,
+		"renegotiation": false
+	}
+}

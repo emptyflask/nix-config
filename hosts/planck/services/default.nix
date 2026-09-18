@@ -1,16 +1,8 @@
 {...}: {
   imports = [
     ./caddy.nix
+    ./step-ca.nix
   ];
-
-  # services.localCA = {
-  #   enable = true;
-  #   certFile = "planck.pem";
-  #   keyFile = "planck-key.pem";
-  #   domains = [ "planck.lan" "pi.hole" "pihole.lan" "node-red.lan" ];
-  #   validityDays = 730;
-  #   renewBeforeDays = 30;
-  # };
 
   services.chrony = {
     enable = true;
