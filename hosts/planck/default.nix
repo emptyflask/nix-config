@@ -13,6 +13,7 @@
     ../../nixos/users
     ../common.nix
     ./samba.nix
+    ./services
   ];
 
   boot.loader.grub.enable = false;
@@ -102,68 +103,6 @@
 
   # power.ups.enable = true;
 
-  # services.couchdb.enable = true;
-  # services.docker.enable = true;
-
-  # services.localCA = {
-  #   enable = true;
-  #   certFile = "planck.pem";
-  #   keyFile = "planck-key.pem";
-  #   domains = [ "planck.lan" "pi.hole" "pihole.lan" "node-red.lan" ];
-  #   validityDays = 730;
-  #   renewBeforeDays = 30;
-  # };
-
-  services.chrony = {
-    enable = true;
-    extraConfig = ''
-      allow 10.9.0.0/16
-      makestep 1.0 3
-    '';
-    servers = [
-      "ns.nts.umn.edu"
-      "ntp.state.mn.us"
-      "time.nist.gov"
-      "0.us.pool.ntp.org"
-    ];
-  };
-
-  services.nfs = {
-    server = {
-      enable = true;
-      exports = ''
-        /       10.9.0.0/16(ro,insecure,sync,no_subtree_check,crossmnt,fsid=0)
-        /photon 10.9.8.0/24(rw,insecure,sync,no_subtree_check)
-        /photon 10.9.0.0/16(ro,insecure,sync,no_subtree_check)
-        /squid  10.9.8.0/24(rw,insecure,sync,no_subtree_check)
-        /squid  10.9.0.0/16(ro,insecure,sync,no_subtree_check)
-      '';
-    };
-  };
-
-  services.openssh = {
-    enable = true;
-    settings = {
-      AllowUsers = ["jon"];
-      PasswordAuthentication = false;
-      PermitRootLogin = "no";
-      X11Forwarding = false;
-    };
-  };
-
-  services.rpcbind.enable = true;
-
-  services.caddy = {
-    enable = true;
-    virtualHosts = {
-      "pi.hole:80".extraConfig = "reverse_proxy http://localhost:8080";
-      "pihole.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
-      "pihole.planck.lan:80".extraConfig = "reverse_proxy http://localhost:8080";
-      # nodeRed: container is currently disabled, see virtualisation.oci-containers below
-      # "node-red.planck.lan:80".extraConfig = "reverse_proxy http://localhost:1880";
-    };
-  };
-
   systemd.tmpfiles.rules = [
     "d /var/lib/nodered 0755 root root -"
     "d /var/lib/pihole/etc-pihole 0755 root root -"
@@ -177,7 +116,20 @@
   virtualisation = {
     oci-containers = {
       backend = "podman";
+
       containers = {
+        dockhand = {
+          image = "docker.io/fnsys/dockhand:latest";
+          ports = ["127.0.0.1:3300:3000"];
+          volumes = [
+            "/run/podman/podman.sock:/run/podman/podman.sock"
+            "dockhand:/app/data"
+          ];
+          extraOptions = [
+            "--group-add=${toString config.users.groups.podman.gid}"
+          ];
+        };
+
         pihole = {
           image = "pihole/pihole:latest";
           autoStart = true;

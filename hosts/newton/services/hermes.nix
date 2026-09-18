@@ -60,6 +60,18 @@ in {
         command = "npx";
         args = ["@bitbonsai/mcpvault@latest" config.services.livesync-cli.vaultPath];
       };
+      # PAPERLESS_API_KEY resolved at runtime from hermes-env (mirrors HISTER_ACCESS_TOKEN
+      # above) -- add a line `PAPERLESS_API_KEY=<token>` to secrets/hermes.env.age via
+      # `agenix -i ~/.ssh/id_agenix -e secrets/hermes.env.age`. Generate the token in
+      # Paperless-ngx: My Profile -> API Auth Token.
+      paperless = {
+        command = "npx";
+        args = ["-y" "@baruchiro/paperless-mcp@latest"];
+        env = {
+          PAPERLESS_URL = "http://127.0.0.1:28981";
+          PAPERLESS_API_KEY = "\${PAPERLESS_API_KEY}";
+        };
+      };
     };
     extraDependencyGroups = dependencyGroups;
     # CLI tools on the agent's PATH. uv is here so hermes's lazy-install ladder

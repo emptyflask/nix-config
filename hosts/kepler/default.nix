@@ -264,6 +264,23 @@
     libvirtd.enable = true;
 
     oci-containers.containers = {
+      dockhand = {
+        image = "docker.io/fnsys/dockhand:latest";
+        ports = ["127.0.0.1:3300:3000"];
+        volumes = [
+          "/var/run/docker.sock:/var/run/docker.sock"
+          "/run/podman/podman.sock:/run/podman/podman.sock"
+          "dockhand:/app/data"
+        ];
+        # dockhand drops from root to uid/gid 1001:1001 on start, so it needs
+        # supplementary group access to reach the root:docker and root:podman
+        # sockets mounted above.
+        extraOptions = [
+          "--group-add=${toString config.users.groups.docker.gid}"
+          "--group-add=${toString config.users.groups.podman.gid}"
+        ];
+      };
+
       homeassistant = {
         volumes = ["home-assistant:/config"];
         environment.TZ = config.time.timeZone;

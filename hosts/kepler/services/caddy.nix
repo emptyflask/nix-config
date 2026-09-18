@@ -61,7 +61,7 @@ in {
 
       (proxy "audiobookshelf.kepler.lan" config.services.audiobookshelf.port)
       (proxy "bazarr.kepler.lan" config.services.bazarr.listenPort)
-      (proxy "immich.kepler.lan" 2283)
+      (proxy "dockhand.kepler.lan" 3300)
       (proxy "immich.kepler.lan" 2283)
       (proxy "jellyfin.kepler.lan" 8096)
       (proxy "lidarr.kepler.lan" config.services.lidarr.settings.server.port)
