@@ -81,6 +81,12 @@ in {
           url = "https://hagezi-mirror.dnsbunker.org/adblock/native.xiaomi.txt";
         }
       ];
+      users = [
+        {
+          name = "admin";
+          password = "$2b$05$VfTy4UdB6Q5BRfzX7EFqMOlB2Js8XpGPEz0PQaDXgeZ4SuEdsOcuu";
+        }
+      ];
     };
   };
 }
