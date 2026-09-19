@@ -1,11 +1,11 @@
 {config, ...}: {
   imports = [
+    ../../../nixos/services/adguardhome.nix
     ./caddy.nix
     ./hermes.nix
     ./hister.nix
     ./livesync.nix
     ./paperless.nix
-    ./pihole.nix
     ./restic.nix
     ./samba.nix
     ./scan-ftp.nix

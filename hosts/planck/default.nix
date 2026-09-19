@@ -8,7 +8,7 @@
 }: {
   imports = [
     # ../../nixos/security
-    # ../../nixos/services
+    ../../nixos/services/adguardhome.nix
     ./hardware-configuration.nix
     ../../nixos/users
     ../common.nix
@@ -110,13 +110,9 @@
 
   systemd.tmpfiles.rules = [
     "d /var/lib/nodered 0755 root root -"
-    "d /var/lib/pihole/etc-pihole 0755 root root -"
-    "d /var/lib/pihole/etc-dnsmasq.d 0755 root root -"
   ];
 
   time.timeZone = "America/Chicago";
-
-  age.secrets.pihole-env.file = ../../secrets/pihole.env.age;
 
   virtualisation = {
     oci-containers = {
@@ -133,24 +129,6 @@
           extraOptions = [
             "--group-add=${toString config.users.groups.podman.gid}"
           ];
-        };
-
-        pihole = {
-          image = "pihole/pihole:latest";
-          autoStart = true;
-          ports = ["53:53/tcp" "53:53/udp" "8080:80/tcp"];
-          environment = {
-            TZ = "America/Chicago";
-            FTLCONF_dns_listeningMode = "all";
-            FTLCONF_dns_reply_host_force4 = "true";
-            FTLCONF_dns_reply_host_IPv4 = "10.9.8.6";
-          };
-          environmentFiles = [config.age.secrets.pihole-env.path];
-          volumes = [
-            "/var/lib/pihole/etc-pihole:/etc/pihole"
-            "/var/lib/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
-          ];
-          extraOptions = ["--cap-add=NET_ADMIN" "--cap-add=SYS_TIME" "--cap-add=SYS_NICE"];
         };
 
         # nodered = {

@@ -20,7 +20,6 @@ in {
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jon];
   "secrets/paperless-admin-pass.age".publicKeys = [hosts.newton jon];
   "secrets/paperless-ai.env.age".publicKeys = [hosts.newton jon];
-  "secrets/pihole.env.age".publicKeys = [hosts.newton hosts.planck jon];
   "secrets/step-ca-intermediate-password.age".publicKeys = [hosts.planck jon];
   "secrets/restic-password.age".publicKeys = [hosts.kepler jon];
   "secrets/restic-b2-env.age".publicKeys = [hosts.kepler jon];

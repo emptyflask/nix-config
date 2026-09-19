@@ -44,9 +44,9 @@
     hostName = "newton";
     extraHosts = ''
       127.0.0.1 newton.lan newton
-      # newton's own pihole answers NXDOMAIN for other hosts' *.lan zones
-      # (doesn't fall through to the router), so pin step-ca's hostname here
-      # for ACME to resolve it reliably
+      # newton's own AdGuard Home answers NXDOMAIN for other hosts' *.lan
+      # zones (doesn't fall through to the router), so pin step-ca's
+      # hostname here for ACME to resolve it reliably
       10.9.8.6 ca.planck.lan
     '';
     useDHCP = false;
