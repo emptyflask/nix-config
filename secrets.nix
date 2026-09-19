@@ -15,6 +15,7 @@ in {
   "secrets/hermes-webui.env.age".publicKeys = [hosts.newton jon];
   "secrets/hermes.env.age".publicKeys = [hosts.newton jon];
   "secrets/hister.env.age".publicKeys = [hosts.newton jon];
+  "secrets/immich-db-password.age".publicKeys = [hosts.kepler jon];
   "secrets/kepler-tls-key.age".publicKeys = [hosts.kepler jon];
   "secrets/livesync-settings.age".publicKeys = [hosts.newton jon];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jon];

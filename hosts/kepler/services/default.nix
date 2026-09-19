@@ -218,6 +218,7 @@
   imports = [
     ./caddy.nix
     ./hoogle
+    ./immich.nix
     ./jellyfin.nix
     ./openssh.nix
     ./postgresql.nix

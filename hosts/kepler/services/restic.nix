@@ -60,7 +60,7 @@
 
   backupPrepareCommand = ''
     mkdir -p "$(dirname ${immichDbDump})"
-    ${pkgs.docker}/bin/docker exec immich_postgres pg_dumpall -U postgres > ${immichDbDump}
+    ${pkgs.podman}/bin/podman exec database pg_dumpall -U postgres > ${immichDbDump}
   '';
 in {
   age.secrets.restic-password.file = ../../../secrets/restic-password.age;
