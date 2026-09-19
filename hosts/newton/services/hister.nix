@@ -9,7 +9,7 @@
     enable = true;
     environmentFile = config.age.secrets.hister-env.path;
     settings = {
-      server.base_url = "http://hister.newton.lan";
+      server.base_url = "https://hister.newton.lan";
       semantic_search = {
         enable = true;
         embedding_endpoint = "https://openrouter.ai/api/v1/embeddings";
