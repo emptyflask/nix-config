@@ -69,17 +69,18 @@ in {
       (proxy "test.sxsw.localhost" 8999)
 
       (acmeProxy "audiobookshelf.kepler.lan" config.services.audiobookshelf.port)
-      (acmeProxy "bazarr.kepler.lan" config.services.bazarr.listenPort)
       (acmeProxy "dockhand.kepler.lan" 3300)
       (acmeProxy "immich.kepler.lan" 2283)
       (acmeProxy "jellyfin.kepler.lan" 8096)
+      (acmeProxy "usenet.kepler.lan" 6789)
+      (acmeProxy "hoogle.kepler.lan" config.services.hoogle.port)
+
+      (acmeProxy "bazarr.kepler.lan" config.services.bazarr.listenPort)
       (acmeProxy "lidarr.kepler.lan" config.services.lidarr.settings.server.port)
       (acmeProxy "prowlarr.kepler.lan" config.services.prowlarr.settings.server.port)
       (acmeProxy "radarr.kepler.lan" config.services.radarr.settings.server.port)
       (acmeProxy "seerr.kepler.lan" config.services.seerr.port)
       (acmeProxy "sonarr.kepler.lan" config.services.sonarr.settings.server.port)
-      (acmeProxy "usenet.kepler.lan" 6789)
-      (acmeProxy "hoogle.kepler.lan" config.services.hoogle.port)
     ];
   };
 }
