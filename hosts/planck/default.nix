@@ -71,7 +71,12 @@
       allowedTCPPorts = [dns http https lockd mountd nfs rpcbind ssh statd];
       allowedUDPPorts = [dns lockd mountd nfs ntp rpcbind statd];
     };
-    nameservers = ["1.1.1.1" "1.0.0.1"];
+    # Point at our own AdGuard Home first (it has rewrites for kepler.lan,
+    # newton.lan, and planck.lan), fallback to Cloudflare. Without this,
+    # step-ca's ACME http-01/tls-alpn-01 challenges can't resolve *.lan
+    # validation targets: public DNS returns a definitive NXDOMAIN for them,
+    # so renewal fails silently until every issued cert has expired.
+    nameservers = ["127.0.0.1" "1.1.1.1" "1.0.0.1"];
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
