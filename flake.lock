@@ -970,6 +970,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-raspberrypi": "nixos-raspberrypi",
         "nixpkgs": "nixpkgs_8",
+        "vpn-confinement": "vpn-confinement",
         "yazi": "yazi"
       }
     },
@@ -1212,6 +1213,21 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "vpn-confinement": {
+      "locked": {
+        "lastModified": 1789394839,
+        "narHash": "sha256-trdjVJKmDBbzgbP8pd+R7iKbGkdRu0nmXgQlBR/hEiU=",
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
+        "rev": "a21f66ccd9f644c3770ccdf287cb380c00192628",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
         "type": "github"
       }
     },

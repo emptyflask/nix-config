@@ -50,6 +50,7 @@ in {
         ./hosts/kepler
         agenix.nixosModules.default
         flatpaks.nixosModules.default
+        inputs.vpn-confinement.nixosModules.default
         home-manager.nixosModules.home-manager
         {
           home-manager = {

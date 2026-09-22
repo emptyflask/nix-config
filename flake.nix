@@ -41,6 +41,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
+    vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
     yazi.url = "github:sxyazi/yazi";
 
     mcp = {

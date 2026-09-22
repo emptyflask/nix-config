@@ -17,6 +17,7 @@ in {
   "secrets/hister.env.age".publicKeys = [hosts.newton jon];
   "secrets/immich-db-password.age".publicKeys = [hosts.kepler jon];
   "secrets/kepler-tls-key.age".publicKeys = [hosts.kepler jon];
+  "secrets/protonvpn-arrs.age".publicKeys = [hosts.kepler jon];
   "secrets/livesync-settings.age".publicKeys = [hosts.newton jon];
   "secrets/openclaw.env.age".publicKeys = [hosts.newton jon];
   "secrets/paperless-admin-pass.age".publicKeys = [hosts.newton jon];
@@ -31,4 +32,5 @@ in {
   "secrets/ghi-token.age".publicKeys = [jon];
   "secrets/jira-token.age".publicKeys = [jon];
   "secrets/nix-access-tokens.age".publicKeys = [jon];
+  "secrets/typesafe-api-key.age".publicKeys = [jon];
 }
