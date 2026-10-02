@@ -361,8 +361,25 @@ in {
     configPath = "${config.xdg.configHome}/mozilla/firefox";
     # Trust the OS cert store (incl. mkcert's rootCA.pem, wired in via
     # security.pki.certificateFiles) instead of Firefox's own NSS store.
+    # NOTE: ImportEnterpriseRoots only takes effect on Windows/macOS, so on
+    # Linux this is a no-op and the activation script below does the real work.
     policies.Certificates.ImportEnterpriseRoots = true;
   };
+
+  # mkcert only knows to inject its root CA into Firefox profiles found at
+  # ~/.mozilla/firefox/*, but configPath above moves the profile to the XDG
+  # location, so `mkcert -install` can never find it. Import the CA directly
+  # into every Firefox profile's NSS database instead.
+  home.activation.mkcertFirefoxNss = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    for db in "$HOME"/.config/mozilla/firefox/*/cert9.db; do
+      [ -e "$db" ] || continue
+      profile="$(dirname "$db")"
+      $VERBOSE_ECHO "Trusting mkcert root CA in Firefox profile: $profile"
+      $DRY_RUN_CMD ${pkgs.nss.tools}/bin/certutil -A \
+        -d "sql:$profile" -t "C,," -n "mkcert dev CA (sxsw)" \
+        -i ${../../nixos/security/ssl/certs/rootCA.pem}
+    done
+  '';
 
   programs.ncspot = {
     enable = true;
