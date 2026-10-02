@@ -165,6 +165,7 @@ in {
 
       # graphics / print
       # adobe-reader
+      affinity-v3 # Affinity Photo/Designer/Publisher, via Wine (github:mrshmllow/affinity-nix)
       # blender
       # darktable
       ffmpegthumbnailer

@@ -31,6 +31,10 @@
     };
 
     # Tools
+    affinity-nix = {
+      url = "github:mrshmllow/affinity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     agenix.url = "github:ryantm/agenix";
     claude-code.url = "github:sadjow/claude-code-nix";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
@@ -57,11 +61,13 @@
   };
   nixConfig = {
     extra-substituters = [
+      "https://cache.forall.systems"
       "https://claude-code.cachix.org"
       "https://nixos-raspberrypi.cachix.org"
       "https://yazi.cachix.org"
     ];
     extra-trusted-public-keys = [
+      "cache.forall.systems:5PmD7QO4MSF8YgyRZtkSGXRDo96H3bybIf2SsQh8ScI="
       "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
       "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="

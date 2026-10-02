@@ -64,6 +64,7 @@ in {
       outputs.overlays.modifications
 
       # You can also add overlays exported from other flakes:
+      inputs.affinity-nix.overlays.default
       # neovim-nightly-overlay.overlays.default
 
       # Or define it inline, for example:
