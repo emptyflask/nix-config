@@ -15,7 +15,7 @@
     passwordFile = config.age.secrets.paperless-admin-pass.path;
     environmentFile = config.age.secrets.paperless-ai-env.path;
     settings = {
-      PAPERLESS_URL = "http://paperless.newton.lan";
+      PAPERLESS_URL = "https://paperless.newton.lan";
       PAPERLESS_OCR_LANGUAGE = "eng";
       # Per-user FTP scan dirs (see ./scan-ftp.nix): consume/<name>/... gets
       # picked up recursively and each person's scans auto-tagged with <name>.
