@@ -12,6 +12,7 @@
 in {
   imports = [
     "${self}/home-manager/claude.nix"
+    "${self}/home-manager/pi-coding-agent.nix"
     "${self}/home-manager/common.nix"
     "${self}/home-manager/environment.nix"
     "${self}/home-manager/services/dunst"
@@ -254,7 +255,6 @@ in {
       hexyl
       html-tidy # format html
       lazydocker
-      ltrace # lib trace
       nixfmt # format nix
       shellcheck # shell script analyzer
       sourceHighlight

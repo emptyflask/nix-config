@@ -9,53 +9,12 @@
   system = pkgs.stdenv.hostPlatform.system;
   serena = inputs.mcp.serena.packages.${system}.serena;
 
-  typesafeAiSkills = pkgs.fetchFromGitHub {
-    owner = "typesafe-ai";
-    repo = "skills";
-    rev = "65a39f393687675ce170e6094757de20370365b9";
-    hash = "sha256-Lh2Y90TFv+njKqo/g5WXEHw0Rk1jQSH5POqKtrvy5kM=";
-  };
-
-  plugins = {
-    mattpocock-skills = pkgs.fetchFromGitHub {
-      owner = "mattpocock";
-      repo = "skills";
-      rev = "v1.2.3";
-      hash = "sha256-I/EXHGW92nXz6JCLp8SKGgzXrbbUTkLAfxv8bc/ThwQ=";
-    };
-
-    # typesafe-ai/skills: TypeSafe System One API context. Loaded as a
-    # personal plugin (skills/agents/commands/hooks/MCP) the same way as the
-    # other entries here - not through marketplace registration. Claude Code
-    # owns known_marketplaces.json itself (installLocation/lastUpdated get
-    # rewritten at runtime for claude-plugins-official/mdodkins-tdd), so we
-    # deliberately don't manage that file from nix.
-    typesafe = typesafeAiSkills;
-
-    # Rewrites AI-sounding prose. Skill only, no hooks or scripts.
-    humanizer = pkgs.fetchFromGitHub {
-      owner = "blader";
-      repo = "humanizer";
-      rev = "e2e92e7b4b8229253ed5c8e81dc65463fdeddda5";
-      hash = "sha256-n08pud3m9ka1Ymqv6qinSCUku975FM2LJRboi9ur5D4=";
-    };
-
-    # "Laziest senior dev" mode. node hooks; state lives in ~/.config/ponytail.
-    ponytail = pkgs.fetchFromGitHub {
-      owner = "DietrichGebert";
-      repo = "ponytail";
-      rev = "2ed6c52c9d7e5e56942508591085fd45dea277d3";
-      hash = "sha256-bGdXvzhWPwGdz3T2Yh2h6lf+3PBRFAfdBxP5pESmCHI=";
-    };
-
-    # Token-compressed output mode. node hooks; state in ~/.config/caveman.
-    caveman = pkgs.fetchFromGitHub {
-      owner = "JuliusBrussee";
-      repo = "caveman";
-      rev = "2f49f0e1a352aa810e70056b7930aeb0b3d219b4";
-      hash = "sha256-FagkzOnjW9tqeaAK8NX1X8REsjWRRMqfrvhByEtrAXM=";
-    };
-  };
+  # Shared with pi-coding-agent.nix so both agents see identical skill
+  # content. Claude Code owns known_marketplaces.json itself
+  # (installLocation/lastUpdated get rewritten at runtime for
+  # claude-plugins-official/mdodkins-tdd), so we deliberately don't manage
+  # that file from nix.
+  plugins = import ./skill-plugins.nix {inherit pkgs;};
 
   # Second config dir used for work (CLAUDE_CONFIG_DIR=~/.claude-work claude).
   workDir = "${config.home.homeDirectory}/.claude-work";

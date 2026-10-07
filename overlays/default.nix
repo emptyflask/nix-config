@@ -33,6 +33,22 @@
         ++ ["src/documents/tests/test_consumer.py::TestConsumer::testNormalOperation"];
     });
 
+    # rxvt-unicode (urxvt) wraps this; overriding it here propagates there too.
+    rxvt-unicode-unwrapped = prev.rxvt-unicode-unwrapped.overrideAttrs (old: {
+      # rxvtutil.h declares its own free-function `lerp`, found via unqualified
+      # lookup alongside `std::lerp` (added in C++20). Nothing here pins a
+      # `-std=`, so it inherits whatever newer default GCC picks, and once
+      # that default reaches C++20 the two `lerp`s collide as an ambiguous
+      # overload - a real compile error, not a warning. Pin an older standard
+      # pre-dating std::lerp rather than patch this 2016-vintage, unmaintained
+      # upstream's source.
+      env =
+        (old.env or {})
+        // {
+          CXXFLAGS = toString ((old.env.CXXFLAGS or []) ++ ["-std=gnu++17"]);
+        };
+    });
+
     postman = prev.postman.overrideAttrs (old: rec {
       version = "20230716100528";
       src = final.fetchurl {
