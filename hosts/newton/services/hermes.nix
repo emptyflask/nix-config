@@ -9,9 +9,32 @@
   # Dependency groups the agent's venv is built with. The hermes-agent module
   # bakes these into the package it runs. The webui runs the agent host-native
   # from its own package reference (HERMES_WEBUI_PYTHON = the venv's python3), so
-  # it must be built with the SAME groups — honcho in particular, since
-  # settings.memory.provider = "honcho" fails at runtime without it.
-  dependencyGroups = ["firecrawl" "hindsight" "honcho" "messaging"];
+  # it must be built with the SAME groups.
+  #
+  # "hindsight" and "honcho" used to live here too, but upstream moved every
+  # non-builtin memory provider out of pyproject.toml's extras/dependency-groups
+  # and into its runtime plugin catalog (installed to $HERMES_HOME/plugins/<name>,
+  # not the sealed venv) — passing either name here now fails the build with
+  # "Extra/group name '<name>' does not match either extra or dependency group".
+  # We still use "hindsight" as memory.provider below; it's declared via
+  # extraPlugins instead (pinned from the catalog entry, see hindsightPlugin).
+  dependencyGroups = ["firecrawl" "messaging"];
+
+  # The "hindsight" memory provider's catalog entry
+  # (plugin-catalog/hindsight.yaml upstream): the actual Hermes plugin
+  # (plugin.yaml + __init__.py) lives in a subdir of vectorize-io/hindsight,
+  # not at the repo root, so pull just that subdir out into its own derivation
+  # for extraPlugins below. Bump both `rev` and `version` together from that
+  # catalog entry when updating.
+  hindsightSrc = pkgs.fetchFromGitHub {
+    owner = "vectorize-io";
+    repo = "hindsight";
+    rev = "d56c4acdf59c41957613d399094cdf8c489b060c"; # version 1.2.1
+    hash = "sha256-L5HjVF64foSslizP6FPvEcnzorK4LY78YnuuP8rfEcA=";
+  };
+  hindsightPlugin = pkgs.runCommand "hermes-plugin-hindsight" {} ''
+    cp -r ${hindsightSrc}/hindsight-integrations/hermes $out
+  '';
 
   # Pinned Python libraries baked into the sealed venv (reproducible). Add
   # nixpkgs libs here for anything you want guaranteed/offline-buildable;
@@ -74,6 +97,7 @@ in {
       };
     };
     extraDependencyGroups = dependencyGroups;
+    extraPlugins = [hindsightPlugin];
     # CLI tools on the agent's PATH. uv is here so hermes's lazy-install ladder
     # (resolve_uv() or shutil.which("uv")) can find it; the nixpkgs uv is
     # patchelf'd for NixOS, unlike hermes's download-a-standalone-binary
