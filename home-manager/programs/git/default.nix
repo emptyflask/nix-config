@@ -50,6 +50,7 @@
       ".env.production"
       ".env.staging"
       ".envrc"
+      ".nix-gems/"
       ".notags"
       ".nvimrc"
       ".nvimlog"
@@ -61,6 +62,7 @@
       ".solargraph.yml"
       ".vimrc"
       ".vscode/"
+      ".worktrees/"
       "GPATH"
       "GRTAGS"
       "GTAGS"
@@ -71,7 +73,6 @@
       "tags"
       "tags.lock"
       "tags.temp"
-      ".nix-gems/"
     ];
 
     settings = {
