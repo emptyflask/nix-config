@@ -29,6 +29,7 @@ in {
   "secrets/newton-restic-b2-env.age".publicKeys = [hosts.newton jon];
 
   # personal
+  "secrets/rootca-key.age".publicKeys = [jon];
   "secrets/ghi-token.age".publicKeys = [jon];
   "secrets/jira-token.age".publicKeys = [jon];
   "secrets/nix-access-tokens.age".publicKeys = [jon];
