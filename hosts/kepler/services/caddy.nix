@@ -81,6 +81,7 @@ in {
       (proxy "test.sxsw.localhost" 8999)
 
       (acmeProxy "audiobookshelf.kepler.lan" config.services.audiobookshelf.port)
+      (acmeProxy "decypharr.kepler.lan" 8282)
       (acmeProxy "dockhand.kepler.lan" 3300)
       (acmeProxy "immich.kepler.lan" 2283)
       (acmeProxy "jellyfin.kepler.lan" 8096)
@@ -101,6 +102,7 @@ in {
               <li><a href='https://bazarr.kepler.lan'>Bazarr</a>: subtitles for Radarr/Sonarr</li>
               <li><a href='https://prowlarr.kepler.lan'>Prowlarr</a>: indexer manager feeding Radarr/Sonarr/Lidarr</li>
               <li><a href='https://qbittorrent.kepler.lan'>qBittorrent</a>: torrent client, routed through ProtonVPN</li>
+              <li><a href='https://decypharr.kepler.lan'>Decypharr</a>: qBittorrent-compatible download client backed by Premiumize</li>
               <li><a href='https://usenet.kepler.lan'>NZBGet</a>: usenet client</li>
             </ul></body></html>" 200
           }

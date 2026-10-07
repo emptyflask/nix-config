@@ -217,6 +217,7 @@
 
   imports = [
     ./caddy.nix
+    ./decypharr.nix
     ./hoogle
     ./immich.nix
     ./jellyfin.nix

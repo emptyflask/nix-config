@@ -11,38 +11,33 @@
     serviceConfig.UMask = lib.mkForce "0002";
   };
 in {
+  # openFirewall is left off (NixOS default false) for all of these: each is
+  # already reachable over HTTPS via Caddy's reverse proxy at *.kepler.lan
+  # (see hosts/kepler/services/caddy.nix). Opening their raw ports here would
+  # make them reachable directly over plain HTTP too, bypassing that proxy
+  # entirely - belt-and-suspenders exposure with no upside.
   services.bazarr = {
     enable = true;
     group = "media";
-    openFirewall = true;
   };
 
   services.lidarr = {
     enable = true;
     group = "media";
-    openFirewall = true;
   };
 
-  services.prowlarr = {
-    enable = true;
-    openFirewall = true;
-  };
+  services.prowlarr.enable = true;
 
   services.radarr = {
     enable = true;
     group = "media";
-    openFirewall = true;
   };
 
-  services.seerr = {
-    enable = true;
-    openFirewall = true;
-  };
+  services.seerr.enable = true;
 
   services.sonarr = {
     enable = true;
     group = "media";
-    openFirewall = true;
   };
 
   # No Caddy entry / openFirewall: it's an internal helper Prowlarr calls at
@@ -52,7 +47,6 @@ in {
 
   services.shelfmark = {
     enable = true;
-    openFirewall = true;
     environment = {
       FLASK_HOST = "0.0.0.0";
       INGEST_DIR = "/media/repository/books";
