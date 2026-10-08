@@ -71,3 +71,14 @@ Copy the shape of an existing one under `hosts/`, add it to
 `nixosConfigurations` (or `darwinConfigurations`) in `outputs.nix`, wire up
 its `home.nix` the same way the others do, and it's rebuildable the same
 way as everything else here.
+
+## Upgrading immich
+
+```
+# on kepler
+sudo podman pull ghcr.io/immich-app/immich-server:release
+sudo podman pull ghcr.io/immich-app/immich-machine-learning:release-cuda
+
+# restart the containers so they pick up the new image
+sudo systemctl restart podman-immich-server.service podman-immich-machine-learning.service
+```
