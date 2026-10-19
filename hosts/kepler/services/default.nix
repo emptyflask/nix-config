@@ -215,6 +215,16 @@
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
+  # nzbget's own completed-download category dirs (configured via its web UI,
+  # under /media/work/usenet/complete/) include ones like "Series" owned
+  # group "media" - same group the arrs share (see modules/nixos/arrs.nix).
+  # nzbget isn't in that group by default, so moving a finished download
+  # into such a category silently fails (mkdir denied) and the file is
+  # stuck in .../incomplete/ forever - Sonarr/Radarr never see it, and
+  # nzbget logs the only error ("Could not create directory ... Move ...
+  # failed"), not the *arr app.
+  systemd.services.nzbget.serviceConfig.SupplementaryGroups = ["media"];
+
   imports = [
     ./caddy.nix
     ./decypharr.nix
