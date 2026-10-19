@@ -26,6 +26,7 @@
       image = "ghcr.io/immich-app/immich-machine-learning:release-cuda";
       volumes = ["immich-model-cache:/cache"];
       environment.TZ = config.time.timeZone;
+      environment.MACHINE_LEARNING_MODEL_REVISION = "v2";
       devices = ["nvidia.com/gpu=all"];
     };
 
