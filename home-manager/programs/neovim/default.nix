@@ -37,7 +37,6 @@ in
         # dhall-lsp-server
         haskellPackages.haskell-language-server
         lua-language-server
-        luaPackages.tiktoken_core
         # nil # nix language server
         nixd # other nix language server
         ruby-lsp

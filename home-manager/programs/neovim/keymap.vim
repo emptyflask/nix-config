@@ -184,7 +184,6 @@ map <M-q> :tabclose<cr>
 " Delete buffer
 map <leader><bs> :bd!<cr>
 
-map <F3> :CopilotChatToggle<CR>
 nnoremap <F4> :Errors<CR>
 nmap <F8> :TagbarOpenAutoClose<CR>
 

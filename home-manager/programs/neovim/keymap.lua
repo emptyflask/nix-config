@@ -156,7 +156,6 @@ vim.keymap.set('n', '<M-q>', ':tabclose<CR>')
 vim.keymap.set('n', '<leader><bs>', ':bd!<CR>')
 
 -- Special function keys
-vim.keymap.set('n', '<F3>', ':CopilotChatToggle<CR>')
 vim.keymap.set('n', '<F4>', ':Errors<CR>')
 vim.keymap.set('n', '<F8>', ':TagbarOpenAutoClose<CR>')
 
