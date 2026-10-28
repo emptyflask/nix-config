@@ -117,6 +117,8 @@
           }; f'';
       };
 
+      branch.autoSetupMerge = "simple";
+
       color = {
         ui = "true";
 
@@ -134,6 +136,8 @@
         attributesFile = "~/.git/gitattributes";
         pager = "${pkgs.delta}/bin/delta";
       };
+
+      credential.helper = "${pkgs.pass-git-helper}/bin/pass-git-helper";
 
       delta = {
         navigate = true;
@@ -156,10 +160,9 @@
         };
       };
 
-      # Delta themes
+      github.user = "emptyflask";
       include.path = "${./themes.gitconfig}";
-
-      interactive = {diffFilter = "${pkgs.delta}/bin/delta --color-only";};
+      interactive.diffFilter = "${pkgs.delta}/bin/delta --color-only";
 
       merge = {
         tool = "nvim";
@@ -167,14 +170,11 @@
       };
 
       mergetool.nvim.cmd = ''nvim -f -c "Gdiffsplit!" "$MERGED"'';
-
-      credential.helper = "${pkgs.pass-git-helper}/bin/pass-git-helper";
-      github.user = "emptyflask";
-
       pull.ff = "only";
+
       push = {
         autoSetupRemote = true;
-        default = "upstream";
+        default = "simple";
       };
 
       rebase.updateRefs = true;

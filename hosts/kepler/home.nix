@@ -136,6 +136,7 @@ in {
       pv # pipe viewer
       qalculate-gtk # calculator
       qemu
+      restic-b2 # wraps restic with b2 backup credentials decrypted via agenix
       restic-local # restic against the /media/green local backup repo
       scowl # spellchecker / dictionary
       sone # tidal gui
