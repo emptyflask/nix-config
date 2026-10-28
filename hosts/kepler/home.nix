@@ -17,7 +17,7 @@ in {
     "${self}/home-manager/environment.nix"
     "${self}/home-manager/services/dunst"
     "${self}/home-manager/services/mpd"
-    "${self}/home-manager/services/trayer"
+    "${self}/home-manager/services/stalonetray"
     "${self}/home-manager/programs/alacritty"
     "${self}/home-manager/programs/git"
     "${self}/home-manager/programs/kitty"
