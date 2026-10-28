@@ -1,10 +1,17 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }: let
   system = pkgs.stdenv.hostPlatform.system;
+
+  # Python package set matching hermes's own interpreter (pinned by its
+  # pm/lock.json, from its own nixpkgs). Must be used for extraPythonPackages:
+  # the package's requiredPythonModules silently drops anything built against
+  # a different python (e.g. pkgs.python3Packages), leaving it off PYTHONPATH.
+  pyPkgs = inputs.hermes-agent.packages.${system}.default.python.pkgs;
 
   # Dependency groups the agent's venv is built with. The hermes-agent module
   # bakes these into the package it runs. The webui runs the agent host-native
@@ -36,21 +43,35 @@
     cp -r ${hindsightSrc}/hindsight-integrations/hermes $out
   '';
 
-  # Pinned Python libraries baked into the sealed venv (reproducible). Add
-  # nixpkgs libs here for anything you want guaranteed/offline-buildable;
-  # arbitrary PyPI libs the agent grabs on the fly go to the lazy-install vendor
-  # dir instead (HERMES_LAZY_INSTALL_TARGET, set below). Skips libs hermes already
-  # bundles as core deps (requests, httpx, rich, Pillow, markdown, pydantic, …).
-  extraPythonPackages = with pkgs.python3Packages; [
-    beautifulsoup4
-    lxml # HTML/XML scraping + parsing (lxml is compiled)
-    numpy
-    openpyxl # PDF text extraction + Excel .xlsx read/write
-    pandas # numbers + tabular data; compiled, so Nix avoids fragile wheels on this CPU
-    pypdf
-    python-dateutil
-    tabulate # flexible date parsing + text/markdown table formatting
-  ];
+  # The plugin's pyproject.toml deps (hindsight-client/-embed >=0.10.1,<1).
+  # Hermes would uv-sync these into its venv on install, which can't work on the
+  # read-only store venv, so bake them in via extraPythonPackages instead. Not in
+  # nixpkgs; both are pure-Python wheels. Keep below 1.0 to match the plugin pin.
+  # Their deps (aiohttp, pydantic, rich, yarl, …) already live in the sealed
+  # venv, and hermes's build fails on any extra that duplicates a venv package,
+  # so propagate nothing and skip the runtime-deps check (it can't see the venv).
+  # aiohttp-retry is the one dep the venv lacks; it's stripped the same way.
+  bareWheel = pname: version: hash:
+    pyPkgs.buildPythonPackage {
+      inherit pname version;
+      format = "wheel";
+      dontCheckRuntimeDeps = true;
+      src = pyPkgs.fetchPypi {
+        inherit version hash;
+        pname = builtins.replaceStrings ["-"] ["_"] pname;
+        format = "wheel";
+        dist = "py3";
+        python = "py3";
+      };
+    };
+  hindsightClient = bareWheel "hindsight-client" "0.10.3" "sha256-tNDRu8KdzU7yWkojoIpIBG1TN7cEva+rsC0AENKZoGg=";
+  hindsightEmbed = bareWheel "hindsight-embed" "0.10.3" "sha256-KQuB2DY+mW8Wb1M9MsYec0r10QRpWiUrDg9ynPNuzPE=";
+  aiohttpRetry = bareWheel "aiohttp-retry" "2.9.1" "sha256-ZtJ1nRkhg4JWoFo/gK1+ckk28IPjW+WrteFu7Wvm3FQ=";
+
+  # Python libraries added to the agent's PYTHONPATH. Must come from pyPkgs, and
+  # must not (transitively) include anything already in the sealed venv — the
+  # build fails on collisions — so prefer bareWheel and let the venv supply deps.
+  extraPythonPackages = [aiohttpRetry hindsightClient hindsightEmbed];
 
   # Reproduces exactly the package the hermes-agent module builds internally
   # (default.override { inherit extraDependencyGroups extraPythonPackages; }), so
@@ -79,8 +100,12 @@ in {
         headers.Authorization = "Bearer \${HISTER_ACCESS_TOKEN}";
         timeout = 180;
       };
+      # Absolute npx paths: hermes swaps a bare "npx" for its own PM-provisioned
+      # copy, and that provisioning hangs on NixOS — blocking the shared MCP loop
+      # so every server (HTTP ones too) dies with CancelledError. An absolute
+      # command is left as-is.
       mcpVault = {
-        command = "npx";
+        command = "${pkgs.nodejs}/bin/npx";
         args = ["@bitbonsai/mcpvault@latest" config.services.livesync-cli.vaultPath];
       };
       # PAPERLESS_API_KEY resolved at runtime from hermes-env (mirrors HISTER_ACCESS_TOKEN
@@ -88,7 +113,7 @@ in {
       # `agenix -i ~/.ssh/id_agenix -e secrets/hermes.env.age`. Generate the token in
       # Paperless-ngx: My Profile -> API Auth Token.
       paperless = {
-        command = "npx";
+        command = "${pkgs.nodejs}/bin/npx";
         args = ["-y" "@baruchiro/paperless-mcp@latest"];
         env = {
           PAPERLESS_URL = "http://127.0.0.1:28981";
@@ -97,7 +122,10 @@ in {
       };
     };
     extraDependencyGroups = dependencyGroups;
-    extraPlugins = [hindsightPlugin];
+    # Not extraPlugins: that links plugins as nix-managed-<name>, but memory
+    # providers resolve by directory name (plugins/hindsight), so memory.provider
+    # wouldn't find it and startup would try a catalog install instead. Linked
+    # via tmpfiles below.
     # CLI tools on the agent's PATH. uv is here so hermes's lazy-install ladder
     # (resolve_uv() or shutil.which("uv")) can find it; the nixpkgs uv is
     # patchelf'd for NixOS, unlike hermes's download-a-standalone-binary
@@ -143,6 +171,24 @@ in {
     jon.extraGroups = ["hermes"];
   };
 
+  # Upstream sets HERMES_HOME to 2770 (activation + a tmpfiles "d" rule), but
+  # gateway discovery only accepts a group-writable home when the group is
+  # private — jon's membership above makes it shared, so cron fails with
+  # unsafe_control_permissions. Every hermes service runs as the hermes user,
+  # so nothing needs group-write on the home itself (subdirs keep it).
+  # Both upstream paths need overriding: activation (every switch) and tmpfiles
+  # (boot, or a switch that changes tmpfiles config).
+  system.activationScripts.hermes-home-perms = lib.stringAfter ["hermes-agent-setup"] ''
+    chmod 2750 /var/lib/hermes/.hermes
+  '';
+  # tmpfiles applies the entry from the lexically first file per path, and
+  # "00-hermes-home" sorts before the module's "00-nixos", so this one wins.
+  systemd.tmpfiles.settings."00-hermes-home"."/var/lib/hermes/.hermes".d = {
+    mode = "2750";
+    user = "hermes";
+    group = "hermes";
+  };
+
   # hermes's cron worker needs a reachable user D-Bus session
   # (systemd-run --user --scope) for restart-safe scoping. `linger` above
   # makes that session exist, but user@<uid>.service starts in parallel with
@@ -163,6 +209,7 @@ in {
   # readable, so the link resolves and the persona updates on every rebuild.
   systemd.tmpfiles.rules = [
     "L+ /var/lib/hermes/.hermes/SOUL.md - - - - ${./hermes/SOUL.md}"
+    "L+ /var/lib/hermes/.hermes/plugins/hindsight - - - - ${hindsightPlugin}"
     # Vendor dir for HERMES_LAZY_INSTALL_TARGET (runtime uv pip installs). setgid
     # + group-writable so the gateway, webui, and dashboard (all run as hermes)
     # share one target. The plugin also mkdirs it, but seed it with correct perms.
