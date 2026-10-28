@@ -40,7 +40,7 @@ local servers = {
   'biome',
   -- 'dhall_lsp_server',
   'gleam',
-  'hls',
+  -- 'hls', -- started by haskell-tools.nvim instead
   -- 'nil_ls',
   'nixd',
   'pyright',
