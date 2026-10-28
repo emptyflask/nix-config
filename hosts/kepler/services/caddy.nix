@@ -109,7 +109,7 @@ in {
         '';
       }
 
-      (acmeProxy "bazarr.kepler.lan" config.services.bazarr.listenPort)
+      (acmeProxy "bazarr.kepler.lan" config.services.bazarr.settings.general.port)
       (acmeProxy "lidarr.kepler.lan" config.services.lidarr.settings.server.port)
       (acmeProxy "prowlarr.kepler.lan" config.services.prowlarr.settings.server.port)
       (acmeProxyNetns "qbittorrent.kepler.lan" config.vpnNamespaces.arrsvpn.namespaceAddress config.services.qbittorrent.webuiPort)

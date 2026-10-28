@@ -45,13 +45,14 @@
 
     flatpak = {
       enable = true;
+      packages = [
+        # "flathub:app/io.github.lullabyX.sone//stable"
+      ];
       remotes = {
         "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";
         "flathub-beta" = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
       };
-      packages = [
-        # "flathub:app/io.github.lullabyX.sone//stable"
-      ];
+      runWithoutGui = true;
     };
 
     gvfs.enable = true; # automount
@@ -136,8 +137,16 @@
     # Support different DNS servers per interface
     resolved.enable = true;
 
-    # Usenet downloader
-    nzbget = {enable = true;};
+    # Usenet downloader. Primary group "media" (shared with the arrs, see
+    # modules/nixos/arrs.nix) so completed downloads are group-owned by it.
+    # With only a supplementary group, nzbget could write into media-owned
+    # category dirs but new downloads were still nzbget:nzbget, so Radarr's
+    # cross-device import (copy, then delete source) failed on the delete
+    # and retried forever, rewriting whole movies to /media/repository.
+    nzbget = {
+      enable = true;
+      group = "media";
+    };
 
     # Windows file sharing
     samba = {
@@ -214,16 +223,6 @@
   };
 
   systemd.services.NetworkManager-wait-online.enable = false;
-
-  # nzbget's own completed-download category dirs (configured via its web UI,
-  # under /media/work/usenet/complete/) include ones like "Series" owned
-  # group "media" - same group the arrs share (see modules/nixos/arrs.nix).
-  # nzbget isn't in that group by default, so moving a finished download
-  # into such a category silently fails (mkdir denied) and the file is
-  # stuck in .../incomplete/ forever - Sonarr/Radarr never see it, and
-  # nzbget logs the only error ("Could not create directory ... Move ...
-  # failed"), not the *arr app.
-  systemd.services.nzbget.serviceConfig.SupplementaryGroups = ["media"];
 
   imports = [
     ./caddy.nix
