@@ -16,7 +16,10 @@
     };
 
     # Raspberry Pi
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/develop";
 
     # Home manager
@@ -34,19 +37,30 @@
     affinity-nix = {
       url = "github:mrshmllow/affinity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.git-hooks.inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     };
-    agenix.url = "github:ryantm/agenix";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # claude-code and hermes-agent keep their own nixpkgs so their cachix caches hit
     claude-code.url = "github:sadjow/claude-code-nix";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
     hermes-agent.url = "github:NousResearch/hermes-agent";
-    hermes-webui.url = "github:nesquena/hermes-webui";
+    hermes-webui = {
+      url = "github:nesquena/hermes-webui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-anywhere.url = "github:nix-community/nixos-anywhere";
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
-    yazi.url = "github:sxyazi/yazi";
 
     mcp = {
       url = "path:inputs/mcp";
@@ -63,14 +77,14 @@
     extra-substituters = [
       "https://cache.forall.systems"
       "https://claude-code.cachix.org"
+      "https://hermes-agent.cachix.org"
       "https://nixos-raspberrypi.cachix.org"
-      "https://yazi.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.forall.systems:5PmD7QO4MSF8YgyRZtkSGXRDo96H3bybIf2SsQh8ScI="
       "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
+      "hermes-agent.cachix.org-1:jN3pjR50Mxi4SESKC/FIMNM6/LCosvPk2VUwzVvebzU="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
-      "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
     ];
   };
 
