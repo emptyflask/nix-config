@@ -116,7 +116,11 @@ in {
   # Available through 'home-manager --flake .#jon@kepler'
   homeConfigurations = {
     "jon@gaudi" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+      pkgs = import nixpkgs {
+        system = "aarch64-darwin";
+        overlays = [outputs.overlays.additions outputs.overlays.modifications];
+        config.allowUnfree = true;
+      };
       extraSpecialArgs = {inherit inputs outputs;};
       modules = [agenix.homeManagerModules.default ./hosts/gaudi/home.nix];
     };
