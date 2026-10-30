@@ -493,6 +493,61 @@ in {
     userDirs.enable = true;
     userDirs.setSessionVariables = false;
 
+    # xdg-open ignores Terminal=true, and GLib's terminal list doesn't include
+    # kitty, so nvim.desktop can't be launched from the GUI.
+    desktopEntries.nvim-kitty = {
+      name = "Neovim (kitty)";
+      genericName = "Text Editor";
+      exec = "${config.programs.kitty.package}/bin/kitty nvim %F";
+      icon = "nvim";
+      categories = ["Utility" "TextEditor"];
+      mimeType = ["text/plain" "text/markdown" "application/x-ruby"];
+    };
+
+    # Desktop-specific mimeapps.list takes precedence over ~/.config/mimeapps.list,
+    # so these defaults are pinned while apps stay free to write the latter.
+    configFile."xmonad-mimeapps.list".text = lib.generators.toINI {} {
+      "Default Applications" = let
+        firefox = "firefox.desktop";
+        thunderbird = "thunderbird.desktop";
+        nvim = "nvim-kitty.desktop";
+      in {
+        "text/plain" = nvim;
+        "text/markdown" = nvim;
+        "application/x-ruby" = nvim;
+        "text/csv" = "calc.desktop";
+
+        "application/pdf" = "org.pwmt.zathura.desktop";
+        "application/epub+zip" = "calibre-gui.desktop";
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "writer.desktop";
+
+        "image/png" = "feh.desktop";
+        "image/jpeg" = "feh.desktop";
+        "image/gif" = "feh.desktop";
+        "image/webp" = "feh.desktop";
+        "video/mp4" = "smplayer.desktop";
+        "video/x-matroska" = "smplayer.desktop";
+
+        "text/html" = firefox;
+        "application/xhtml+xml" = firefox;
+        "application/x-extension-htm" = firefox;
+        "application/x-extension-html" = firefox;
+        "application/x-extension-shtml" = firefox;
+        "application/x-extension-xhtml" = firefox;
+        "application/x-extension-xht" = firefox;
+        "x-scheme-handler/http" = firefox;
+        "x-scheme-handler/https" = firefox;
+        "x-scheme-handler/about" = firefox;
+        "x-scheme-handler/unknown" = firefox;
+        "x-scheme-handler/chrome" = firefox;
+        "x-scheme-handler/webcal" = firefox;
+
+        "x-scheme-handler/mailto" = thunderbird;
+        "x-scheme-handler/mid" = thunderbird;
+        "message/rfc822" = thunderbird;
+      };
+    };
+
     # xdg-desktop-portal-lxqt doesn't implement the Screenshot portal, so
     # flameshot (since v14) hangs 30s trying it before failing. Skip the
     # portal and use Qt's native X11 capture directly.
@@ -548,6 +603,13 @@ in {
 
   xsession = {
     enable = true;
+
+    # lightdm sets "none+xmonad"; a plain name keeps xmonad-mimeapps.list sane
+    profileExtra = ''
+      export XDG_CURRENT_DESKTOP=xmonad
+      ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd XDG_CURRENT_DESKTOP
+    '';
+
     initExtra = ''
       ${pkgs.feh}/bin/feh --bg-fill ${background}
 
