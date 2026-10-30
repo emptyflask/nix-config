@@ -10,7 +10,7 @@
       rofi-calc
       rofimoji
     ];
-    terminal = "${pkgs.kitty}/bin/kitty";
+    settings.terminal = "${pkgs.kitty}/bin/kitty";
     theme = "gruvbox-dark";
   };
 }
