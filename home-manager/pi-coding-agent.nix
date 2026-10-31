@@ -31,8 +31,9 @@
   # conflicts" collisions at startup. Whitelist only the dirs that hold the
   # real skills/agents/commands so the duplicates are never discovered.
   #
-  # - humanizer ships its SKILL.md at the repo root, so it has no entry here
-  #   and is linked whole (below).
+  # - humanizer ships its SKILL.md at the repo root, and the herdr entry points
+  #   straight at its skill dir, so neither has an entry here and both are
+  #   linked whole (below).
   # - context-mode is omitted from the skills map entirely: the
   #   `npm:context-mode` package (required for its native Pi extension)
   #   already provides the ctx-* skills under ~/.pi/agent/npm/node_modules,
@@ -46,7 +47,7 @@
   };
 
   # Plugins linked whole (SKILL.md at root or no known duplicate dirs).
-  wholeRepoPlugins = ["humanizer"];
+  wholeRepoPlugins = ["humanizer" "herdr"];
 
   # Build a curated tree containing only the whitelisted subdirs. Copy real
   # directories (not symlinks) so pi's recursive SKILL.md walker discovers

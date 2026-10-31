@@ -350,6 +350,7 @@ in {
   };
 
   programs.broot.enable = true; # directory browser
+  programs.herdr.enable = true; # terminal multiplexer for coding agents
 
   programs.eza = {
     enable = true;

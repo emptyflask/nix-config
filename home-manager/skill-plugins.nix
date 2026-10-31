@@ -26,6 +26,10 @@
     hash = "sha256-n8cbTzhlGf8VnWpPukq7XD2mucIrqyE1XMpAAc5oA8A=";
   };
 
+  # Controls the herdr terminal multiplexer. Skill only, taken from the source
+  # of the installed package so it always matches the binary.
+  herdr = "${pkgs.herdr.src}/skills/herdr";
+
   # "Laziest senior dev" mode. node hooks; state lives in ~/.config/ponytail.
   ponytail = pkgs.fetchFromGitHub {
     owner = "DietrichGebert";
