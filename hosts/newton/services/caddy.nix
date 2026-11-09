@@ -15,6 +15,7 @@
             <li><a href='https://immich.newton.lan'>Immich</a></li>
             <li><a href='https://navidrome.newton.lan'>Navidrome</a></li>
             <li><a href='https://paperless.newton.lan'>Paperless-ngx</a></li>
+            <li><a href='https://vault.newton.lan'>Vaultwarden</a></li>
           </ul></body></html>" 200
         }
       '';
@@ -27,6 +28,7 @@
       "immich.newton.lan".extraConfig = "reverse_proxy http://localhost:2283";
       "navidrome.newton.lan".extraConfig = "reverse_proxy http://localhost:4533";
       "paperless.newton.lan".extraConfig = "reverse_proxy http://localhost:28981";
+      "vault.newton.lan".extraConfig = "reverse_proxy http://localhost:8222";
     };
   };
 }

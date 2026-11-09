@@ -19,6 +19,8 @@
     "/var/lib/paperless"
     "/media/immich"
     postgresDump
+    # not /var/lib/vaultwarden: the live sqlite db isn't safe to copy mid-write
+    config.services.vaultwarden.backupDir
   ];
 
   exclude = [
@@ -49,6 +51,7 @@ in {
     backupPrepareCommand = ''
       mkdir -p "$(dirname ${postgresDump})"
       ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/pg_dumpall > ${postgresDump}
+      ${pkgs.systemd}/bin/systemctl start backup-vaultwarden.service
     '';
   };
 }

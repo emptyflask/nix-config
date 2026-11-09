@@ -19,8 +19,19 @@
   # Second config dir used for work (CLAUDE_CONFIG_DIR=~/.claude-work claude).
   workDir = "${config.home.homeDirectory}/.claude-work";
 
+  # On PATH rather than referenced by store path so the work config dir's
+  # unmanaged settings.json can point at it too.
+  statusline = pkgs.writeShellApplication {
+    name = "claude-statusline";
+    runtimeInputs = [pkgs.jq pkgs.git];
+    # The ANSI color codes are deliberately spliced into printf format strings.
+    excludeShellChecks = ["SC2059"];
+    text = builtins.readFile ./claude-statusline.sh;
+  };
+
   sharedConfigDirEntries =
-    map (name: "skills/${name}")
+    ["CLAUDE.md"]
+    ++ map (name: "skills/${name}")
     (["claude-code-home-manager"] ++ lib.attrNames plugins);
 in {
   age.secrets.typesafe-api-key.file = "${self}/secrets/typesafe-api-key.age";
@@ -101,6 +112,10 @@ in {
           };
         };
       };
+      statusLine = {
+        type = "command";
+        command = "claude-statusline";
+      };
       tui = "fullscreen";
       editorMode = "vim";
       disableMouseClicks = true;
@@ -159,6 +174,20 @@ in {
 
     agents = {
     };
+
+    # Serena's tools are deferred behind ToolSearch, so without a standing
+    # instruction Claude defaults to grep/Read and never reaches for them.
+    context = ''
+      ## Code navigation
+
+      Prefer Serena's MCP tools for symbol-level work in any language Serena
+      supports. Use `find_symbol` and `get_symbols_overview` to locate
+      definitions, `find_referencing_symbols` for callers and usages, and
+      `rename_symbol`, `replace_symbol_body` and `insert_*_symbol` for
+      structural edits. They're deferred, so load them with ToolSearch
+      ("serena") before first use. Fall back to grep/Read for non-code text,
+      config, string literals, or when Serena comes back empty.
+    '';
   };
 
   home.file = lib.listToAttrs (map (entry:
@@ -167,5 +196,7 @@ in {
     })
   sharedConfigDirEntries);
 
-  home.packages = [serena];
+  # ruby-lsp backs the ruby-lsp@claude-plugins-official plugin, which only
+  # finds the server on PATH.
+  home.packages = [serena pkgs.ruby-lsp statusline];
 }

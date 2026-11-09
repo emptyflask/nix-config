@@ -9,6 +9,7 @@
     ./restic.nix
     ./samba.nix
     ./scan-ftp.nix
+    ./vaultwarden.nix
   ];
 
   age.secrets.couchdb-admin-pass = {
