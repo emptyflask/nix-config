@@ -33,6 +33,14 @@
         ++ ["src/documents/tests/test_consumer.py::TestConsumer::testNormalOperation"];
     });
 
+    # mplayer's dvdnav support links the ancient libdvdnav_4_2_1 (and its
+    # libdvdread.so.4), which shadows the current libdvdnav that ffmpeg_7's
+    # libavformat was built against, so the final link fails on an undefined
+    # `dvdnav_open2`. Backport of nixpkgs#584772 (merged to master
+    # 2026-11-09); once nixos-unstable has it, the libdvdnav_4_2_1 argument
+    # is gone and this override errors out, so delete it then.
+    mplayer = prev.mplayer.override {libdvdnav_4_2_1 = final.libdvdnav;};
+
     # rxvt-unicode (urxvt) wraps this; overriding it here propagates there too.
     rxvt-unicode-unwrapped = prev.rxvt-unicode-unwrapped.overrideAttrs (old: {
       # rxvtutil.h declares its own free-function `lerp`, found via unqualified
