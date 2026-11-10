@@ -383,16 +383,6 @@ in {
     done
   '';
 
-  programs.ncspot = {
-    enable = true;
-    settings = {
-      initial_screen = "library";
-      notify = true;
-      use_nerd_font = true;
-      shuffle = false;
-    };
-  };
-
   programs.gh = {
     enable = true;
     extensions = with pkgs; [gh-cal gh-eco];
