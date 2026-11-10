@@ -50,7 +50,6 @@
   # Their deps (aiohttp, pydantic, rich, yarl, …) already live in the sealed
   # venv, and hermes's build fails on any extra that duplicates a venv package,
   # so propagate nothing and skip the runtime-deps check (it can't see the venv).
-  # aiohttp-retry is the one dep the venv lacks; it's stripped the same way.
   bareWheel = pname: version: hash:
     pyPkgs.buildPythonPackage {
       inherit pname version;
@@ -66,12 +65,11 @@
     };
   hindsightClient = bareWheel "hindsight-client" "0.10.3" "sha256-tNDRu8KdzU7yWkojoIpIBG1TN7cEva+rsC0AENKZoGg=";
   hindsightEmbed = bareWheel "hindsight-embed" "0.10.3" "sha256-KQuB2DY+mW8Wb1M9MsYec0r10QRpWiUrDg9ynPNuzPE=";
-  aiohttpRetry = bareWheel "aiohttp-retry" "2.9.1" "sha256-ZtJ1nRkhg4JWoFo/gK1+ckk28IPjW+WrteFu7Wvm3FQ=";
 
   # Python libraries added to the agent's PYTHONPATH. Must come from pyPkgs, and
   # must not (transitively) include anything already in the sealed venv — the
   # build fails on collisions — so prefer bareWheel and let the venv supply deps.
-  extraPythonPackages = [aiohttpRetry hindsightClient hindsightEmbed];
+  extraPythonPackages = [hindsightClient hindsightEmbed];
 
   # Reproduces exactly the package the hermes-agent module builds internally
   # (default.override { inherit extraDependencyGroups extraPythonPackages; }), so
