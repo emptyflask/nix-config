@@ -339,11 +339,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1794337128,
-        "narHash": "sha256-0Iz/yweav5+/GifmzslISJVB58BOAIWNUxGLzC1YrNg=",
+        "lastModified": 1794416353,
+        "narHash": "sha256-fWK4pymiTiznt+R+NmBv2JHCZdaMJnA8JKwzzEnPhBs=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "95fc3e668fc1e13ad05d22a4f02fccc6a6d6ce02",
+        "rev": "56ac7b5d51945ae7875c4b669baa757fa17f4846",
         "type": "github"
       },
       "original": {
@@ -359,11 +359,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794303197,
-        "narHash": "sha256-NY9ozhqVtpihpl0RovRgtxLNPUEW3gi9HHvqzfdoaSk=",
+        "lastModified": 1794400104,
+        "narHash": "sha256-jscuL0tDEm/Wsq+ow6cqQjXfVewrKxzgVdD8HSk3cYY=",
         "owner": "nesquena",
         "repo": "hermes-webui",
-        "rev": "356872452547ca34839fd8b43c34c1e3f3aa7ff8",
+        "rev": "2affa89d98e8596f9cae97887fca4f5a927e09d9",
         "type": "github"
       },
       "original": {
@@ -438,37 +438,19 @@
     },
     "livesync-cli": {
       "inputs": {
-        "livesync-src": "livesync-src",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-Wj4Z/xhIPYnxe2MTbM0+cN3K/xJhOGBzZJ+++r5qYIM=",
+        "narHash": "sha256-O6mDWf0410No08nRqaO0FaoHffhnYTEA8vu+v61bt40=",
         "path": "inputs/livesync-cli",
         "type": "path"
       },
       "original": {
         "path": "inputs/livesync-cli",
         "type": "path"
-      }
-    },
-    "livesync-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1793376458,
-        "narHash": "sha256-CreBIyE1sQI13VnhKGf07CFxponEXgc9GyAKbhWcI28=",
-        "owner": "vrtmrz",
-        "repo": "obsidian-livesync",
-        "rev": "f00d09e91e884f8daaa7515d1ffec328946c6bc7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vrtmrz",
-        "ref": "1.0.43",
-        "repo": "obsidian-livesync",
-        "type": "github"
       }
     },
     "mcp": {
@@ -582,11 +564,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794313216,
-        "narHash": "sha256-vMLsA5eX6qMsrXAPuHhvo4K3z4NW09V+DP78L2G4HbQ=",
+        "lastModified": 1794382742,
+        "narHash": "sha256-dCttiJMmGw71BAHvH9GObiNkumz+Q0FUe/XRNCq1M4M=",
         "owner": "tpwrules",
         "repo": "nixos-apple-silicon",
-        "rev": "32b53b2408522ca8895c5baaad16fa7ac3714c93",
+        "rev": "5de1c7ae865d645a3ebcc7d2ba5a13b9b50c0c16",
         "type": "github"
       },
       "original": {
@@ -602,11 +584,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794222723,
-        "narHash": "sha256-jehPADpSIsWnyNHw/s44OHF9l6Y75QmW74sqO9cEe0A=",
+        "lastModified": 1794400081,
+        "narHash": "sha256-BuQB4OrIPcXCDVvmLBrzk1eH9Aq/oKYe/fnNJFqrRn4=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "919c16cf46a7acf9b44b2c2444bc39aa094eaa85",
+        "rev": "37ba750aba1c1e78c4d2e0c28e1e4fb84c73ef35",
         "type": "github"
       },
       "original": {

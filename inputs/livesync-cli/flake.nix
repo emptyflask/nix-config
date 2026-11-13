@@ -3,36 +3,36 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-    # The upstream repo, pinned to a release tag. `flake = false` means the flake
-    # lockfile pins the source hash for us — no manual `src` hash to maintain.
-    livesync-src = {
-      url = "github:vrtmrz/obsidian-livesync/1.0.43";
-      flake = false;
-    };
   };
 
   outputs = {
     self,
     nixpkgs,
-    livesync-src,
   }: let
+    # To upgrade, from this directory:
+    #   nix run nixpkgs#nix-update -- --flake livesync-cli --version <new>
+    # It rewrites `version`, the src hash and npmDepsHash below in one go.
+    version = "1.0.49";
+
     # The package builder, reused across systems.
     mkLivesyncCli = pkgs: let
       nodejs = pkgs.nodejs_22;
     in
       pkgs.buildNpmPackage {
         pname = "livesync-cli";
-        version = "1.0.43";
+        inherit version;
 
-        src = livesync-src;
+        src = pkgs.fetchFromGitHub {
+          owner = "vrtmrz";
+          repo = "obsidian-livesync";
+          tag = version;
+          hash = "sha256-YdnPfCt9I8Rc7QMOOrje/yYUiwJlgArBJp8Adkt8nS8=";
+        };
         inherit nodejs;
 
         # ---- npm dependency cache (FOD) --------------------------------------
-        # Hash of all npm deps from package-lock.json at tag 1.0.43. If you bump
-        # the source, recompute with:
-        #   nix run nixpkgs#prefetch-npm-deps -- <checkout>/package-lock.json
-        npmDepsHash = "sha256-yRRZap3gO5nmqEbZlyLIL8qJWiKvqdbPPDopeJUcFWA=";
+        # Hash of all npm deps from package-lock.json; nix-update refreshes it.
+        npmDepsHash = "sha256-bhC4HOwfRKScYkXHcYrKsrXp1CTXgvce44Ly7yHohW0=";
 
         # Don't run install scripts during `npm ci`: the root devDependencies
         # `edgedriver` and `geckodriver` download browser drivers from the

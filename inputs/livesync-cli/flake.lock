@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "livesync-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1793376458,
-        "narHash": "sha256-CreBIyE1sQI13VnhKGf07CFxponEXgc9GyAKbhWcI28=",
-        "owner": "vrtmrz",
-        "repo": "obsidian-livesync",
-        "rev": "f00d09e91e884f8daaa7515d1ffec328946c6bc7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vrtmrz",
-        "ref": "1.0.43",
-        "repo": "obsidian-livesync",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1786862985,
@@ -35,7 +18,6 @@
     },
     "root": {
       "inputs": {
-        "livesync-src": "livesync-src",
         "nixpkgs": "nixpkgs"
       }
     }

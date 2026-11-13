@@ -33,6 +33,11 @@
         ++ ["src/documents/tests/test_consumer.py::TestConsumer::testNormalOperation"];
     });
 
+    # Electron 43.8.3 breaks Obsidian's renderer (webFrame "Cannot read
+    # properties of undefined (reading 'defineProperty')" -> blank window);
+    # 43.7.11 and 44.x are fine. Drop once nixpkgs' electron_43 is fixed.
+    obsidian = prev.obsidian.override {electron = final.electron_44;};
+
     # mplayer's dvdnav support links the ancient libdvdnav_4_2_1 (and its
     # libdvdread.so.4), which shadows the current libdvdnav that ffmpeg_7's
     # libavformat was built against, so the final link fails on an undefined
@@ -40,22 +45,6 @@
     # 2026-11-09); once nixos-unstable has it, the libdvdnav_4_2_1 argument
     # is gone and this override errors out, so delete it then.
     mplayer = prev.mplayer.override {libdvdnav_4_2_1 = final.libdvdnav;};
-
-    # rxvt-unicode (urxvt) wraps this; overriding it here propagates there too.
-    rxvt-unicode-unwrapped = prev.rxvt-unicode-unwrapped.overrideAttrs (old: {
-      # rxvtutil.h declares its own free-function `lerp`, found via unqualified
-      # lookup alongside `std::lerp` (added in C++20). Nothing here pins a
-      # `-std=`, so it inherits whatever newer default GCC picks, and once
-      # that default reaches C++20 the two `lerp`s collide as an ambiguous
-      # overload - a real compile error, not a warning. Pin an older standard
-      # pre-dating std::lerp rather than patch this 2016-vintage, unmaintained
-      # upstream's source.
-      env =
-        (old.env or {})
-        // {
-          CXXFLAGS = toString ((old.env.CXXFLAGS or []) ++ ["-std=gnu++17"]);
-        };
-    });
 
     postman = prev.postman.overrideAttrs (old: rec {
       version = "20230716100528";
