@@ -9,6 +9,18 @@
   system = pkgs.stdenv.hostPlatform.system;
   serena = inputs.mcp.serena.packages.${system}.serena;
 
+  # Run Serena inside the project's direnv environment so language servers
+  # see the dev shell's toolchain. Without it, ruby-lsp runs under the system
+  # ruby, `bundle exec ruby-lsp` can't find the project's gems, and Serena then
+  # tries `gem install` into the read-only store. Falls back to plain Serena
+  # where there's no .envrc or it isn't allowed (direnv exec fails outright).
+  serena-direnv = pkgs.writeShellScript "serena-direnv" ''
+    if ${pkgs.direnv}/bin/direnv exec . true >/dev/null 2>&1; then
+      exec ${pkgs.direnv}/bin/direnv exec . ${serena}/bin/serena "$@"
+    fi
+    exec ${serena}/bin/serena "$@"
+  '';
+
   # Shared with pi-coding-agent.nix so both agents see identical skill
   # content. Claude Code owns known_marketplaces.json itself
   # (installLocation/lastUpdated get rewritten at runtime for
@@ -55,18 +67,13 @@ in {
         defaultMode = "auto";
       };
       hooks = {
+        # No `serena-hooks remind`: it denies grep/Read bursts outright, which
+        # just costs a retry since Serena's deferred tools rarely get loaded.
         PreToolUse = [
           {
-            matcher = "";
-            hooks = [
-              {
-                type = "command";
-                command = "serena-hooks remind --client=claude-code";
-              }
-            ];
-          }
-          {
-            matcher = "mcp__serena__*";
+            # home-manager wraps mcpServers in its "hm" plugin, so the tools
+            # are mcp__plugin_hm_serena__*, not mcp__serena__*
+            matcher = "mcp__plugin_hm_serena__.*";
             hooks = [
               {
                 type = "command";
@@ -162,7 +169,7 @@ in {
     mcpServers = {
       serena = {
         type = "stdio";
-        command = "${serena}/bin/serena";
+        command = "${serena-direnv}";
         args = [
           "start-mcp-server"
           "--context"
