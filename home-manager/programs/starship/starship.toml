@@ -1,6 +1,7 @@
 add_newline = true
 
 format = """
+${env_var.ZMX_SESSION}\
  $username$hostname$directory\
  $git_branch$git_commit $git_status\
  $cmd_duration\
@@ -44,6 +45,11 @@ bright-blue   = "#83a598"
 bright-purple = "#d3869b"
 bright-aqua   = "#8ec07c"
 bright-orange = "#fe8019"
+
+[env_var.ZMX_SESSION]
+format = "[\\[$env_value\\]]($style) "
+description = "zmx session name"
+style = "bold fg:bright-orange"
 
 [fill]
 symbol = " "

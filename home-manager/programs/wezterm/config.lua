@@ -114,13 +114,61 @@ config.colors = {
   },
 }
 
+-- zmx helpers (mirror kitty's zmx_switch.py). zmx's own ctrl+\ detach key is
+-- disabled (ZMX_NO_DETACH_KEY in zshrc), so detaching runs `zmx detach` out
+-- of band, which works no matter what program is running inside the session.
+
+-- Session name from `zmx attach [--labels kv] <name> [cmd...]`
+local function zmx_attached(pane)
+  local info = pane:get_foreground_process_info()
+  if not info or not info.argv then return nil end
+  local argv = info.argv
+  if (info.executable or ""):match("([^/]+)$") ~= "zmx" then return nil end
+  if argv[2] ~= "attach" and argv[2] ~= "a" then return nil end
+  local i = 3
+  while argv[i] and argv[i]:sub(1, 2) == "--" do
+    i = i + (argv[i] == "--labels" and 2 or 1)
+  end
+  if not argv[i] then return nil end
+  return info.executable, argv[i]
+end
+
+local function zmx_detach(exe, session)
+  wezterm.background_child_process { "env", "ZMX_SESSION=" .. session, exe, "detach" }
+end
+
+-- ctrl+shift+\: detach the session in this pane
+local zmx_detach_action = wezterm.action_callback(function(_, pane)
+  local exe, session = zmx_attached(pane)
+  if session then zmx_detach(exe, session) end
+end)
+
+-- ctrl+shift+b: inside zmx, detach (zsm, if it attached the session, reopens
+-- its list); at a bare zsh prompt, run zsm; otherwise do nothing
+local zmx_switch = wezterm.action_callback(function(_, pane)
+  local exe, session = zmx_attached(pane)
+  if session then
+    zmx_detach(exe, session)
+  elseif (pane:get_foreground_process_name() or ""):match("([^/]+)$") == "zsh" then
+    pane:send_text("\x15zsm\r")
+  end
+end)
+
 -- Keybindings (matching kitty)
--- ctrl+shift+n: new window with cwd (kitty: new_os_window_with_cwd)
--- ctrl+shift+t: new tab with cwd   (kitty: new_tab_with_cwd)
+-- ctrl+shift+n:     new window          (kitty: new_os_window_with_cwd)
+-- ctrl+shift+t:     new tab with cwd    (kitty: new_tab_with_cwd)
+-- ctrl+shift+enter: split with cwd      (kitty: new_window)
+-- ctrl+shift+\:     zmx detach
+-- ctrl+shift+b:     zmx session switcher
 -- ctrl+shift+y: detach tab has no WezTerm equivalent; omitted
 config.keys = {
   { key = "n",          mods = "CTRL|SHIFT", action = wezterm.action.SpawnCommandInNewWindow {}, },
   { key = "t",          mods = "CTRL|SHIFT", action = wezterm.action.SpawnTab "CurrentPaneDomain", },
+  { key = "Enter",      mods = "CTRL|SHIFT", action = wezterm.action.SplitPane { direction = "Right", command = { domain = "CurrentPaneDomain" } }, },
+  { key = "\\",         mods = "CTRL|SHIFT", action = zmx_detach_action },
+  { key = "|",          mods = "CTRL|SHIFT", action = zmx_detach_action },
+  { key = "b",          mods = "CTRL|SHIFT", action = zmx_switch },
+  { key = "B",          mods = "CTRL|SHIFT", action = zmx_switch },
   { key = "LeftArrow",  mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "RightArrow", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
 }

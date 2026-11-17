@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   config,
+  lib,
   ...
 }: let
   # Define ls aliases only if eza is not enabled
@@ -14,6 +15,19 @@
     }
     else {};
 in {
+  # planck pins nixpkgs 26.05, which has no zmx
+  home.packages = lib.optionals (pkgs ? zmx) [
+    pkgs.zmx
+    inputs.zsm.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
+  # zsm (fork): quit to a plain shell when the attached session ends (ctrl-d);
+  # detaching still returns to the picker. Start with preview wrapping off.
+  home.sessionVariables = {
+    ZSM_EXIT_ON_END = "1";
+    ZSM_WRAP = "0";
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;

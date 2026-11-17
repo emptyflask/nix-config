@@ -2,14 +2,21 @@
 
 {
   xdg.configFile."kitty/scrollback.sh".source = ./scrollback.sh;
+  xdg.configFile."kitty/zmx_switch.py".source = ./zmx_switch.py;
 
   programs.kitty = {
     enable = true;
 
     keybindings = {
-      "ctrl+shift+n" = "new_os_window_with_cwd";
-      "ctrl+shift+t" = "new_tab_with_cwd !neighbor";
+      "ctrl+shift+n"     = "new_os_window_with_cwd";
+      "ctrl+shift+t"     = "new_tab_with_cwd !neighbor";
+      "ctrl+shift+enter" = "launch --type=window --cwd=current";
       "ctrl+shift+y" = "detach_tab";
+
+      # zmx: detach (replaces zmx's ctrl+\, freed for nvim) and an in-place
+      # session switcher (replaces kitty's move_window_backward)
+      "ctrl+shift+backslash" = "kitten zmx_switch.py detach";
+      "ctrl+shift+b"         = "kitten zmx_switch.py switch";
     };
 
     settings = {

@@ -21,6 +21,43 @@ bindkey '^[[6~' history-beginning-search-forward    # PAGE DOWN
 # bindkey '\e[A' up-line-or-history
 # bindkey '\e[B' down-line-or-history
 
+# zmx: refresh client env (SSH_AUTH_SOCK, DISPLAY, KITTY_*) before each prompt.
+# The session name in the prompt is a starship segment (env_var.ZMX_SESSION).
+_zmx_env_hook() {
+  [[ -n $ZMX_SESSION ]] && eval "$(zmx print-env -s .)"
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _zmx_env_hook
+
+# zmx completions (commands and session names)
+(( $+commands[zmx] )) && eval "$(zmx completions zsh)"
+
+# kitty/wezterm detach via ctrl+shift+\ (running `zmx detach`), so free ctrl+\
+# for nvim. Elsewhere (other terminals, over ssh) keep zmx's ctrl+\ detach.
+if [[ -z $SSH_CONNECTION && ( $TERM == xterm-kitty || $TERM_PROGRAM == WezTerm ) ]]; then
+  export ZMX_NO_DETACH_KEY=1
+fi
+
+# Run coding agents inside a new zmx session named <project>.<tool>.<N> (first
+# free N >= 1), so they survive the terminal closing. Project is $ZMX_PROJECT
+# (e.g. set in .envrc), else the git repo root's name, else the cwd's name.
+# Already in zmx: run directly.
+_zmx_agent() {
+  local tool=$1; shift
+  if [[ -n $ZMX_SESSION ]] || (( ! $+commands[zmx] )); then
+    command $tool "$@"
+    return
+  fi
+  local project=${ZMX_PROJECT:-${$(git rev-parse --show-toplevel 2>/dev/null):t}}
+  project=${${project:-${PWD:t}}//[^A-Za-z0-9._-]/-}
+  local -a taken=(${(f)"$(zmx list --short 2>/dev/null)"})
+  local n=1
+  while (( ${taken[(Ie)$project.$tool.$n]} )); do (( n++ )); done
+  zmx attach "$project.$tool.$n" $tool "$@"
+}
+claude() { _zmx_agent claude "$@" }
+pi() { _zmx_agent pi "$@" }
+
 rgrep() { grep -iR $1 *; }
 f() { find ./ | grep $1; }
 
