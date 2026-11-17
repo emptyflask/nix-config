@@ -49,6 +49,41 @@
       config = builtins.readFile ./dashboard.lua;
     };
 
+    gitsigns-nvim = {
+      plugin = pkgs.vimPlugins.gitsigns-nvim;
+      type = "lua";
+      config = ''
+        require('gitsigns').setup{
+          on_attach = function(bufnr)
+            local gitsigns = require('gitsigns')
+
+            local function map(mode, l, r, opts)
+              opts = opts or {}
+              opts.buffer = bufnr
+              vim.keymap.set(mode, l, r, opts)
+            end
+
+            -- Navigation
+            map('n', ']h', function()
+              if vim.wo.diff then
+                vim.cmd.normal({']h', bang = true})
+              else
+                gitsigns.nav_hunk('next')
+              end
+            end)
+
+            map('n', '[h', function()
+              if vim.wo.diff then
+                vim.cmd.normal({'[h', bang = true})
+              else
+                gitsigns.nav_hunk('prev')
+              end
+            end)
+          end
+        }
+      '';
+    };
+
     gruvbox = {
       # Lua port of gruvbox-community w/ treesitter support
       plugin = pkgs.vimPlugins.gruvbox-nvim;
@@ -244,6 +279,7 @@
     tagbar
     custom.conform
     custom.dashboard
+    custom.gitsigns-nvim
     custom.leap-nvim
     custom.lspconfig
     custom.mini
@@ -252,7 +288,6 @@
     custom.tabular
     custom.treesitter
     editorconfig-vim
-    gitsigns-nvim
     neoformat
     none-ls-nvim
     nvim-nio
