@@ -38,14 +38,6 @@
     # 43.7.11 and 44.x are fine. Drop once nixpkgs' electron_43 is fixed.
     obsidian = prev.obsidian.override {electron = final.electron_44;};
 
-    # mplayer's dvdnav support links the ancient libdvdnav_4_2_1 (and its
-    # libdvdread.so.4), which shadows the current libdvdnav that ffmpeg_7's
-    # libavformat was built against, so the final link fails on an undefined
-    # `dvdnav_open2`. Backport of nixpkgs#584772 (merged to master
-    # 2026-11-09); once nixos-unstable has it, the libdvdnav_4_2_1 argument
-    # is gone and this override errors out, so delete it then.
-    mplayer = prev.mplayer.override {libdvdnav_4_2_1 = final.libdvdnav;};
-
     postman = prev.postman.overrideAttrs (old: rec {
       version = "20230716100528";
       src = final.fetchurl {
