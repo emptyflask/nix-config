@@ -10,7 +10,6 @@ let
     (hm "programs/neomutt")
     (hm "programs/neovim")
     (hm "programs/starship")
-    (hm "programs/tmux")
     (hm "programs/vim")
     (hm "programs/zathura")
     (hm "programs/zsh")

@@ -7,7 +7,6 @@
     ../../home-manager/programs/git
     ../../home-manager/programs/neovim/minimal.nix
     ../../home-manager/programs/starship
-    ../../home-manager/programs/tmux
     ../../home-manager/programs/vim
     ../../home-manager/programs/zsh
   ];

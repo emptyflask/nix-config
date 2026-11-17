@@ -311,7 +311,6 @@
     custom.ts-node-action
     img-clip-nvim
     nvim-jdtls # java lsp
-    vim-tmux-navigator
 
     # THEME / VISUAL
     custom.onedark

@@ -26,7 +26,6 @@ in {
     "${self}/home-manager/programs/neovim"
     "${self}/home-manager/programs/rofi"
     "${self}/home-manager/programs/starship"
-    "${self}/home-manager/programs/tmux"
     "${self}/home-manager/programs/vim"
     "${self}/home-manager/programs/yazi"
     "${self}/home-manager/programs/zathura"
