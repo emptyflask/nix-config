@@ -61,6 +61,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
+    zsm = {
+      url = "github:emptyflask/zmx-session-manager?ref=emptyflask/settings";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     mcp = {
       url = "path:inputs/mcp";
