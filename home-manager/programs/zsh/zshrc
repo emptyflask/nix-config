@@ -42,6 +42,26 @@ fi
 # free N >= 1), so they survive the terminal closing. Project is $ZMX_PROJECT
 # (e.g. set in .envrc), else the git repo root's name, else the cwd's name.
 # Already in zmx: run directly.
+#
+# The session runs an interactive zsh that types the agent command as its first
+# line (ZMX_AGENT_CMD), so ctrl-z drops to a shell with job control. The shell
+# exits once the agent is gone and no jobs remain, ending the session.
+if [[ -n $ZMX_AGENT_CMD ]]; then
+  typeset -g _zmx_agent_cmd=$ZMX_AGENT_CMD _zmx_agent_started=
+  unset ZMX_AGENT_CMD
+  _zmx_agent_run() {
+    add-zle-hook-widget -d line-init _zmx_agent_run
+    BUFFER=$_zmx_agent_cmd _zmx_agent_started=1
+    zle accept-line
+  }
+  _zmx_agent_exit() {
+    [[ -n $_zmx_agent_started ]] && (( ! ${#jobstates} )) && exit
+  }
+  autoload -Uz add-zle-hook-widget
+  add-zle-hook-widget line-init _zmx_agent_run
+  add-zsh-hook precmd _zmx_agent_exit
+fi
+
 _zmx_agent() {
   local tool=$1; shift
   if [[ -n $ZMX_SESSION ]] || (( ! $+commands[zmx] )); then
@@ -53,7 +73,7 @@ _zmx_agent() {
   local -a taken=(${(f)"$(zmx list --short 2>/dev/null)"})
   local n=1
   while (( ${taken[(Ie)$project.$tool.$n]} )); do (( n++ )); done
-  zmx attach "$project.$tool.$n" $tool "$@"
+  ZMX_AGENT_CMD="$tool ${(j: :)${(q)@}}" zmx attach "$project.$tool.$n"
 }
 claude() { _zmx_agent claude "$@" }
 pi() { _zmx_agent pi "$@" }
