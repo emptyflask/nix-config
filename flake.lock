@@ -85,6 +85,22 @@
         "type": "github"
       }
     },
+    "claude-subagents": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795021108,
+        "narHash": "sha256-zecsNJj88DAJaXEbUFUJyQHeQIUPIRKjr6OCrLelL4o=",
+        "owner": "emptyflask",
+        "repo": "awesome-claude-code-subagents",
+        "rev": "6d16b8fbd8c4ef573acf516bc13c607d2d2f1e67",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emptyflask",
+        "repo": "awesome-claude-code-subagents",
+        "type": "github"
+      }
+    },
     "conform-nvim": {
       "flake": false,
       "locked": {
@@ -937,6 +953,7 @@
         "affinity-nix": "affinity-nix",
         "agenix": "agenix",
         "claude-code": "claude-code",
+        "claude-subagents": "claude-subagents",
         "darwin": "darwin",
         "flatpaks": "flatpaks",
         "hermes-agent": "hermes-agent",

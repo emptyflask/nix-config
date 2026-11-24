@@ -44,7 +44,8 @@
   sharedConfigDirEntries =
     ["CLAUDE.md"]
     ++ map (name: "skills/${name}")
-    (["claude-code-home-manager"] ++ lib.attrNames plugins);
+    (["claude-code-home-manager"] ++ lib.attrNames plugins)
+    ++ map (name: "agents/${name}.md") (lib.attrNames config.programs.claude-code.agents);
 in {
   age.secrets.typesafe-api-key.file = "${self}/secrets/typesafe-api-key.age";
 
@@ -106,12 +107,19 @@ in {
         ];
       };
       enabledPlugins = {
+        "pstack@cursor-plugins" = true;
         "ruby-lsp@claude-plugins-official" = true;
         "superpowers@claude-plugins-official" = true;
         "tdd@mdodkins-tdd" = true;
         "typescript-lsp@claude-plugins-official" = true;
       };
       extraKnownMarketplaces = {
+        cursor-plugins = {
+          source = {
+            source = "github";
+            repo = "cursor/plugins";
+          };
+        };
         mdodkins-tdd = {
           source = {
             source = "github";
@@ -179,8 +187,27 @@ in {
       };
     };
 
-    agents = {
-    };
+    # Picked from emptyflask/awesome-claude-code-subagents (flake input);
+    # bump with `nix flake update claude-subagents`.
+    agents =
+      lib.concatMapAttrs (category: names:
+        lib.genAttrs names (name: "${inputs.claude-subagents}/categories/${category}/${name}.md"))
+      {
+        "01-core-development" = ["backend-developer" "frontend-developer"];
+        "02-language-specialists" = ["nix-expert" "rails-expert"];
+        "03-infrastructure" = ["devops-engineer"];
+        "04-quality-security" = [
+          "architect-reviewer"
+          "code-reviewer"
+          "compliance-auditor"
+          "debugger"
+          "performance-engineer"
+          "qa-expert"
+          "security-auditor"
+          "test-automator"
+        ];
+        "08-business-product" = ["product-manager"];
+      };
 
     # Serena's tools are deferred behind ToolSearch, so without a standing
     # instruction Claude defaults to grep/Read and never reaches for them.
@@ -197,13 +224,31 @@ in {
     '';
   };
 
-  home.file = lib.listToAttrs (map (entry:
-    lib.nameValuePair "${workDir}/${entry}" {
-      source = config.home.file."${config.programs.claude-code.configDir}/${entry}".source;
-    })
-  sharedConfigDirEntries);
+  home.file =
+    lib.listToAttrs (map (entry:
+      lib.nameValuePair "${workDir}/${entry}" {
+        source = config.home.file."${config.programs.claude-code.configDir}/${entry}".source;
+      })
+    sharedConfigDirEntries)
+    # home-manager's plugin wrapper is a dir of top-level symlinks into the
+    # source, and Claude Code (>= 2.1.3xx) rejects manifest skills/hooks paths
+    # that resolve outside the plugin dir ("path escapes plugin directory").
+    # Replace each wrapper with a dereferenced copy, keeping its generated
+    # plugin.json for sources that don't ship one.
+    // lib.mapAttrs' (name: src:
+      lib.nameValuePair "${config.programs.claude-code.configDir}/skills/${name}" {
+        source = lib.mkForce (pkgs.runCommand "claude-code-${name}-real" {} ''
+          cp -rL ${src} "$out"
+          chmod -R u+w "$out"
+          if [[ ! -e $out/.claude-plugin/plugin.json ]]; then
+            mkdir -p "$out/.claude-plugin"
+            echo '${builtins.toJSON {inherit name;}}' > "$out/.claude-plugin/plugin.json"
+          fi
+        '');
+      })
+    plugins;
 
   # ruby-lsp backs the ruby-lsp@claude-plugins-official plugin, which only
   # finds the server on PATH.
-  home.packages = [serena pkgs.ruby-lsp statusline];
+  home.packages = [serena pkgs.python3 pkgs.ruby-lsp statusline];
 }

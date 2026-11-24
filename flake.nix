@@ -46,6 +46,10 @@
     };
     # claude-code and hermes-agent keep their own nixpkgs so their cachix caches hit
     claude-code.url = "github:sadjow/claude-code-nix";
+    claude-subagents = {
+      url = "github:emptyflask/awesome-claude-code-subagents";
+      flake = false;
+    };
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
     hermes-agent.url = "github:NousResearch/hermes-agent";
     hermes-webui = {
